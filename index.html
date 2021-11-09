@@ -16,11 +16,15 @@
                     <li><a href="#" id="play-button">Play</a></li>
                     <li><a href="#" id="instructions-button">Instructions</a></li>
                     <li><a href="#" id="high-scores-button">High Scores</a></li>
+                    <li><a href="#" id="give-up">Give Up</a></li>
                 </ul>
             </nav>
             <form class="authenticator">
                 <input type="text" name="username" value="jonhdoe">
                 <input type="password" name="password" value="password">
+                <input type="button" name="signin" value="Sign in">
+                <input type="button" name="signup" value="Sign up">
+                <input type="button" name="logout" value="Log Out">
             </form>
         </header>
         <main>
@@ -32,14 +36,14 @@
                 <h1>High Scores</h1>
                 <table class="scores">
                     <thead>
-                        <tr><th>Position</th><th>Name</th><th>Score</th></tr>
+                        <tr><th>Position</th><th>Name</th><th>Score</th><th>AI Level</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>#1</td><td>Jonh Doe</td><td>100</td></tr>
-                        <tr><td>#2</td><td>Jonh Doe</td><td>100</td></tr>
-                        <tr><td>#3</td><td>Jonh Doe</td><td>100</td></tr>
-                        <tr><td>#4</td><td>Jonh Doe</td><td>100</td></tr>
-                        <tr><td>#5</td><td>Jonh Doe</td><td>100</td></tr>
+                        <tr><td>#1</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
+                        <tr><td>#2</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
+                        <tr><td>#3</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
+                        <tr><td>#4</td><td>Jonh Doe</td><td>100</td><td>Hard</td></tr>
+                        <tr><td>#5</td><td>Jonh Doe</td><td>100</td><td>Hard</td></tr>
                     </tbody>
                 </table>
             </section>
@@ -50,6 +54,13 @@
                     <label>No. Holes<input type="number" name="number-of-holes" min="5" max= "10" value="5"></label>
                     <label>No. Stones p/ Hole<input type="number" name="number-of-stones" min="5" max="10" value="5"></label>
                     <label>2 players<input type="checkbox" name="two-players" value="one"></label>
+                    <label>First Turn<input type="checkbox" name="start-turn"></label>
+                    <label>Difficulty level
+                        <select name="level">
+                            <option>Easy</option>
+                            <option>Hard</option>
+                        </select>
+                    </label>
                     <input type="button" name="configuration-confirmation" value="Ok">
                 </form>
             </section>
@@ -57,6 +68,14 @@
                 <h1>Game</h1>
                 <p>This is where the game board and other elements should be!</p>
                 <p>Perhaps a CSS grid??</p>
+            </section>
+            <section class="messages">
+                <h1>Messages</h1>
+                <p class="plays-again">Player x plays again!</p>
+                <p class="gaveup">Player x gave up!</p>
+                <p class="player-win">Player x wins!</p>
+                <p class="computer-win">Computer wins!</p>
+                <input type="button" name="reading-confirmation" value="Ok">
             </section>
         </main>
         <footer>
