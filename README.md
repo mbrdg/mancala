@@ -10,6 +10,6 @@
 
 | Nome | E-mail |
 | :----------: | :----------------------: |
-| João Marinho | upxxxxxxxxx@edu.fe.up.pt |
+| João Marinho | up201905952@edu.fe.up.pt |
 | Miguel Rodrigues | up201906042@edu.fe.up.pt |
 
