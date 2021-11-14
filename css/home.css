@@ -1,0 +1,20 @@
+/* Home Section */
+#home {
+    background: #4E4E50;
+    position: relative;
+}
+#home .home{
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 50px;
+    justify-content: center;
+
+}
+#home h1{
+    color: #F90951;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 4.5rem;
+    /* position: relative;*/
+}
+/* End Home Section */

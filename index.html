@@ -6,33 +6,59 @@
         <meta name="author" content="João Marinho">
         <meta name="author" content="Miguel Rodrigues">
         <!-- Links -->
+        <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+        <link href="./css/styles.css" type="text/css" rel="stylesheet">
+        <link href="./css/home.css" type="text/css" rel="stylesheet">
+        <link href="./css/header.css" type="text/css" rel="stylesheet">
 
     </head>
     <body>
-        <header>
-            <img src="logo.png" alt="Mancala Logo"/>
+        <!-- Header Section-->
+        <header class="container">
             <nav>
-                <ul>
-                    <li><a href="#" id="play-button">Play</a></li>
-                    <li><a href="#" id="instructions-button">Instructions</a></li>
-                    <li><a href="#" id="high-scores-button">High Scores</a></li>
-                    <li><a href="#" id="give-up">Give Up</a></li>
-                </ul>
+                <div class="nav-list">
+                    <div class="hamburguer"><div class="bar"></div></div>
+                    <ul>
+                        <li><a href="#home" id="home-button">Home</a></li>
+                        <li><a href="#play" id="play-button">Play</a></li>
+                        <li><a href="#instructions" id="instructions-button">Instructions</a></li>
+                        <li><a href="#high-scores" id="high-scores-button">High Scores</a></li>
+                    </ul>
+                </div>
+                <form class="authenticator">
+                    <div>
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" placeholder="Username" id="username">
+                    </div>
+                    <div>
+                        <label for="username">Password:</label> 
+                        <input type="password" name="password" placeholder="****" id="password">
+                    </div>
+                    <div>
+                        <input type="button" name="signin" value="Sign in">
+                        <input type="button" name="logout" value="Log Out">
+                    </div>
+                </form>
             </nav>
-            <form class="authenticator">
-                <input type="text" name="username" value="jonhdoe">
-                <input type="password" name="password" value="password">
-                <input type="button" name="signin" value="Sign in">
-                <input type="button" name="signup" value="Sign up">
-                <input type="button" name="logout" value="Log Out">
-            </form>
         </header>
+        <!-- End Header Section-->
+
         <main>
+            <!-- First Section -->
+            <section id="home">
+                <div class="home container">
+                    <div>
+                        <h1>MANCALA</h1>
+                    </div>
+                </div>
+            </section>
+            <!-- End of First Section -->
+
             <section class="instructions">
                 <h1>Instructions</h1>
                 <p>This spot should have the instructions of the Game!</p>
             </section>
-            <section class="high-scores">
+            <section class="high-scores" id="high-scores">
                 <h1>High Scores</h1>
                 <table class="scores">
                     <thead>
@@ -47,7 +73,7 @@
                     </tbody>
                 </table>
             </section>
-            <section class="configurator">
+            <section class="configurations">
                 <h1>Settings</h1>
                 <form>
                     <label>Username<input type="text" name="name" value="Jonh Doe"></label>
@@ -68,6 +94,7 @@
                 <h1>Game</h1>
                 <p>This is where the game board and other elements should be!</p>
                 <p>Perhaps a CSS grid??</p>
+                <p><b>CANVA</b></p>
             </section>
             <section class="messages">
                 <h1>Messages</h1>
@@ -82,6 +109,7 @@
             <span class="course">LTW 21/22 @ L.EIC - FEUP</span>
             <span class="author">João Marinho & Miguel Rodrigues</span>
         </footer>
+        <script src="./src/app.js"></script>
     </body>
 </html>
 

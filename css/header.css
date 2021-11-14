@@ -1,0 +1,151 @@
+/* Header Section */
+header {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: auto;
+
+    min-height: 8vh;
+    transition: background-color .3s ease;
+}
+/*Nav bar*/
+header nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
+}
+
+header nav .nav-list {
+    display: flex;
+    flex-direction: column;
+}
+
+header .nav-list ul {
+    list-style: none;
+    position: absolute;
+    background-color:  rgb(31, 30, 30);/*Test color*/
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    top: 75px;
+    z-index: 1;
+    overflow-x: hidden;
+    visibility: hidden;
+}
+
+header .nav-list ul.active {
+    top: 105px;
+    visibility: visible;
+    transition: .2s ease;
+    transition-property: top, visibility;
+}
+header.nav-list ul.inactive {
+    top: 60px;
+    visibility: hidden;
+    transition: visibility 0s;
+}
+
+header .nav-list ul li a{
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: .1rem;
+    text-decoration: none;
+    color: white;
+    padding: 2px;
+    display: block;
+}
+header .nav-list ul li:hover a{
+    color:#F90951;
+}
+
+/*Form*/
+header form{
+    margin-top: 3px;
+    display: flex;
+    flex-direction: column;
+    color: #382D2D;
+}
+
+/*Hamburguer*/
+header .hamburguer{
+    width: 62px;
+    height: 62px;
+
+    border: 3px solid white;
+    border-radius: 50%;
+
+    position: absolute;
+    left: 30px;
+    top: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    
+    cursor: pointer;
+    transform: scale(.8);
+}
+
+header .hamburguer::after{
+    position: absolute;
+    content: '';
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    border: 3px solid white;
+    animation: hamburguer_puls 1.2s ease infinite;
+}
+
+header .hamburguer .bar {
+    width: 35px;
+    height: 4px;
+    border-radius: 179px;
+    position: relative;
+    background-color: white;
+    z-index: -1;
+}
+header .hamburguer .bar::after, header .hamburguer .bar::before{
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 179px;
+    background-color: white;
+    
+    transition: .3s ease;
+    transition-property: top, bottom;
+}
+header .hamburguer .bar::before{
+    bottom: 0;
+}
+header .hamburguer .bar::after {
+    top: 0;
+}
+header .hamburguer.active .bar::after{
+    top: 10px;
+}
+header .hamburguer.active .bar::before{
+    bottom: 10px;
+}
+/* End Header Section */
+
+/* Keyframes */
+@keyframes hamburguer_puls{
+    0%{
+        opacity: 1;
+        transform: scale(1);
+    }
+    100%{
+        opacity: 0;
+        transform: scale(1.4);
+    }
+}
