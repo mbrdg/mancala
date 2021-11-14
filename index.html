@@ -10,37 +10,34 @@
         <link href="./css/styles.css" type="text/css" rel="stylesheet">
         <link href="./css/home.css" type="text/css" rel="stylesheet">
         <link href="./css/header.css" type="text/css" rel="stylesheet">
+        <link href="./css/footer.css" type="text/css" rel="stylesheet">
 
     </head>
     <body>
         <!-- Header Section-->
-        <header class="container">
-            <nav>
-                <div class="nav-list">
-                    <div class="hamburguer"><div class="bar"></div></div>
-                    <ul>
-                        <li><a href="#home" id="home-button">Home</a></li>
-                        <li><a href="#play" id="play-button">Play</a></li>
-                        <li><a href="#instructions" id="instructions-button">Instructions</a></li>
-                        <li><a href="#high-scores" id="high-scores-button">High Scores</a></li>
-                    </ul>
-                </div>
-                <form class="authenticator">
-                    <div>
+        <section id="header">
+            <header class="container">
+                <nav>
+                    <div class="nav-list">
+                        <div class="hamburguer"><div class="bar"></div></div>
+                        <ul>
+                            <li><a href="#home" id="home-button">Home</a></li>
+                            <li><a href="#play" id="play-button">Play</a></li>
+                            <li><a href="#instructions" id="instructions-button">Instructions</a></li>
+                            <li><a href="#high-scores" id="high-scores-button">High Scores</a></li>
+                        </ul>
+                    </div>
+                    <form class="authenticator">
                         <label for="username">Username:</label>
-                        <input type="text" name="username" placeholder="Username" id="username">
-                    </div>
-                    <div>
+                        <input type="text" name="username" placeholder="" id="username">
                         <label for="username">Password:</label> 
-                        <input type="password" name="password" placeholder="****" id="password">
-                    </div>
-                    <div>
-                        <input type="button" name="signin" value="Sign in">
-                        <input type="button" name="logout" value="Log Out">
-                    </div>
-                </form>
-            </nav>
-        </header>
+                        <input type="password" name="password" placeholder="" id="password">
+                        <input type="submit" name="signin" value="Sign in">
+                    </form>
+                </nav>
+            </header>
+        </section>
+        
         <!-- End Header Section-->
 
         <main>
@@ -50,6 +47,11 @@
                     <div>
                         <h1>MANCALA</h1>
                     </div>
+                </div>
+                <div class="divider">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" class="shape-fill"></path>
+                    </svg>
                 </div>
             </section>
             <!-- End of First Section -->
@@ -105,10 +107,17 @@
                 <input type="button" name="reading-confirmation" value="Ok">
             </section>
         </main>
+        <!-- Footer Section -->
         <footer>
-            <span class="course">LTW 21/22 @ L.EIC - FEUP</span>
-            <span class="author">João Marinho & Miguel Rodrigues</span>
+            <div class="footer container">
+                <div class="img_label">
+                    <img src="./assets/JM.png" alt="Group Icon" class="icon">
+                    <p class="author">João Marinho & Miguel Rodrigues</p>
+                </div>
+                <p class="course">LTW 21/22 © L.EIC - FEUP</p>
+            </div>
         </footer>
+        <!-- End Footer Section -->
         <script src="./src/app.js"></script>
     </body>
 </html>

@@ -1,0 +1,31 @@
+/* Footer Section */
+footer {
+    background-color: #6F2232;
+}
+footer .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 28%;
+    padding-top: 25px;
+    padding-bottom: 15px;
+    padding-right: 3%;
+    padding-left: 3%;
+}
+
+footer .footer p {
+    font-weight: 200;
+    font-size: 0.85rem;
+    color: #FFFFFF;
+}
+footer .footer .img_label{
+    display: flex;
+    align-items: center;
+}
+footer .footer .icon {
+    margin-right: 8px;
+    width: 30px;
+    height: 29px;
+}
+/* End Footer Section */

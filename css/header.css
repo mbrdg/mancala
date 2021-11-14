@@ -1,12 +1,13 @@
 /* Header Section */
-header {
+#header {
     position: fixed;
     z-index: 100;
     left: 0;
     top: 0;
     width: 100vw;
     height: auto;
-
+}
+#header header {
     min-height: 8vh;
     transition: background-color .3s ease;
 }
@@ -15,63 +16,90 @@ header nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    
     width: 100%;
     height: 100%;
-    padding: 0 10px;
+
+    max-width: 14400px;
+    padding: 0 3%;
 }
 
 header nav .nav-list {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding-left: 20px;
 }
 
+/*Nav list*/
 header .nav-list ul {
     list-style: none;
     position: absolute;
-    background-color:  rgb(31, 30, 30);/*Test color*/
+    background-color:  #6F2232;/*Test color*/
+    border-radius: 15%;
     
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
     
-    top: 75px;
+    top: 50%;
+    margin-left: 0;
     z-index: 1;
-    overflow-x: hidden;
     visibility: hidden;
 }
 
 header .nav-list ul.active {
-    top: 105px;
+    top: 100%;
     visibility: visible;
     transition: .2s ease;
     transition-property: top, visibility;
 }
 header.nav-list ul.inactive {
-    top: 60px;
+    top: 50%;
     visibility: hidden;
     transition: visibility 0s;
 }
 
 header .nav-list ul li a{
     font-size: 1.25rem;
-    font-weight: 500;
+    font-weight: 520;
     letter-spacing: .1rem;
     text-decoration: none;
     color: white;
-    padding: 2px;
+    padding: 2px 5px;
     display: block;
 }
 header .nav-list ul li:hover a{
-    color:#F90951;
+    color:#400b1b;
 }
 
 /*Form*/
-header form{
-    margin-top: 3px;
-    display: flex;
-    flex-direction: column;
+#header header form {
     color: #382D2D;
+    margin-top: 3px;
+
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    row-gap: 0.5rem;
+    
+    padding-bottom: 5px;
+}
+#header header form label {
+    grid-column: 1 / 2;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+#header header form input {
+    grid-column: 2 / 3;
+}
+#header header form input[type=text], #header header form input[type=password] {
+    border-radius: 1rem;
+}
+#header header form input[type=submit]{
+    font-weight: normal;
+    font-size: 1.0rem;
+    background: #B1B1BC;
+    border-radius: 5px;
+    color: #000000;
+    text-align: center;
 }
 
 /*Hamburguer*/
@@ -82,9 +110,7 @@ header .hamburguer{
     border: 3px solid white;
     border-radius: 50%;
 
-    position: absolute;
-    left: 30px;
-    top: 45px;
+    position: relative;
 
     display: flex;
     align-items: center;
@@ -93,6 +119,7 @@ header .hamburguer{
     
     cursor: pointer;
     transform: scale(.8);
+    margin-top: 10%;
 }
 
 header .hamburguer::after{
@@ -102,7 +129,7 @@ header .hamburguer::after{
     width: 100%;
     border-radius: 50%;
     border: 3px solid white;
-    animation: hamburguer_puls 1.2s ease infinite;
+    animation: hamburguer_puls 1.3s ease infinite;
 }
 
 header .hamburguer .bar {
@@ -146,6 +173,6 @@ header .hamburguer.active .bar::before{
     }
     100%{
         opacity: 0;
-        transform: scale(1.4);
+        transform: scale(1.3);
     }
 }
