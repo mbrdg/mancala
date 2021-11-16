@@ -9,6 +9,7 @@
         <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
         <link href="./css/styles.css" type="text/css" rel="stylesheet">
         <link href="./css/home.css" type="text/css" rel="stylesheet">
+        <link href="./css/highscores.css" type="text/css" rel="stylesheet">
         <link href="./css/header.css" type="text/css" rel="stylesheet">
         <link href="./css/footer.css" type="text/css" rel="stylesheet">
 
@@ -37,11 +38,10 @@
                 </nav>
             </header>
         </section>
-        
         <!-- End Header Section-->
 
         <main>
-            <!-- First Section -->
+            <!-- Home Section -->
             <section id="home">
                 <div class="home container">
                     <div>
@@ -50,32 +50,20 @@
                 </div>
                 <div class="divider">
                     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" class="shape-fill"></path>
+                        <path d="M600 112.77 C 268.63 112.77 0 65.52 0 7.23 V 120 H 1200 V 7.23 C 1200 65.52 931.37 112.77 600 112.77 Z" class="shape-fill"></path>
                     </svg>
                 </div>
             </section>
-            <!-- End of First Section -->
+            <!-- End of Home Section -->
 
+            <!-- Instructions Section -->
             <section class="instructions">
                 <h1>Instructions</h1>
                 <p>This spot should have the instructions of the Game!</p>
             </section>
-            <section class="high-scores" id="high-scores">
-                <h1>High Scores</h1>
-                <table class="scores">
-                    <thead>
-                        <tr><th>Position</th><th>Name</th><th>Score</th><th>AI Level</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>#1</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
-                        <tr><td>#2</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
-                        <tr><td>#3</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
-                        <tr><td>#4</td><td>Jonh Doe</td><td>100</td><td>Hard</td></tr>
-                        <tr><td>#5</td><td>Jonh Doe</td><td>100</td><td>Hard</td></tr>
-                    </tbody>
-                </table>
-            </section>
-            <section class="configurations">
+            <!-- End of Instructions Section -->
+
+            <section id="configurations">
                 <h1>Settings</h1>
                 <form>
                     <label>Username<input type="text" name="name" value="Jonh Doe"></label>
@@ -106,7 +94,35 @@
                 <p id="computer-win">Computer wins!</p>
                 <input type="button" name="reading-confirmation" value="Ok">
             </section>
+
+            <!-- HighScores Section -->
+            <section id="highscores">
+                <div class="divider">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M 600 7.23 C 268.63 7.23 0 54.48 0 112.77 V 0 H 1200 V 112.77 C 1200 54.48 931.37 7.23 600 7.23 Z" class="shape-fill"></path>
+                    </svg>
+                </div>
+                <div class="highscores container">
+                    <div>
+                        <h1>High Scores</h1>
+                    </div>
+                    <table class="scores">
+                        <thead>
+                            <tr><th>Position</th><th>Name</th><th>Score</th><th>AI Level</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>#1</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
+                            <tr><td>#2</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
+                            <tr><td>#3</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
+                            <tr><td>#4</td><td>Jonh Doe</td><td>100</td><td>Hard</td></tr>
+                            <tr><td>#5</td><td>Jonh Doe</td><td>100</td><td>Hard</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <!-- End of HighScores Section -->
         </main>
+
         <!-- Footer Section -->
         <footer>
             <div class="footer container">

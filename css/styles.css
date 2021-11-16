@@ -1,6 +1,6 @@
-*{
-    padding:0;
-    margin:0;
+* {
+    padding: 0;
+    margin: 0;
     box-sizing: border-box;
 }
 
@@ -9,13 +9,13 @@ html {
     scroll-behavior: smooth;
 }
 
-a{
+a {
     text-decoration: none;
 }
 
 .container {
     min-height: 100vh;
     width: 100%;
-    display:flex;
+    display: flex;
     align-items: center;
 }

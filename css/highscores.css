@@ -1,0 +1,42 @@
+/* High Scores section */
+#highscores {
+    background: #4E4E50;
+    position: relative;
+}
+
+#highscores .divider {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+#highscores .highscores.container {
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+}
+
+#highscores h1 {
+    display: flex;
+
+    font-family: inherit;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2.5rem;
+
+    text-align: center;
+
+    color: #FFFFFF;
+}
+#highscores .scores {
+    margin-left: auto;
+    margin-right: auto;
+    color: #FFFFFF;
+}
+#highscores .scores th {
+    stroke: #A82727;
+    stroke-width: 3px;
+}
+

@@ -58,7 +58,7 @@ header.nav-list ul.inactive {
     transition: visibility 0s;
 }
 
-header .nav-list ul li a{
+header .nav-list ul li a {
     font-size: 1.25rem;
     font-weight: 520;
     letter-spacing: .1rem;
