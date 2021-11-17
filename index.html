@@ -7,7 +7,7 @@
         <meta name="author" content="Miguel Rodrigues">
         <!-- Links -->
         <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
-        <link href="./css/styles.css" type="text/css" rel="stylesheet">
+        <link href="./css/general.css" type="text/css" rel="stylesheet">
         <link href="./css/home.css" type="text/css" rel="stylesheet">
         <link href="./css/highscores.css" type="text/css" rel="stylesheet">
         <link href="./css/header.css" type="text/css" rel="stylesheet">
@@ -25,7 +25,7 @@
                             <li><a href="#home" id="home-button">Home</a></li>
                             <li><a href="#play" id="play-button">Play</a></li>
                             <li><a href="#instructions" id="instructions-button">Instructions</a></li>
-                            <li><a href="#high-scores" id="high-scores-button">High Scores</a></li>
+                            <li><a href="#highscores" id="high-scores-button">High Scores</a></li>
                         </ul>
                     </div>
                     <form class="authenticator">
@@ -99,16 +99,21 @@
             <section id="highscores">
                 <div class="divider">
                     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M 600 7.23 C 268.63 7.23 0 54.48 0 112.77 V 0 H 1200 V 112.77 C 1200 54.48 931.37 7.23 600 7.23 Z" class="shape-fill"></path>
+                        <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" class="shape-fill"></path>
                     </svg>
                 </div>
                 <div class="highscores container">
                     <div>
                         <h1>High Scores</h1>
                     </div>
-                    <table class="scores">
+                    <table>
                         <thead>
-                            <tr><th>Position</th><th>Name</th><th>Score</th><th>AI Level</th></tr>
+                            <tr>
+                                <th>Position</th>
+                                <th>Name</th>
+                                <th>Score</th>
+                                <th>AI Level</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr><td>#1</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>

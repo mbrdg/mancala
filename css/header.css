@@ -7,10 +7,12 @@
     width: 100vw;
     height: auto;
 }
+
 #header header {
     min-height: 8vh;
     transition: background-color .3s ease;
 }
+
 /*Nav bar*/
 header nav {
     display: flex;
@@ -52,6 +54,7 @@ header .nav-list ul.active {
     transition: .2s ease;
     transition-property: top, visibility;
 }
+
 header.nav-list ul.inactive {
     top: 50%;
     visibility: hidden;
@@ -67,6 +70,7 @@ header .nav-list ul li a {
     padding: 2px 5px;
     display: block;
 }
+
 header .nav-list ul li:hover a{
     color:#400b1b;
 }
@@ -77,22 +81,26 @@ header .nav-list ul li:hover a{
     margin-top: 3px;
 
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 80px 1fr;
     row-gap: 0.5rem;
     
     padding-bottom: 5px;
 }
+
 #header header form label {
     grid-column: 1 / 2;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
+
 #header header form input {
     grid-column: 2 / 3;
 }
+
 #header header form input[type=text], #header header form input[type=password] {
     border-radius: 1rem;
 }
+
 #header header form input[type=submit]{
     font-weight: normal;
     font-size: 1.0rem;
@@ -140,6 +148,7 @@ header .hamburguer .bar {
     background-color: white;
     z-index: -1;
 }
+
 header .hamburguer .bar::after, header .hamburguer .bar::before{
     content: '';
     position: absolute;
@@ -151,15 +160,19 @@ header .hamburguer .bar::after, header .hamburguer .bar::before{
     transition: .3s ease;
     transition-property: top, bottom;
 }
+
 header .hamburguer .bar::before{
     bottom: 0;
 }
+
 header .hamburguer .bar::after {
     top: 0;
 }
+
 header .hamburguer.active .bar::after{
     top: 10px;
 }
+
 header .hamburguer.active .bar::before{
     bottom: 10px;
 }

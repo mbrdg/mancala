@@ -1,42 +1,106 @@
-/* High Scores section */
+/* High Scores Section */
 #highscores {
     background: #4E4E50;
     position: relative;
 }
 
+#highscores .highscores {
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 1440px;
+    padding: 80px;
+
+    /* position: relative;
+    top: -4rem; */
+}
+
+#highscores h1 {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2.5rem;
+    padding-bottom: 7%;
+    color: #FFFFFF;
+}
+
+/*Table*/
+#highscores .highscores table {
+    color: #FFFFFF;
+    background-color: #0E0A0A;
+
+    width: 70%;
+    text-align: center;
+
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-radius: 40px 0px;
+
+    overflow: hidden;
+    transition: box-shadow .4s ease;
+}
+
+#highscores .highscores table:hover {
+    box-shadow: 0 2px 10px #00FFFF;/*rgba(32, 32, 32, .3);*/
+}
+
+#highscores .highscores table thead{
+    background-color: #C4C4C4;
+    height: 4.5rem;
+}
+
+#highscores table th {
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-shadow:
+    -1.7px -1.7px 0 #A82727,
+     0   -1.7px 0 #A82727,
+     1.7px -1.7px 0 #A82727,
+     1.7px  0   0 #A82727,
+     1.7px  1.7px 0 #A82727,
+     0    1.7px 0 #A82727,
+    -1.7px  1.7px 0 #A82727,
+    -1.7px  0   0 #A82727;
+}
+
+#highscores table td{
+    font-size: 1rem;
+    font-weight: 600;
+
+}
+
+#highscores table th, #highscores table td {
+    padding: 10px 12px;
+}
+
+#highscores table tbody tr:nth-child(odd) {
+    background-color: #6F2232;
+}
+#highscores table tbody tr:nth-child(even) {
+    background-color: #950740;
+}
+#highscores table tbody tr {
+    /* border-radius: 0px 11px; */
+}
+
+/*Divider*/
 #highscores .divider {
-    bottom: 0;
+    position: absolute;
+    top: 0;
     left: 0;
     width: 100%;
     overflow: hidden;
     line-height: 0;
+    transform: rotate(180deg);
 }
 
-#highscores .highscores.container {
-    margin: 0;
-    padding: 0;
-    justify-content: center;
+#highscores .divider svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 116px;
 }
 
-#highscores h1 {
-    display: flex;
-
-    font-family: inherit;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 2.5rem;
-
-    text-align: center;
-
-    color: #FFFFFF;
+#highscores .divider .shape-fill {
+    fill: #1A1A1D;
 }
-#highscores .scores {
-    margin-left: auto;
-    margin-right: auto;
-    color: #FFFFFF;
-}
-#highscores .scores th {
-    stroke: #A82727;
-    stroke-width: 3px;
-}
+/* End High Scores Section */
 

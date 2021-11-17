@@ -15,6 +15,7 @@
     font-style: normal;
     font-size: 4.5rem;
 }
+
 #home .divider {
     position: absolute;
     bottom: 0;
@@ -22,5 +23,16 @@
     width: 100%;
     overflow: hidden;
     line-height: 0;
+}
+
+#home .divider svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 116px;
+}
+
+#home .divider .shape-fill {
+    fill: #1A1A1D;
 }
 /* End Home Section */
