@@ -9,6 +9,7 @@
         <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
         <link href="./css/general.css" type="text/css" rel="stylesheet">
         <link href="./css/home.css" type="text/css" rel="stylesheet">
+        <link href="./css/play.css" type="text/css" rel="stylesheet">
         <link href="./css/highscores.css" type="text/css" rel="stylesheet">
         <link href="./css/header.css" type="text/css" rel="stylesheet">
         <link href="./css/footer.css" type="text/css" rel="stylesheet">
@@ -57,15 +58,49 @@
             <!-- End of Home Section -->
 
             <!-- Instructions Section -->
-            <section class="instructions">
+            <section id="instructions">
                 <h1>Instructions</h1>
                 <p>This spot should have the instructions of the Game!</p>
             </section>
             <!-- End of Instructions Section -->
 
-            <section id="configurations">
-                <h1>Settings</h1>
-                <form>
+            <!-- Play Section -->
+            <section id="play">
+                <div class="welcome-menu container">
+                    <div class="banner">
+                        <div class="text">
+                            <h2>Welcome!</h2>
+                            <p>Lets play Mancala</p>
+                        </div>
+                        <div>
+                            <img src="./assets/mancala.png" alt="mancalaIcon">
+                        </div>
+                    </div>
+                    <div class="settings">
+                        <form action="">
+                            <div class="mode">
+                                <input id="pvp" class="toggle toggle-left" name="mode" value="pvp" type="radio" checked>
+                                <label for="pvp" class="mode-label">PVP</label>
+                                <input id="singleplayer" class="toggle toggle-right" name="mode" value="singleplayer" type="radio">
+                                <label for="singleplayer" class="mode-label">Singleplayer</label>
+                            </div>
+                            <select name="difficulty" id="difficulty">
+                                <option value="easy_bot">Easy Bot</option>
+                                <option value="hard_bot">Hard Bot</option>
+                                <option value="local_player">Local Player</option>
+                            </select>
+                            <input type="button" value="play">
+                            <input type="button" value="instruction">
+                            <input type="button" value="moreSettings" id="more-settings-btn">
+                        </form>
+                    </div>
+                </div>
+                <div class="more-settings container">
+                    <h1>Hello</h1>
+                    <button class="close-settings">Close</button>
+                </div>
+                <!-- <h1>Settings</h1> -->
+                <!-- <form>
                     <label>Username<input type="text" name="name" value="Jonh Doe"></label>
                     <label>No. Holes<input type="number" name="number-of-holes" min="5" max= "10" value="5"></label>
                     <label>No. Stones p/ Hole<input type="number" name="number-of-stones" min="5" max="10" value="5"></label>
@@ -78,9 +113,10 @@
                         </select>
                     </label>
                     <input type="button" name="configuration-confirmation" value="Ok">
-                </form>
+                </form> -->
             </section>
-            <section class="game">
+            <!-- End Play Section -->
+            <!-- <section class="game">
                 <h1>Game</h1>
                 <p>This is where the game board and other elements should be!</p>
                 <p>Perhaps a CSS grid??</p>
@@ -93,7 +129,7 @@
                 <p id="player-win">Player x wins!</p>
                 <p id="computer-win">Computer wins!</p>
                 <input type="button" name="reading-confirmation" value="Ok">
-            </section>
+            </section> -->
 
             <!-- HighScores Section -->
             <section id="highscores">
@@ -131,7 +167,7 @@
         <!-- Footer Section -->
         <footer>
             <div class="footer container">
-                <div class="img_label">
+                <div class="img-label">
                     <img src="./assets/JM.png" alt="Group Icon" class="icon">
                     <p class="author">João Marinho & Miguel Rodrigues</p>
                 </div>
