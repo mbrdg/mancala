@@ -1,13 +1,15 @@
-div.game.container {
+/* Game Board */
+#play .game.container {
     background-color: #4E4E50;
     padding: 5%;
     
     display: grid;
     grid-template: 1fr / 4fr 1fr;
     gap: 1rem;
+    display: none;
 }
 
-div.gameboard {
+#play .gameboard {
     background-color: #C4C4C4;
     width: 65vw;
     height: 45vh;
@@ -20,20 +22,21 @@ div.gameboard {
     justify-content: space-around;
 }
 
-div.other-deposit, div.my-deposit, div.other-hole, div.my-hole {
+#play .game .other-deposit, #play .game .my-deposit, #play .game .other-hole, #play .game .my-hole {
     background-color: #950740;
     border: 15px solid #A82727;
     border-radius: 5em;
 }
 
-div.other-deposit {
+#play .game .other-deposit {
     grid-area: 1 / 1 / 3 / 2;
 }
-div.my-deposit {
+
+#play .game .my-deposit {
     grid-area: -1 / -1 / -3 / -2; 
 }
 
-div.messages {
+#play .game .messages {
     position: relative;
     background-color: #A82727;
     color: #C4C4C4;
@@ -43,10 +46,12 @@ div.messages {
     border-radius: 0.5em;
 }
 
-div.messages h1 {
+#play .game .messages h1 {
     font-weight: bolder;
     text-align: center;
 }
-div.messages p {
+
+#play .game .messages p {
     text-align: right;
 }
+/* End Game Board */
