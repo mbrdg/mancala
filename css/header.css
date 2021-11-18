@@ -39,6 +39,7 @@ header .nav-list ul {
     position: absolute;
     background-color:  #6F2232;/*Test color*/
     border-radius: 15%;
+    padding: 0.5em;
     
     text-align: center;
     

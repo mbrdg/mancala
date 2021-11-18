@@ -6,10 +6,13 @@
         <meta name="author" content="João Marinho">
         <meta name="author" content="Miguel Rodrigues">
         <!-- Links -->
+        <!-- Remote fonts -->
         <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+        <!-- stylesheet -->
         <link href="./css/general.css" type="text/css" rel="stylesheet">
         <link href="./css/home.css" type="text/css" rel="stylesheet">
         <link href="./css/play.css" type="text/css" rel="stylesheet">
+        <link href="./css/gameboard.css" type="text/css" rel="stylesheet">
         <link href="./css/highscores.css" type="text/css" rel="stylesheet">
         <link href="./css/header.css" type="text/css" rel="stylesheet">
         <link href="./css/footer.css" type="text/css" rel="stylesheet">
@@ -114,22 +117,32 @@
                     </label>
                     <input type="button" name="configuration-confirmation" value="Ok">
                 </form> -->
+                <div class="game container">
+                    <div class="gameboard">
+                        <div class="other-deposit"></div>
+                        <div class="other-hole"></div>
+                        <div class="other-hole"></div>
+                        <div class="other-hole"></div>
+                        <div class="other-hole"></div>
+                        <div class="other-hole"></div>
+                        <div class="my-hole"></div>
+                        <div class="my-hole"></div>
+                        <div class="my-hole"></div>
+                        <div class="my-hole"></div>
+                        <div class="my-hole"></div>
+                        <div class="my-deposit"></div>
+                    </div> 
+                    <div class="messages">
+                        <h1>Messages</h1>
+                        <p id="plays-again">Player x plays again!</p>
+                        <p id="gaveup">Player x gave up!</p>
+                        <p id="player-win">Player x wins!</p>
+                        <p id="computer-win">Computer wins!</p>
+                        <input type="button" name="reading-confirmation" value="Ok">
+                    </div>
+                </div>
             </section>
-            <!-- End Play Section -->
-            <!-- <section class="game">
-                <h1>Game</h1>
-                <p>This is where the game board and other elements should be!</p>
-                <p>Perhaps a CSS grid??</p>
-                <p><b>CANVA</b></p>
-            </section>
-            <section class="messages">
-                <h1>Messages</h1>
-                <p id="plays-again">Player x plays again!</p>
-                <p id="gaveup">Player x gave up!</p>
-                <p id="player-win">Player x wins!</p>
-                <p id="computer-win">Computer wins!</p>
-                <input type="button" name="reading-confirmation" value="Ok">
-            </section> -->
+            <!-- End of Play Section -->
 
             <!-- HighScores Section -->
             <section id="highscores">
@@ -162,6 +175,7 @@
                 </div>
             </section>
             <!-- End of HighScores Section -->
+            
         </main>
 
         <!-- Footer Section -->
@@ -174,7 +188,8 @@
                 <p class="course">LTW 21/22 © L.EIC - FEUP</p>
             </div>
         </footer>
-        <!-- End Footer Section -->
+        <!-- End of Footer Section -->
+
         <script src="./src/app.js"></script>
     </body>
 </html>
