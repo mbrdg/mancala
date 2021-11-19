@@ -44,7 +44,6 @@ const moreSettingsMenu = document.querySelector('#play .more-settings');
 
 const moreSettingsBtn = document.querySelector('#play .welcome-menu .settings form #more-settings-btn');
 const closeBtn = document.querySelector('#play .more-settings .close-settings');
-console.log(closeBtn);
 
 moreSettingsBtn.addEventListener('click',() => {
     play.scrollIntoView();
@@ -56,4 +55,19 @@ closeBtn.addEventListener('click',() => {
     welcomeMenu.classList.toggle('active');
     moreSettingsMenu.classList.toggle('active');
     body.style.overflow = 'visible';
+});
+
+//Difficulty
+const difficultyLevel = document.getElementById('difficulty');
+const pvpMode = document.getElementById('pvp');
+const singleMode = document.getElementById('singleplayer');
+
+difficultyLevel.onchange = ()=>{
+    difficultyLevel.selectedIndex > 0 ? singleMode.checked=true  : pvpMode.checked=true;
+};
+pvpMode.addEventListener('click', ()=>{
+    difficultyLevel.selectedIndex = 0;
+});
+singleMode.addEventListener('click', ()=>{
+    difficultyLevel.selectedIndex = 1;
 });

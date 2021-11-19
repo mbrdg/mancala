@@ -82,19 +82,19 @@
                     </div>
                     <div class="settings">
                         <form action="">
-                            <div class="mode">
-                                <input id="pvp" class="toggle toggle-left" name="mode" value="pvp" type="radio" checked>
+                            <div id="mode">
+                                <input id="pvp" name="mode" value="pvp" type="radio" checked>
                                 <label for="pvp" class="mode-label">PVP</label>
-                                <input id="singleplayer" class="toggle toggle-right" name="mode" value="singleplayer" type="radio">
+                                <input id="singleplayer" name="mode" value="singleplayer" type="radio">
                                 <label for="singleplayer" class="mode-label">Singleplayer</label>
                             </div>
                             <select name="difficulty" id="difficulty">
+                                <option value="local_player">Local Player</option>
                                 <option value="easy_bot">Easy Bot</option>
                                 <option value="hard_bot">Hard Bot</option>
-                                <option value="local_player">Local Player</option>
                             </select>
-                            <input type="button" value="play">
-                            <input type="button" value="instruction">
+                            <input type="button" value="play" id="play-btn">
+                            <input type="button" value="instruction" id="instructions-btn">
                             <input type="button" value="moreSettings" id="more-settings-btn">
                         </form>
                     </div>
