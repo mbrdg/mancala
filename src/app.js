@@ -31,19 +31,29 @@ const header=document.querySelector('header')
 document.addEventListener('scroll',()=>{
     var scroll_position = window.scrollY;
     if(scroll_position>230){
-        header.style.backgroundColor = "#6F2232"
+        header.style.backgroundColor = "transparent";//"#6F2232"
     }else {
-        header.style.backgroundColor = "transparent"
+        header.style.backgroundColor = "transparent";
     }
 });
 
 //Play
 const play = document.querySelector('#play');
+
 const welcomeMenu = document.querySelector('#play .welcome-menu');
+const gameMenu = document.querySelector('#play .game');
 const moreSettingsMenu = document.querySelector('#play .more-settings');
 
-const moreSettingsBtn = document.querySelector('#play .welcome-menu .settings form #more-settings-btn');
+const moreSettingsBtn = document.querySelector('#play .welcome-menu #more-settings-btn');
+const playBtn = document.querySelector('#play .welcome-menu #play-btn');
 const closeBtn = document.querySelector('#play .more-settings .close-settings');
+
+playBtn.addEventListener('click',()=>{
+    play.scrollIntoView();
+    gameMenu.style.display = "grid";
+    welcomeMenu.style.display = "none";
+    /*Start game with specified settings*/
+});
 
 moreSettingsBtn.addEventListener('click',() => {
     play.scrollIntoView();

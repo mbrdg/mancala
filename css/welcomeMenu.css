@@ -40,7 +40,7 @@
     top: -5px;
 }
 
-#play .welcome-menu img {
+#play .welcome-menu #mancala-icon {
     width: 60px;
     height: 60px;
     transform: rotate(46.01deg);
@@ -51,20 +51,22 @@
 #play .welcome-menu .settings {
     background: #C4C4C4;
     width: 85vh;
-    height: 50vh;
+    height: 40vh;
     border-radius: 0 0 30px 30px;
-    padding: 20px 20px;
-    padding-top: 10px;
+    padding: 0 20px;
 
     display: flex;
-    overflow: auto;
+    align-items: center;
+    justify-content: center;
 }
 
 #play .welcome-menu form {
     display: grid;
-    grid-template: repeat(3, 1fr) / repeat(6, 1fr);
-    row-gap: 0.5rem;
-    column-gap: 0.5rem;
+    grid-template: 0.4fr 0.2fr 0.3fr / repeat(6, 1fr);
+    column-gap: 0.3rem;
+    height: 40vh;
+    width: 65vw;
+    align-content: center;
 }
 
 #play .welcome-menu form #mode {
@@ -90,7 +92,7 @@
     grid-area: 3 / 6 / 4 / 7;
 }
 
-/* Butttons */
+/* Mode Butttons */
 #play #mode input {
     display: none;
 }
@@ -115,9 +117,84 @@
 }
 
 #play #mode input:checked + .mode-label {
-    background-color: #A82727;
+    background-color: #827E7E;
     cursor: default;
     transition: background-color 200ms ease;
+}
+
+/* Difficulty */
+#play .settings #difficulty {
+    border-radius: 26px;
+    background-color: #A82727;
+    color: #FFFFFF;
+    outline: none;
+    
+    height: 6vh;
+    padding: 6px;
+    margin: 0 12px;
+    align-self: center;
+
+    font-size: 0.8rem;
+}
+
+#play .settings #difficulty:hover {
+    cursor: pointer;
+}
+
+#play .settings #difficulty option {
+    font-size: 0.7rem;
+    background-color: #827E7E;
+}
+
+/* Last Butttons */
+#play .settings button {
+    height: 7vh;
+    align-self: center;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+
+    border-radius: 10px;
+}
+#play .settings button:hover {
+    cursor: pointer;
+    transition: ease;
+    transform: translateY(-0.10em);
+    box-shadow: 0 0.5em 0.5em -0.4em #3c2f2f;
+}
+
+#play #play-btn {
+    background-color: #A82727;
+    font-size: 0.9rem;
+    font-weight: lighter;
+    margin-left: 12px;
+    border: none;
+}
+#play #instructions-btn {
+    background-color: #827E7E;
+    border: 1px solid #FFFFFF;
+    margin: 0 6px;
+}
+#play #more-settings-btn{
+    background-color: #827E7E;
+    border: 1px solid #FFFFFF;
+    margin-right: 12px;
+}
+
+#play #play-btn img {
+    padding-left: 5px;
+    width: 17px;
+    height: 13px;
+}
+#play #instructions-btn img {
+    width: 20px;
+    height: 20px;
+}
+#play #more-settings-btn img {
+    width: 18px;
+    height: 18px;
 }
 
 /* End Welcome Menu */

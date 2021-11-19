@@ -77,11 +77,11 @@
                             <p>Lets play Mancala</p>
                         </div>
                         <div>
-                            <img src="./assets/mancala.png" alt="mancalaIcon">
+                            <img src="./assets/mancala.png" alt="mancalaIcon" id="mancala-icon">
                         </div>
                     </div>
                     <div class="settings">
-                        <form action="">
+                        <form>
                             <div id="mode">
                                 <input id="pvp" name="mode" value="pvp" type="radio" checked>
                                 <label for="pvp" class="mode-label">PVP</label>
@@ -93,9 +93,9 @@
                                 <option value="easy_bot">Easy Bot</option>
                                 <option value="hard_bot">Hard Bot</option>
                             </select>
-                            <input type="button" value="play" id="play-btn">
-                            <input type="button" value="instruction" id="instructions-btn">
-                            <input type="button" value="moreSettings" id="more-settings-btn">
+                            <button type="button" id="play-btn">Play <img src="./assets/play-button-arrowhead.png" alt="Play icon"></button>
+                            <button type="button" id="instructions-btn"><img src="./assets/question.png" alt="Instructions icon"></button>
+                            <button type="button" id="more-settings-btn"><img src="./assets/gear.png" alt="More Settings icon"></button>
                         </form>
                     </div>
                 </div>
