@@ -1,6 +1,5 @@
 /* Game Board */
 #play .game.container {
-    background-color: #4E4E50;
     padding: 5%;
     
     display: grid;

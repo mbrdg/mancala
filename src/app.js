@@ -1,4 +1,20 @@
 const body = document.body;
+const play = document.querySelector('#play');
+const instructions = document.querySelector('#instructions');
+
+//NavBar
+const playButton = document.querySelector('#play-button');
+const instructionsButton = document.querySelector('#instructions-button');
+
+playButton.addEventListener('click', ()=>{
+    play.classList.remove('active');
+    instructions.classList.remove('active');
+});
+instructionsButton.addEventListener('click', ()=>{
+    play.classList.add('active');
+    instructions.classList.add('active');
+});
+
 
 //Hamburguer & Menu Animation
 const hamburguer=document.querySelector('header nav .nav-list .hamburguer');
@@ -38,14 +54,13 @@ document.addEventListener('scroll',()=>{
 });
 
 //Play
-const play = document.querySelector('#play');
-
 const welcomeMenu = document.querySelector('#play .welcome-menu');
 const gameMenu = document.querySelector('#play .game');
 const moreSettingsMenu = document.querySelector('#play .more-settings');
 
 const moreSettingsBtn = document.querySelector('#play .welcome-menu #more-settings-btn');
 const playBtn = document.querySelector('#play .welcome-menu #play-btn');
+const instructionsBtn = document.querySelector('#play .welcome-menu #instructions-btn');
 const closeBtn = document.querySelector('#play .more-settings .close-settings');
 
 playBtn.addEventListener('click',()=>{
@@ -53,6 +68,14 @@ playBtn.addEventListener('click',()=>{
     welcomeMenu.style.display = "none";
     gameMenu.classList.toggle('active');
     /*Start game with specified settings*/
+});
+
+//Instructions
+instructionsBtn.addEventListener('click', ()=>{
+    play.classList.toggle('active');
+    instructions.classList.toggle('active');
+    instructions.scrollIntoView();
+
 });
 
 moreSettingsBtn.addEventListener('click',() => {

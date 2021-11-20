@@ -1,0 +1,19 @@
+/* Instructions Section */
+#instructions {
+    background: #1A1A1D;
+    position: relative;
+
+    color: white;
+    display: none;
+}
+
+#instructions.active {
+    display: flex;
+}
+
+#instructions .instructions {
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 0 20vw;
+}
+/* End Instructions Section */

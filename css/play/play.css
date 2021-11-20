@@ -4,6 +4,10 @@
     position: relative;
 }
 
+#play.active {
+    display: none;
+}
+
 #play .more-settings{
     position: fixed;
     top: -10%;
