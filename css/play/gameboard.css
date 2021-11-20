@@ -9,6 +9,10 @@
     display: none;
 }
 
+#play .game.active {
+    display: grid;
+}
+
 #play .gameboard {
     background-color: #C4C4C4;
     width: 65vw;

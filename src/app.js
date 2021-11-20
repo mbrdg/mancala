@@ -50,8 +50,8 @@ const closeBtn = document.querySelector('#play .more-settings .close-settings');
 
 playBtn.addEventListener('click',()=>{
     play.scrollIntoView();
-    gameMenu.style.display = "grid";
     welcomeMenu.style.display = "none";
+    gameMenu.classList.toggle('active');
     /*Start game with specified settings*/
 });
 

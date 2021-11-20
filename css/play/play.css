@@ -15,7 +15,6 @@
 
     transition: 0.2s ease;
     transition-property: top, visibility, opacity;
-    
 }
 
 #play .more-settings.active {
@@ -24,7 +23,6 @@
     opacity: 1;
     transition: 0.3s ease;
     transition-property: top, visibility, opacity;
-    
 }
 
 /* End Play Section */
