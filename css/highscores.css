@@ -62,7 +62,7 @@
     -1.7px  0   0 #A82727;
 }
 
-#highscores table td{
+#highscores table td {
     font-size: 1rem;
     font-weight: 600;
 }
@@ -99,7 +99,7 @@
     border-bottom: 20px solid black;
 }
 
-/* #highscores table tbody tr td:first-child {
+/*#highscores table tbody tr td:first-child {
     border-radius: 0 0 0 20px;
 }
 #highscores table tbody tr td:last-child {
