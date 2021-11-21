@@ -2,15 +2,18 @@
 #header {
     position: fixed;
     z-index: 100;
+    width: 100vw;
     left: 0;
     top: 0;
-    width: 100vw;
-    height: auto;
+    transition: top .3s ease;
 }
 
 #header header {
-    min-height: 8vh;
-    transition: background-color .3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 12vh;
+    background-color: #6F2232;
 }
 
 /*Nav bar*/
@@ -21,16 +24,18 @@ header nav {
     
     width: 100%;
     height: 100%;
-
     max-width: 100vw;
-    padding: 0 3%;
+
+    margin: 0 3%;
 }
 
 header nav .nav-list {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-left: 20px;
+    justify-content: center;
+    padding-left: 2rem;
+    height: 100%;
 }
 
 /*Nav list*/
@@ -39,84 +44,106 @@ header .nav-list ul {
     position: absolute;
     background-color:  #6F2232;/*Test color*/
     border-radius: 15%;
-    padding: 0.5em;
+    padding: 0.3em;
     
     text-align: center;
     
     top: 50%;
-    margin-left: 0;
-    z-index: 1;
     visibility: hidden;
 }
 
 header .nav-list ul.active {
-    top: 100%;
+    top: 110%;
     visibility: visible;
     transition: .2s ease;
     transition-property: top, visibility;
 }
 
-header.nav-list ul.inactive {
-    top: 50%;
-    visibility: hidden;
-    transition: visibility 0s;
-}
-
 header .nav-list ul li a {
-    font-size: 1.25rem;
-    font-weight: 520;
+    font-size: 1rem;
+    font-weight: 600;
     letter-spacing: .1rem;
     text-decoration: none;
     color: white;
-    padding: 2px 5px;
-    display: block;
+    padding: 2px 4px;
 }
 
 header .nav-list ul li:hover a{
-    color:#400b1b;
+    color:#ff0550;/*#400b1b;*/
 }
 
 /*Form*/
 #header header form {
-    color: #382D2D;
-    margin-top: 3px;
+    color: #250d0d;
+    height: 100%;
 
     display: grid;
-    grid-template-columns: 80px 1fr;
-    row-gap: 0.5rem;
-    
-    padding-bottom: 5px;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: 0.1fr 0.3fr;
+    column-gap: 0.15rem;
+    margin: 5px 0;
 }
 
 #header header form label {
     grid-column: 1 / 2;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 #header header form input {
     grid-column: 2 / 3;
+    width: 10vw;
+    height: 3vh;
+    border: none;
 }
 
 #header header form input[type=text], #header header form input[type=password] {
     border-radius: 1rem;
+    font-family: 'Nunito';
+    font-size: 0.6rem;
+    padding-left: 0.4rem;
+    caret-color: rgba(0, 0, 0, 0.494);
+}
+
+#header header form input[type=text]:focus, #header header form input[type=password]:focus {
+    outline: none;
+    background-color: #826f75;
+    transition: .3s background-color ease;
 }
 
 #header header form input[type=submit]{
-    font-weight: normal;
-    font-size: 1.0rem;
-    background: #B1B1BC;
-    border-radius: 5px;
+    font-family: 'Nunito';
+    font-weight: 400;
+    font-size: 0.7rem;
     color: #000000;
     text-align: center;
+    background: #B1B1BC;
+    border-radius: 5px;
+    width: 6vw;
+    justify-self: end;
+}
+
+#header header form input[type=submit]:focus {
+    outline: none;
+    box-shadow: 0 0 0 1.5px rgba(65, 61, 61, 0.6);
+    transition: .3s box-shadow ease;
+}
+
+#header header form input[type=submit]:hover {
+    background-color: #F90951;
+    color: white;
+    transition: .5s ease;
+    cursor: pointer;
+    transition-property: background-color, color;
 }
 
 /*Hamburguer*/
 header .hamburguer{
-    width: 62px;
-    height: 62px;
+    width: 3rem;
+    height: 3rem;
 
-    border: 3px solid white;
+    border: 2px solid white;
     border-radius: 50%;
 
     position: relative;
@@ -124,11 +151,9 @@ header .hamburguer{
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 100;
     
     cursor: pointer;
     transform: scale(.8);
-    margin-top: 10%;
 }
 
 header .hamburguer::after{
@@ -137,13 +162,13 @@ header .hamburguer::after{
     height: 100%;
     width: 100%;
     border-radius: 50%;
-    border: 3px solid white;
+    border: 2px solid white;
     animation: hamburguer_puls 1.3s ease infinite;
 }
 
 header .hamburguer .bar {
-    width: 35px;
-    height: 4px;
+    width: 1.7rem;
+    height: 0.18rem;
     border-radius: 179px;
     position: relative;
     background-color: white;
@@ -171,11 +196,11 @@ header .hamburguer .bar::after {
 }
 
 header .hamburguer.active .bar::after{
-    top: 10px;
+    top: 0.54rem;
 }
 
 header .hamburguer.active .bar::before{
-    bottom: 10px;
+    bottom: 0.54rem;
 }
 /* End Header Section */
 

@@ -1,12 +1,15 @@
 /* Game Board */
 
-#play .game.active {
-    display: flex;
+#play .game {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: stretch;
-    column-gap: 2em;
     padding: 7.5%;
+    display: none;
+}
+
+#play .game.active {
+    display: flex;
 }
 
 #play .gameboard {

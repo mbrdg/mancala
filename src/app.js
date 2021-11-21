@@ -1,4 +1,5 @@
 const body = document.body;
+const header = document.querySelector('#header');
 const play = document.querySelector('#play');
 const instructions = document.querySelector('#instructions');
 
@@ -15,6 +16,18 @@ instructionsButton.addEventListener('click', ()=>{
     instructions.classList.add('active');
 });
 
+let lastScrollTop = 0;
+document.addEventListener('scroll', ()=>{
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    if(scrollTop > lastScrollTop) {
+        header.style.top="-12vh";
+    } else {
+        header.style.top="0";
+    }
+    lastScrollTop = scrollTop;
+});
+
+
 
 //Hamburguer & Menu Animation
 const hamburguer=document.querySelector('header nav .nav-list .hamburguer');
@@ -23,35 +36,27 @@ const menuItem=document.querySelectorAll('header nav .nav-list ul li a');
 
 hamburguer.addEventListener('click',() => {
     hamburguer.classList.toggle('active');
-    if(menu.classList.contains('active')){
-        menu.classList.remove('active');
-        menu.classList.toggle('inactive');
-    } 
-    else {
-        menu.classList.remove('inactive');
-        menu.classList.toggle('active');
-    }
+    menu.classList.toggle('active');
 });
 
 menuItem.forEach((item) => {
     item.addEventListener('click',()=>{
         hamburguer.classList.toggle('active');
         menu.classList.remove('active');
-        menu.classList.toggle('inactive');
     })
 });
 
 //Header background-change
-const header=document.querySelector('header')
+/* const headerV=document.querySelector('header')
 
 document.addEventListener('scroll',()=>{
     var scroll_position = window.scrollY;
     if(scroll_position>230){
-        header.style.backgroundColor = "transparent";//"#6F2232"
+        headerV.style.backgroundColor = "#6F2232";
     }else {
-        header.style.backgroundColor = "transparent";
+        headerV.style.backgroundColor = "#6F2232";
     }
-});
+}); */
 
 //Play
 const welcomeMenu = document.querySelector('#play .welcome-menu');
