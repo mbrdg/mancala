@@ -66,6 +66,7 @@ const moreSettingsMenu = document.querySelector('#play .more-settings');
 const moreSettingsBtn = document.querySelector('#play .welcome-menu #more-settings-btn');
 const playBtn = document.querySelector('#play .welcome-menu #play-btn');
 const instructionsBtn = document.querySelector('#play .welcome-menu #instructions-btn');
+const closeInstructions = document.querySelector('#instructions #closeInstructions');
 const closeBtn = document.querySelector('#play .more-settings .close-settings');
 
 playBtn.addEventListener('click',()=>{
@@ -81,6 +82,12 @@ instructionsBtn.addEventListener('click', ()=>{
     instructions.classList.toggle('active');
     instructions.scrollIntoView();
 
+});
+
+closeInstructions.addEventListener('click',()=>{
+    play.classList.toggle('active');
+    instructions.classList.toggle('active');
+    play.scrollIntoView();
 });
 
 moreSettingsBtn.addEventListener('click',() => {
