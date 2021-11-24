@@ -139,18 +139,29 @@
                     </div>
                     <div class="settings">
                         <form>
-                            <div id="mode">
-                                <input id="pvp" name="mode" value="pvp" type="radio" checked>
-                                <label for="pvp" class="mode-label">PVP</label>
-                                <input id="singleplayer" name="mode" value="singleplayer" type="radio">
-                                <label for="singleplayer" class="mode-label">Singleplayer</label>
+                            <div id="turn">
+                                <input id="f-turn" name="turn" value="first" type="radio" checked>
+                                <label for="f-turn" class="turn-label">First turn</label>
+                                <input id="s-turn" name="turn" value="second" type="radio">
+                                <label for="s-turn" class="turn-label">Second turn</label>
                             </div>
-                            <div>
-                                <div class="n-holes">
+                            <div id="number-holes">
+                                <p>N. Holes</p>
+                                <div class="spinner">
                                     <span class="next"></span>
                                     <span class="prev"></span>
-                                    <div id="box">
-                                        <span>5</span>
+                                    <div class="box">
+                                        <span id="n-holes">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="number-seeds">
+                                <p>N. Seeds</p>
+                                <div class="spinner">
+                                    <span class="next"></span>
+                                    <span class="prev"></span>
+                                    <div class="box">
+                                        <span id="n-seeds">5</span>
                                     </div>
                                 </div>
                             </div>
