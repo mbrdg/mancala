@@ -7,26 +7,4 @@
 #play.active {
     display: none;
 }
-
-#play .more-settings{
-    position: fixed;
-    top: -10%;
-    left: 0;
-    max-width: 100vw;
-    padding: 50px;
-    visibility: hidden;
-    opacity: 0;
-
-    transition: 0.2s ease;
-    transition-property: top, visibility, opacity;
-}
-
-#play .more-settings.active {
-    visibility: visible;
-    top: 0;
-    opacity: 1;
-    transition: 0.3s ease;
-    transition-property: top, visibility, opacity;
-}
-
 /* End Play Section */

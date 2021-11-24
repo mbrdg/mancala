@@ -1,0 +1,51 @@
+/* More Settings */
+#play .more-settings{
+    position: fixed;
+    top: -10%;
+    left: 0;
+    max-width: 100vw;
+    flex-direction: column;
+    
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s ease;
+    transition-property: top, visibility, opacity;
+}
+
+#play .more-settings.active {
+    visibility: visible;
+    top: 0;
+    opacity: 1;
+    transition: 0.3s ease;
+    transition-property: top, visibility, opacity;
+    background: rgba(26, 26, 29, 0.92);
+}
+
+/* Banner */
+#play .more-settings.active .banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    width: 80vh;
+    height: 20vh;
+
+    background: #726B6B;
+    border-radius: 1.8rem 1.8rem 0px 0px;
+    overflow: hidden;
+
+    padding: 4px 20px;
+}
+#play .more-settings.active .banner .text h2 {
+    font-weight: normal;
+    font-size: 1.2rem;
+}
+
+#play .more-settings.active .banner .text p {
+    font-weight: 10;
+    font-size: 0.8rem;
+    position: relative;
+    top: -5px;
+}
+
+/* End More Settings */

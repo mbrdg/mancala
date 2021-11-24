@@ -5,6 +5,7 @@
     flex-wrap: nowrap;
     justify-content: stretch;
     padding: 7.5%;
+    display: none;
 }
 
 #play .game.active {

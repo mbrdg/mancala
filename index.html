@@ -14,6 +14,7 @@
         <link href="./css/instructions.css" type="text/css" rel="stylesheet">
         <link href="./css/play/play.css" type="text/css" rel="stylesheet">
         <link href="./css/play/welcomeMenu.css" type="text/css" rel="stylesheet">
+        <link href="./css/play/moreSettings.css" type="text/css" rel="stylesheet">
         <link href="./css/play/gameboard.css" type="text/css" rel="stylesheet">
         <link href="./css/highscores.css" type="text/css" rel="stylesheet">
         <link href="./css/header.css" type="text/css" rel="stylesheet">
@@ -95,6 +96,8 @@
 
             <!-- Play Section -->
             <section id="play">
+
+                <!-- Welcome Menu -->
                 <div class="welcome-menu container">
                     <div class="banner">
                         <div class="text">
@@ -124,26 +127,40 @@
                         </form>
                     </div>
                 </div>
+                <!-- End Welcome Menu -->
+
+                <!-- More Settings -->
                 <div class="more-settings container">
-                    <h1>Hello</h1>
-                    <button class="close-settings">Close</button>
+                    <div class="banner">
+                        <div class="text">
+                            <h2>Preferences</h2>
+                            <p>Customize the game.</p>
+                        </div>
+                    </div>
+                    <div class="settings">
+                        <form>
+                            <div id="mode">
+                                <input id="pvp" name="mode" value="pvp" type="radio" checked>
+                                <label for="pvp" class="mode-label">PVP</label>
+                                <input id="singleplayer" name="mode" value="singleplayer" type="radio">
+                                <label for="singleplayer" class="mode-label">Singleplayer</label>
+                            </div>
+                            <div>
+                                <div class="n-holes">
+                                    <span class="next"></span>
+                                    <span class="prev"></span>
+                                    <div id="box">
+                                        <span>5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="save-btn">Save</button>
+                        </form>
+                    </div>
                 </div>
-                
-                <!-- <h1>Settings</h1> -->
-                <!-- <form>
-                    <label>Username<input type="text" name="name" value="Jonh Doe"></label>
-                    <label>No. Holes<input type="number" name="number-of-holes" min="5" max= "10" value="5"></label>
-                    <label>No. Stones p/ Hole<input type="number" name="number-of-stones" min="5" max="10" value="5"></label>
-                    <label>2 players<input type="checkbox" name="two-players" value="one"></label>
-                    <label>First Turn<input type="checkbox" name="start-turn"></label>
-                    <label>Difficulty level
-                        <select name="level">
-                            <option>Easy</option>
-                            <option>Hard</option>
-                        </select>
-                    </label>
-                    <input type="button" name="configuration-confirmation" value="Ok">
-                </form> -->
+                <!-- End More Settings -->
+
+                <!-- Game Board -->
                 <div class="game container">
                     <div class="gameboard">
                         <div class="other-deposit">
@@ -218,6 +235,8 @@
                         <p class="opponent">Computer wins!</p>
                     </div>
                 </div>
+                <!-- End Game Board -->
+
             </section>
             <!-- End of Play Section -->
 

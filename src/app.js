@@ -3,6 +3,16 @@ const header = document.querySelector('#header');
 const play = document.querySelector('#play');
 const instructions = document.querySelector('#instructions');
 
+const moreSettingsMenu = document.querySelector('#play .more-settings');
+const welcomeMenu = document.querySelector('#play .welcome-menu');
+const gameMenu = document.querySelector('#play .game');
+
+const moreSettingsBtn = document.querySelector('#play .welcome-menu #more-settings-btn');
+const playBtn = document.querySelector('#play .welcome-menu #play-btn');
+const instructionsBtn = document.querySelector('#play .welcome-menu #instructions-btn');
+const saveBtn = document.querySelector('#play .more-settings #save-btn');
+const closeInstructions = document.querySelector('#instructions #closeInstructions');
+
 //NavBar
 const playButton = document.querySelector('#play-button');
 const instructionsButton = document.querySelector('#instructions-button');
@@ -25,6 +35,8 @@ document.addEventListener('scroll', ()=>{
         header.style.top="0";
     }
     lastScrollTop = scrollTop;
+    
+    if(moreSettingsMenu.classList.contains('active')) header.style.top="-12vh"; 
 });
 
 
@@ -59,15 +71,6 @@ document.addEventListener('scroll',()=>{
 }); */
 
 //Play
-const welcomeMenu = document.querySelector('#play .welcome-menu');
-const gameMenu = document.querySelector('#play .game');
-const moreSettingsMenu = document.querySelector('#play .more-settings');
-
-const moreSettingsBtn = document.querySelector('#play .welcome-menu #more-settings-btn');
-const playBtn = document.querySelector('#play .welcome-menu #play-btn');
-const instructionsBtn = document.querySelector('#play .welcome-menu #instructions-btn');
-const closeInstructions = document.querySelector('#instructions #closeInstructions');
-const closeBtn = document.querySelector('#play .more-settings .close-settings');
 
 playBtn.addEventListener('click',()=>{
     play.scrollIntoView();
@@ -96,7 +99,7 @@ moreSettingsBtn.addEventListener('click',() => {
     moreSettingsMenu.classList.toggle('active');
     body.style.overflow = 'hidden';
 });
-closeBtn.addEventListener('click',() => {
+saveBtn.addEventListener('click',() => {
     welcomeMenu.classList.toggle('active');
     moreSettingsMenu.classList.toggle('active');
     body.style.overflow = 'visible';
