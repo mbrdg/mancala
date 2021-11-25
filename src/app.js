@@ -119,3 +119,30 @@ pvpMode.addEventListener('click', ()=>{
 singleMode.addEventListener('click', ()=>{
     difficultyLevel.selectedIndex = 1;
 });
+
+//Number Holes
+const nHoles = document.getElementById('n-holes');
+
+const sumHoles = document.querySelector('#number-holes .next');
+sumHoles.addEventListener('click', ()=>{
+    if(nHoles.textContent > 8) return;
+    nHoles.textContent = (parseInt(nHoles.textContent)+1).toString();
+});
+const subHoles = document.querySelector('#number-holes .prev');
+subHoles.addEventListener('click', ()=>{
+    if(nHoles.textContent < 3) return;
+    nHoles.textContent = (parseInt(nHoles.textContent)-1).toString();
+});
+//Number Seeds
+const nSeeds = document.getElementById('n-seeds');
+
+const sumSeeds = document.querySelector('#number-seeds .next');
+sumSeeds.addEventListener('click', ()=>{
+    if(nSeeds.textContent > 8) return;
+    nSeeds.textContent = (parseInt(nSeeds.textContent)+1).toString();
+});
+const subSeeds = document.querySelector('#number-seeds .prev');
+subSeeds.addEventListener('click', ()=>{
+    if(nSeeds.textContent < 3) return;
+    nSeeds.textContent = (parseInt(nSeeds.textContent)-1).toString();
+});
