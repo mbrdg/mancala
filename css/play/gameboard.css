@@ -57,6 +57,22 @@
     grid-area: -1 / -1 / -4 / -2; 
 }
 
+/* Seeds */
+#play .game .other-deposit .seed,
+#play .game .my-deposit .seed,
+#play .game .other-hole .seed,
+#play .game .my-hole .seed {
+    display: inline-block;
+    position: relative;
+    background-color: #A82727;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 10px 5px;
+
+    top: 65px;
+    left: 15px;
+}
+
 /* Messages */
 #play .game .messages {   
     display: flex;
