@@ -14,11 +14,10 @@
 
 #play .gameboard {
     background-color: #C4C4C4;
-    width: 75vw;
-    height: 50vh;
-    border-radius: 2em;
+    width: 77vw;
+    height: 60vh;
+    border-radius: 2em 0 0 2em;
     padding: 3em;
-    margin: 1em;
 
     display: grid;
     grid-template: 1fr 0.25fr 0.25fr 1fr / 1fr repeat(5, 0.75fr) 1fr;
@@ -74,39 +73,60 @@
 }
 
 /* Messages */
-#play .game .messages {   
-    display: flex;
-    flex-direction: column;
-    align-content: flex-end;
-    align-items: flex-end;
-    place-content: flex-end;
-    row-gap: 1em;
+#play .game .messages {
+    position: relative;
+    right: 4%;
+
+    display: grid;
+    grid-template: 5% 95% / 100%;
+    justify-content: center;
     
-    background-color: #827E7E;
-    color: #C4C4C4;
-    width: 25vw;
-    height: 50vh;
-    padding: 1.5em;
-    border-radius: 0.75em;
-    margin: 1em;
+    width: 23vw;
+    height: 60vh;
+    
+    background-color: #4E4E50;
+    border-radius: 1.5rem 1.8rem 1.8rem 1.5rem;
 }
 
-#play .game .messages h1 {
-    font-weight: bolder;
-    flex-grow: 1;
-    justify-content: center;
+#play .game .messages #title {
+    text-align: center;
+    grid-area: 1 / 1 / 1 / 1;
+    max-height: 5%;
+}
+
+#play .game .messages #title h3 {
+    padding-top: 2px;
+    font-size: 1.1rem;
+    color: white;
+    height: 100%;
+}
+
+#play .game .messages #chat {
+    overflow: auto;
+    grid-area: 2 / 1 / 2 / 1;
+    align-self: end;
+    padding-bottom: 10px;
+    max-height: 95%;
 }
 
 #play .game .messages .not-opponent {
-    place-self: flex-end;
-    background-color: #2727A8;
-    border: 0.5em solid #2727A8;
-    border-radius: 0.75em 0.75em 0 0.75em; 
+    align-self: flex-end;
+    background-color: #C4C4C4;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 10;
+    border-radius: 0.75em 0.75em 0 0.75em;
+    padding: 0.3rem;
+    margin: 4px 6px 4px 0;
 }
 #play .game .messages .opponent {
-    place-self: flex-start;
+    align-self: flex-start;
     background-color: #A82727;
-    border: 0.5em solid #A82727;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 10;
     border-radius: 0.75em 0.75em 0.75em 0; 
+    padding: 0.3rem;
+    margin: 4px 0 4px 6px;
 }
 /* End Game Board */
