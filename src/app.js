@@ -10,15 +10,15 @@ let game = new Game;
 const play = document.querySelector('#play');
 const welcomeMenu = document.querySelector('#play .welcome-menu');
 const gameMenu = document.querySelector('#play .game');
-const playBtn = document.querySelector('#play .welcome-menu #play-btn');
+const playButton = document.querySelector('#play .welcome-menu #play-btn');
 
 
-playBtn.addEventListener('click',()=>{
+playButton.addEventListener('click', () => {
     play.scrollIntoView();
     welcomeMenu.style.display = "none";
     gameMenu.classList.toggle('active');
 
-    //Start game with current settings
+    // Start game with current setting
     game.setupGameConfig();
     game.startGame();
 });
