@@ -34,3 +34,15 @@ document.addEventListener('scroll',()=>{
         headerV.style.backgroundColor = "#6F2232";
     }
 }); */
+
+const addMsgToChat = (className, text) => {
+    const newElem = document.createElement('p');
+    newElem.classList.add(className);
+    const node = document.createTextNode(text);
+    newElem.append(node);
+    const chat = document.getElementById('chat');
+    chat.prepend(newElem);
+    chat.scrollTop=chat.scrollHeight;
+}
+/* const testBtn = document.getElementById("theB");
+testBtn.addEventListener('click',()=>addMsgToChat("player-msg", "Hello Mike G")); */
