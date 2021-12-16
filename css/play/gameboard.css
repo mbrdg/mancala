@@ -1,6 +1,6 @@
 /* Game Board */
 
-#play .game {
+.game {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: stretch;
@@ -8,11 +8,11 @@
     display: none;
 }
 
-#play .game.active {
+.game.active {
     display: flex;
 }
 
-#play .gameboard {
+.gameboard {
     background-color: #C4C4C4;
     width: 77vw;
     height: 60vh;
@@ -20,56 +20,62 @@
     padding: 3em;
 
     display: grid;
-    grid-template: 1fr 0.25fr 0.25fr 1fr / 1fr repeat(5, 0.75fr) 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr repeat(5, 0.75fr) 1fr;
     row-gap: 0.25em;
     column-gap: 0.5em;
     justify-content: space-around;
 }
 
-#play .game .other-deposit, #play .game .my-deposit {
-    background-color: #8A8888;
-    border-radius: 5em;
+.enemy-deposit {
+    grid-row: 1 / -1;
+    grid-column: 1 / 2;
 }
-#play .game .other-hole, #play .game .my-hole {
-    background-color: #8A8888;
-    border-radius: 7.5em;
-}
-
-#play .game .hole-score, #play .game .other-deposit-score, #play .game .my-deposit-score {
-    place-self: center;
-}
-#play .game .hole-score {
-    font-size: 120%;
-    font-weight: 200%;
-    color: #020202;
-}
-#play .game .other-deposit-score, #play .game .my-deposit-score {
-    font-size: 250%;
-    font-weight: 250%;
-    color: #555555;
+.my-deposit {
+    grid-row: 1 / -1;
+    grid-column: -2 / -1;
 }
 
-#play .game .other-deposit {
-    grid-area: 1 / 1 / 4 / 2;
+.enemy-deposit, .my-deposit, .enemy-hole, .my-hole {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: stretch;
 }
-#play .game .my-deposit {
-    grid-area: -1 / -1 / -4 / -2; 
+
+.enemy-deposit .score, .enemy-hole .score,
+.my-deposit .hole, .my-hole .hole {
+    order: 1;
 }
+
+.enemy-deposit .score, .my-deposit .score {
+    text-align: center;
+    font-size: 200%;
+    font-weight: bolder;
+}
+
+.score {
+    flex-grow: 0;
+    text-align: center;
+    font-size: 150%;
+    font-weight: bold;
+}
+
+.hole {
+    flex-grow: 4;
+    background-color: #8A8888;
+    border-radius: 10em;
+}
+
 
 /* Seeds */
-#play .game .other-deposit .seed,
-#play .game .my-deposit .seed,
-#play .game .other-hole .seed,
-#play .game .my-hole .seed {
+.seed {
     display: inline-block;
     position: relative;
     background-color: #A82727;
-    width: 1rem;
-    height: 1rem;
-    border-radius: 10px 5px;
 
-    top: 65px;
-    left: 15px;
+    width: 1em;
+    height: 1em;
 }
 
 /* Messages */
@@ -80,10 +86,10 @@
     display: grid;
     grid-template: 5% 95% / 100%;
     justify-content: center;
-    
+
     width: 23vw;
     height: 60vh;
-    
+
     background-color: #4E4E50;
     border-radius: 1.5rem 1.8rem 1.8rem 1.5rem;
 }
@@ -125,7 +131,7 @@
     color: white;
     font-size: 0.7rem;
     font-weight: 10;
-    border-radius: 0.75em 0.75em 0.75em 0; 
+    border-radius: 0.75em 0.75em 0.75em 0;
     padding: 0.3rem;
     margin: 4px 0 4px 6px;
 }

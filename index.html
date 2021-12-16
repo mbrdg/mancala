@@ -1,315 +1,405 @@
 <!DOCTYPE html>
 <html lang="en-us">
-    <head>
-        <title>LTW - Mancala</title>
-        <meta charset="UTF-8">
-        <meta name="author" content="João Marinho">
-        <meta name="author" content="Miguel Rodrigues">
-        <!-- Links -->
-        <!-- Remote fonts -->
-        <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
-        <!-- stylesheet -->
-        <link href="./css/general.css" type="text/css" rel="stylesheet">
-        <link href="./css/home.css" type="text/css" rel="stylesheet">
-        <link href="./css/instructions.css" type="text/css" rel="stylesheet">
-        <link href="./css/play/play.css" type="text/css" rel="stylesheet">
-        <link href="./css/play/welcomeMenu.css" type="text/css" rel="stylesheet">
-        <link href="./css/play/moreSettings.css" type="text/css" rel="stylesheet">
-        <link href="./css/play/gameboard.css" type="text/css" rel="stylesheet">
-        <link href="./css/highscores.css" type="text/css" rel="stylesheet">
-        <link href="./css/header.css" type="text/css" rel="stylesheet">
-        <link href="./css/footer.css" type="text/css" rel="stylesheet">
 
-    </head>
-    <body>
-        <!-- Header Section-->
-        <section id="header">
-            <header>
-                <nav>
-                    <div class="nav-list">
-                        <div class="hamburguer"><div class="bar"></div></div>
-                        <ul>
-                            <li><a href="#home" id="home-button">Home</a></li>
-                            <li><a href="#play" id="play-button">Play</a></li>
-                            <li><a href="#instructions" id="instructions-button">Instructions</a></li>
-                            <li><a href="#highscores" id="high-scores-button">High Scores</a></li>
-                        </ul>
-                    </div>
-                    <form class="authenticator">
-                        <label for="username">Username:</label>
-                        <input type="text" name="username" placeholder="" id="username">
-                        <label for="password">Password:</label> 
-                        <input type="password" name="password" placeholder="" id="password">
-                        <input type="submit" name="signin" value="Sign in">
-                    </form>
-                </nav>
-            </header>
-        </section>
-        <!-- End Header Section-->
+<head>
+  <title>LTW - Mancala</title>
+  <meta charset="UTF-8">
+  <meta name="author" content="João Marinho">
+  <meta name="author" content="Miguel Rodrigues">
+  <!-- Links -->
+  <!-- Remote fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+  <!-- stylesheet -->
+  <link href="./css/general.css" type="text/css" rel="stylesheet">
+  <link href="./css/home.css" type="text/css" rel="stylesheet">
+  <link href="./css/instructions.css" type="text/css" rel="stylesheet">
+  <link href="./css/play/play.css" type="text/css" rel="stylesheet">
+  <link href="./css/play/welcomeMenu.css" type="text/css" rel="stylesheet">
+  <link href="./css/play/moreSettings.css" type="text/css" rel="stylesheet">
+  <link href="./css/play/gameboard.css" type="text/css" rel="stylesheet">
+  <link href="./css/highscores.css" type="text/css" rel="stylesheet">
+  <link href="./css/header.css" type="text/css" rel="stylesheet">
+  <link href="./css/footer.css" type="text/css" rel="stylesheet">
 
-        <main>
-            <!-- Home Section -->
-            <section id="home">
-                <div class="home container">
-                    <div>
-                        <h1>MANCALA</h1>
-                    </div>
-                </div>
-                <div class="divider">
-                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M600 112.77 C 268.63 112.77 0 65.52 0 7.23 V 120 H 1200 V 7.23 C 1200 65.52 931.37 112.77 600 112.77 Z" class="shape-fill"></path>
-                    </svg>
-                </div>
-            </section>
-            <!-- End of Home Section -->
+</head>
 
-            <!-- Instructions Section -->
-            <section id="instructions">
-                <div class="instructions container">
-                    <h1>Instructions</h1>
-                    <div class="text">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                           It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-                           Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                           It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-                           Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                           It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-                           Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                           It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-                           Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                           It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-                           Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                           It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-                           Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                           It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-                           Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                        </p>
-                        <button type="button" id="closeInstructions"><img src="./assets/close.png" alt="closeIcon"></button>
-                    </div>
-                </div>
-            </section>
-            <!-- End of Instructions Section -->
+<body>
+  <!-- Header Section-->
+  <section id="header">
+    <header>
+      <nav>
+        <div class="nav-list">
+          <div class="hamburguer">
+            <div class="bar"></div>
+          </div>
+          <ul>
+            <li><a href="#home" id="home-button">Home</a></li>
+            <li><a href="#play" id="play-button">Play</a></li>
+            <li><a href="#instructions" id="instructions-button">Instructions</a></li>
+            <li><a href="#highscores" id="high-scores-button">High Scores</a></li>
+          </ul>
+        </div>
+        <form class="authenticator">
+          <label for="username">Username:</label>
+          <input type="text" name="username" placeholder="" id="username">
+          <label for="password">Password:</label>
+          <input type="password" name="password" placeholder="" id="password">
+          <input type="submit" name="signin" value="Sign in">
+        </form>
+      </nav>
+    </header>
+  </section>
+  <!-- End Header Section-->
 
-            <!-- Play Section -->
-            <section id="play">
+  <main>
+    <!-- Home Section -->
+    <section id="home">
+      <div class="home container">
+        <div>
+          <h1>MANCALA</h1>
+        </div>
+      </div>
+      <div class="divider">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path
+            d="M600 112.77 C 268.63 112.77 0 65.52 0 7.23 V 120 H 1200 V 7.23 C 1200 65.52 931.37 112.77 600 112.77 Z"
+            class="shape-fill"></path>
+        </svg>
+      </div>
+    </section>
+    <!-- End of Home Section -->
 
-                <!-- Welcome Menu -->
-                <div class="welcome-menu container">
-                    <div class="banner">
-                        <div class="text">
-                            <h2>Welcome!</h2>
-                            <p>Lets play Mancala</p>
-                        </div>
-                        <div>
-                            <img src="./assets/mancala.png" alt="mancalaIcon" id="mancala-icon">
-                        </div>
-                    </div>
-                    <div class="settings">
-                        <form>
-                            <div id="mode">
-                                <input id="pvp" name="mode" value="pvp" type="radio" checked>
-                                <label for="pvp" class="mode-label">PVP</label>
-                                <input id="singleplayer" name="mode" value="singleplayer" type="radio">
-                                <label for="singleplayer" class="mode-label">Singleplayer</label>
-                            </div>
-                            <select name="difficulty" id="difficulty">
-                                <option value="local_player">Local Player</option>
-                                <option value="easy_bot">Easy Bot</option>
-                                <option value="hard_bot">Hard Bot</option>
-                            </select>
-                            <button type="button" id="play-btn">Play <img src="./assets/play-button-arrowhead.png" alt="Play icon"></button>
-                            <button type="button" id="instructions-btn"><img src="./assets/question.png" alt="Instructions icon"></button>
-                            <button type="button" id="more-settings-btn"><img src="./assets/gear.png" alt="More Settings icon"></button>
-                        </form>
-                    </div>
-                </div>
-                <!-- End Welcome Menu -->
+    <!-- Instructions Section -->
+    <section id="instructions">
+      <div class="instructions container">
+        <h1>Instructions</h1>
+        <div class="text">
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+            galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
+            versions of Lorem Ipsum.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+            galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
+            versions of Lorem Ipsum.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+            galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
+            versions of Lorem Ipsum.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+            galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
+            versions of Lorem Ipsum. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when
+            an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
+            versions of Lorem Ipsum. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when
+            an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
+            versions of Lorem Ipsum. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when
+            an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
+            versions of Lorem Ipsum.
+          </p>
+          <button type="button" id="closeInstructions"><img src="./assets/close.png" alt="closeIcon"></button>
+        </div>
+      </div>
+    </section>
+    <!-- End of Instructions Section -->
 
-                <!-- More Settings -->
-                <div class="more-settings container">
-                    <div class="banner">
-                        <div class="text">
-                            <h2>Preferences</h2>
-                            <p>Customize the game.</p>
-                        </div>
-                    </div>
-                    <div class="settings">
-                        <form>
-                            <div id="turn">
-                                <input id="f-turn" name="turn" value="first" type="radio" checked>
-                                <label for="f-turn" class="turn-label">First turn</label>
-                                <input id="s-turn" name="turn" value="second" type="radio">
-                                <label for="s-turn" class="turn-label">Second turn</label>
-                            </div>
-                            <div id="number-holes">
-                                <p>N. Holes</p>
-                                <div class="spinner">
-                                    <span class="next"></span>
-                                    <span class="prev"></span>
-                                    <div class="box">
-                                        <span id="n-holes">5</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="number-seeds">
-                                <p>N. Seeds</p>
-                                <div class="spinner">
-                                    <span class="next"></span>
-                                    <span class="prev"></span>
-                                    <div class="box">
-                                        <span id="n-seeds">5</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" id="save-btn">Save</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- End More Settings -->
+    <!-- Play Section -->
+    <section id="play">
 
-                <!-- Game Board -->
-                <div class="game container">
-                    <div class="gameboard">
-                        <div class="other-deposit">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                        <div class="other-hole">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                        <div class="other-hole">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                        <div class="other-hole">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                        <div class="other-hole">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                        <div class="other-hole">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-
-                        <div class=my-deposit-score>40</div>
-                        <div class="hole-score">25</div>
-                        <div class="hole-score">25</div>
-                        <div class="hole-score">25</div>
-                        <div class="hole-score">25</div>
-                        <div class="hole-score">25</div>
-                        <div class="hole-score">25</div>
-                        <div class="hole-score">25</div>
-                        <div class="hole-score">25</div>
-                        <div class="hole-score">25</div>
-                        <div class="hole-score">25</div>
-                        <div class="other-deposit-score">40</div>
-
-                        <div class="my-hole">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                        <div class="my-hole">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                        <div class="my-hole">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                        <div class="my-hole">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                        <div class="my-hole">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                        <div class="my-deposit">
-                            <div class="seed"></div>
-                            <div class="seed"></div>
-                        </div>
-                    </div> 
-                    <div class="messages">
-                        <div id="title">
-                            <h3>Messages</h1>
-                        </div>
-                        <div id="chat">
-                            <p class="not-opponent">Player x plays again!</p>
-                            <p class="not-opponent">Player x plays again!</p>
-                            <p class="not-opponent">Player x plays again!</p>
-                            <p class="not-opponent">Player x plays again!</p>
-                            <p class="not-opponent">Player x plays again!</p>
-                            <p class="not-opponent">Player x plays again!</p>
-                            <p class="not-opponent">Player x plays again!</p>
-                            <p class="not-opponent">Player x plays again!</p>
-                            <p class="not-opponent">Player x plays again!</p>
-                            <p class="opponent">Player x gave up!</p>
-                            <p class="not-opponent">Player x wins!</p>
-                            <p class="opponent">Computer wins!</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Game Board -->
-
-            </section>
-            <!-- End of Play Section -->
-
-            <!-- HighScores Section -->
-            <section id="highscores">
-                <div class="divider">
-                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" class="shape-fill"></path>
-                    </svg>
-                </div>
-                <div class="highscores container">
-                    <div>
-                        <h1>High Scores</h1>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Position</th>
-                                <th>Name</th>
-                                <th>Score</th>
-                                <th>AI Level</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>#1</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
-                            <tr><td>#2</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
-                            <tr><td>#3</td><td>Jonh Doe</td><td>100</td><td>Easy</td></tr>
-                            <tr><td>#4</td><td>Jonh Doe</td><td>100</td><td>Hard</td></tr>
-                            <tr><td>#5</td><td>Jonh Doe</td><td>100</td><td>Hard</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-            <!-- End of HighScores Section -->
-
-        </main>
-
-        <!-- Footer Section -->
-        <footer>
-            <div class="footer container">
-                <div class="img-label">
-                    <img src="./assets/JM.png" alt="Group Icon" class="icon">
-                    <p class="author">João Marinho & Miguel Rodrigues</p>
-                </div>
-                <p class="course">LTW 21/22 © L.EIC - FEUP</p>
+      <!-- Welcome Menu -->
+      <div class="welcome-menu container">
+        <div class="banner">
+          <div class="text">
+            <h2>Welcome!</h2>
+            <p>Lets play Mancala</p>
+          </div>
+          <div>
+            <img src="./assets/mancala.png" alt="mancalaIcon" id="mancala-icon">
+          </div>
+        </div>
+        <div class="settings">
+          <form>
+            <div id="mode">
+              <input id="pvp" name="mode" value="pvp" type="radio" checked>
+              <label for="pvp" class="mode-label">PVP</label>
+              <input id="singleplayer" name="mode" value="singleplayer" type="radio">
+              <label for="singleplayer" class="mode-label">Singleplayer</label>
             </div>
-        </footer>
-        <!-- End of Footer Section -->
+            <select name="difficulty" id="difficulty">
+              <option value="local_player">Local Player</option>
+              <option value="easy_bot">Easy Bot</option>
+              <option value="hard_bot">Hard Bot</option>
+            </select>
+            <button type="button" id="play-btn">Play <img src="./assets/play-button-arrowhead.png"
+                alt="Play icon"></button>
+            <button type="button" id="instructions-btn"><img src="./assets/question.png"
+                alt="Instructions icon"></button>
+            <button type="button" id="more-settings-btn"><img src="./assets/gear.png" alt="More Settings icon"></button>
+          </form>
+        </div>
+      </div>
+      <!-- End Welcome Menu -->
 
-        <script type="module" src="./src/app.js"></script>
-    </body>
+      <!-- More Settings -->
+      <div class="more-settings container">
+        <div class="banner">
+          <div class="text">
+            <h2>Preferences</h2>
+            <p>Customize the game.</p>
+          </div>
+        </div>
+        <div class="settings">
+          <form>
+            <div id="turn">
+              <input id="f-turn" name="turn" value="first" type="radio" checked>
+              <label for="f-turn" class="turn-label">First turn</label>
+              <input id="s-turn" name="turn" value="second" type="radio">
+              <label for="s-turn" class="turn-label">Second turn</label>
+            </div>
+            <div id="number-holes">
+              <p>N. Holes</p>
+              <div class="spinner">
+                <span class="next"></span>
+                <span class="prev"></span>
+                <div class="box">
+                  <span id="n-holes">5</span>
+                </div>
+              </div>
+            </div>
+            <div id="number-seeds">
+              <p>N. Seeds</p>
+              <div class="spinner">
+                <span class="next"></span>
+                <span class="prev"></span>
+                <div class="box">
+                  <span id="n-seeds">5</span>
+                </div>
+              </div>
+            </div>
+            <button type="button" id="save-btn">Save</button>
+          </form>
+        </div>
+      </div>
+      <!-- End More Settings -->
+
+      <!-- Game Board -->
+      <div class="game container">
+        <div class="gameboard">
+
+          <div class="enemy-deposit">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+
+          <div class="enemy-hole">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+
+          <div class="enemy-hole">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+
+          <div class="enemy-hole">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+
+          <div class="enemy-hole">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+
+          <div class="enemy-hole">
+            <div class="score">2</div>
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+          </div>
+
+          <div class="my-hole">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+
+          <div class="my-hole">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+
+          <div class="my-hole">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+
+          <div class="my-hole">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+
+          <div class="my-hole">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+
+          <div class="my-deposit">
+            <div class="hole">
+              <div class="seed"></div>
+              <div class="seed"></div>
+            </div>
+            <div class="score">2</div>
+          </div>
+        </div>
+
+
+        <div class="messages">
+          <div id="title">
+            <h3>Messages</h1>
+          </div>
+          <div id="chat">
+            <p class="not-opponent">Player x plays again!</p>
+            <p class="not-opponent">Player x plays again!</p>
+            <p class="not-opponent">Player x plays again!</p>
+            <p class="not-opponent">Player x plays again!</p>
+            <p class="not-opponent">Player x plays again!</p>
+            <p class="not-opponent">Player x plays again!</p>
+            <p class="not-opponent">Player x plays again!</p>
+            <p class="not-opponent">Player x plays again!</p>
+            <p class="not-opponent">Player x plays again!</p>
+            <p class="opponent">Player x gave up!</p>
+            <p class="not-opponent">Player x wins!</p>
+            <p class="opponent">Computer wins!</p>
+          </div>
+        </div>
+      </div>
+      <!-- End Game Board -->
+
+    </section>
+    <!-- End of Play Section -->
+
+    <!-- HighScores Section -->
+    <section id="highscores">
+      <div class="divider">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z"
+            class="shape-fill"></path>
+        </svg>
+      </div>
+      <div class="highscores container">
+        <div>
+          <h1>High Scores</h1>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Name</th>
+              <th>Score</th>
+              <th>AI Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#1</td>
+              <td>Jonh Doe</td>
+              <td>100</td>
+              <td>Easy</td>
+            </tr>
+            <tr>
+              <td>#2</td>
+              <td>Jonh Doe</td>
+              <td>100</td>
+              <td>Easy</td>
+            </tr>
+            <tr>
+              <td>#3</td>
+              <td>Jonh Doe</td>
+              <td>100</td>
+              <td>Easy</td>
+            </tr>
+            <tr>
+              <td>#4</td>
+              <td>Jonh Doe</td>
+              <td>100</td>
+              <td>Hard</td>
+            </tr>
+            <tr>
+              <td>#5</td>
+              <td>Jonh Doe</td>
+              <td>100</td>
+              <td>Hard</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <!-- End of HighScores Section -->
+
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer container">
+      <div class="img-label">
+        <img src="./assets/JM.png" alt="Group Icon" class="icon">
+        <p class="author">João Marinho & Miguel Rodrigues</p>
+      </div>
+      <p class="course">LTW 21/22 © L.EIC - FEUP</p>
+    </div>
+  </footer>
+  <!-- End of Footer Section -->
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+
 </html>
-
