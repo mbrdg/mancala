@@ -12,6 +12,11 @@
     display: flex;
 }
 
+#play .game.disable {
+    pointer-events: none;
+    user-select: none;
+}
+
 #play .gameboard {
     position: relative;
     background-color: #C4C4C4;

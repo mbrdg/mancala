@@ -1,0 +1,25 @@
+/* Pause Menu */
+#play .pause-menu {
+    position: fixed;
+    top: -10%;
+    left: 0;
+    max-width: 100vw;
+    flex-direction: column;
+    
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s ease;
+    transition-property: top, visibility, opacity;
+
+    z-index: 10;
+}
+
+#play .pause-menu.active {
+    visibility: visible;
+    top: 0;
+    opacity: 1;
+    transition: 0.3s ease;
+    transition-property: top, visibility, opacity;
+    background: rgba(26, 26, 29, 0.92);
+}
+/* End Pause Menu */
