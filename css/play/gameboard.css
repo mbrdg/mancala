@@ -61,7 +61,7 @@
     padding-left: 0.2rem;
 }
 #play .gameboard #pause-btn img:hover {
-    transform: rotate(360deg);
+    transform: rotate(270deg);
 }
 
 /* Deposits */

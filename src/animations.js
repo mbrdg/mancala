@@ -108,8 +108,8 @@ const gameBoardButtonsAnimation = ()=>{
     const pauseMenu = document.querySelector('#play .pause-menu');
 
     const pauseMenuBtn = document.querySelector('#play .gameboard #pause-btn');
-    const continuePlaying = document.querySelector('#play .pause-menu #save-btn');
-    //const giveUp = document.querySelector('#play .pause-menu #save-btn');
+    const continuePlaying = document.querySelector('#play .pause-menu #resume-btn');
+    const giveUp = document.querySelector('#play .pause-menu #leave-btn');
 
     pauseMenuBtn.addEventListener('click',() => {
         play.scrollIntoView();
@@ -117,11 +117,16 @@ const gameBoardButtonsAnimation = ()=>{
         pauseMenu.classList.toggle('active');
         document.body.style.overflow = 'hidden';
     });
-    /* continuePlaying.addEventListener('click',() => {
-        welcomeMenu.classList.toggle('active');
-        moreSettingsMenu.classList.toggle('active');
+    continuePlaying.addEventListener('click',() => {
+        pauseMenu.classList.toggle('active');
+        gameBoard.classList.toggle('disable');
         document.body.style.overflow = 'visible';
-    }); */
+    });
+    giveUp.addEventListener('click',() => {
+        pauseMenu.classList.toggle('active');
+        gameBoard.classList.toggle('disable');
+        document.body.style.overflow = 'visible';
+    });
 }
 
 const setDifficultyAnimation = ()=>{

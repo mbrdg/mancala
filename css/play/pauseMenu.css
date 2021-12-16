@@ -1,25 +1,90 @@
 /* Pause Menu */
 #play .pause-menu {
     position: fixed;
-    top: -10%;
-    left: 0;
+    left: -13%;
+    z-index: 10;
+    
     max-width: 100vw;
     flex-direction: column;
     
     visibility: hidden;
-    opacity: 0;
-    transition: 0.2s ease;
-    transition-property: top, visibility, opacity;
+    opacity: 1;
+}
 
-    z-index: 10;
+/* Banner */
+#play .pause-menu .banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    width: 70vh;
+    height: 15vh;
+
+    background: #726B6B;
+    border-radius: 1.8rem 1.8rem 0px 0px;
+    overflow: hidden;
+
+    padding: 4px 20px;
+}
+#play .pause-menu .banner .text h2 {
+    font-weight: normal;
+    font-size: 1.2rem;
+}
+
+#play .pause-menu .banner .text p {
+    font-weight: 10;
+    font-size: 0.8rem;
+    position: relative;
+    top: -5px;
+}
+
+/* Buttons */
+#play .pause-menu .buttons {
+    background: #C4C4C4;
+    width: 70vh;
+    height: 18vh;
+    border-radius: 0 0 30px 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly; 
+}
+
+#play .pause-menu .buttons button {
+    color: white;
+    font-size: 0.9rem;
+    font-weight: lighter;
+    font-family: 'Nunito';
+
+    padding: 0.3rem 0.8rem;
+    
+    border: none;
+    border-radius: 10px;
+
+    transition: 0.2s box-shadow ease;
+}
+
+#play .pause-menu .buttons button:hover {
+    cursor: pointer;
+    box-shadow: 0 0 0 1.5px rgb(28 7 7 / 52%);
+    transition: .3s box-shadow ease;
+}
+
+#play .pause-menu .buttons #leave-btn {
+    background-color: #A82727;
+}
+
+#play .pause-menu .buttons #resume-btn {
+    background-color: rgb(130, 126, 126);
 }
 
 #play .pause-menu.active {
     visibility: visible;
     top: 0;
+    left: 0;
     opacity: 1;
     transition: 0.3s ease;
-    transition-property: top, visibility, opacity;
+    transition-property: left, visibility, opacity;
     background: rgba(26, 26, 29, 0.92);
 }
 /* End Pause Menu */
