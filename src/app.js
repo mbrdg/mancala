@@ -4,7 +4,7 @@ import Game from './game.js';
 setUpAnimations();
 
 //Create Game
-let game = new Game;
+let game = new Game();
 
 //HTML Elements
 const play = document.querySelector('#play');
@@ -23,14 +23,3 @@ playButton.addEventListener('click', () => {
     game.startGame();
 });
 
-//Header background-change
-/* const headerV=document.querySelector('header')
-
-document.addEventListener('scroll',()=>{
-    var scroll_position = window.scrollY;
-    if(scroll_position>230){
-        headerV.style.backgroundColor = "#6F2232";
-    }else {
-        headerV.style.backgroundColor = "#6F2232";
-    }
-}); */
