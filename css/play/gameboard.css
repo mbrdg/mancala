@@ -13,6 +13,7 @@
 }
 
 #play .gameboard {
+    position: relative;
     background-color: #C4C4C4;
     width: 77vw;
     height: 60vh;
@@ -26,6 +27,39 @@
     justify-content: space-around;
 }
 
+/* Pause Button */
+#play .gameboard #pause-btn {
+    background-color: #A82727;
+    border: none;
+    border-radius: 0 0.4rem 0.4rem 0;
+    
+    position: absolute;
+    top: 1.8rem;
+    
+    display: flex;
+    align-content: center;
+    justify-content: center;
+
+    transition: 0.3s ease;
+}
+
+#play .gameboard #pause-btn img {
+    padding: 0.2rem;
+    transform: rotate(90deg);
+    width: 1.5rem;
+    height: 1.5rem;
+    transition: 0.4s ease;
+}
+
+#play .gameboard #pause-btn:hover {
+    cursor: pointer;
+    padding-left: 0.2rem;
+}
+#play .gameboard #pause-btn img:hover {
+    transform: rotate(360deg);
+}
+
+/* Deposits */
 #play .game .other-deposit, #play .game .my-deposit {
     background-color: #8A8888;
     border-radius: 5em;

@@ -84,7 +84,7 @@
     grid-area: 3 / 2 / 4 / 4;
 }
 
-/* Turn Buttons*/
+/* Turn Buttons */
 #play #turn input {
     display: none;
 }
