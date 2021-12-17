@@ -1,6 +1,10 @@
 export default class Gameboard {
     constructor() {
-        this.settings = {};
+        // Settings
+        this.settings = {startTurn: '', numberOfHoles: '', numberOfSeedsPerHole: ''};
+        // Seeds
+        this.seeds = [];
+
         this.readUserSettings();
         this.buildBoard();
         this.placeSeeds();
@@ -14,12 +18,12 @@ export default class Gameboard {
 
     buildHole(typeOfHole) {
         let newHole = document.createElement('div');
-        newHole.className = typeOfHole;
+        newHole.classList.add(typeOfHole);
 
         let hole = document.createElement('div');
-        hole.className = 'hole';
+        hole.classList.add('hole');
         let score = document.createElement('div');
-        score.className = 'score';
+        score.classList.add('score');
 
         newHole.append(hole);
         newHole.append(score);
@@ -49,6 +53,7 @@ export default class Gameboard {
         this.seeds[this.seeds.length - 1] = 0;
 
         let holes = document.querySelector('.gameboard').children;
+
         for (const [i, nseeds] of this.seeds.entries()) {
             // Weird i+1, right? It's because of the pause button...
             this.placeSeedsOnHole(holes[i+1].children[0], nseeds);
@@ -62,14 +67,16 @@ export default class Gameboard {
 
         for (let i = 0; i < nseeds; i++) {
             let newSeed = seed.cloneNode();
+            console.log(newSeed);
             parentHole.appendChild(newSeed);
             this.generateRandomPosition(newSeed);
         }
     }
 
     generateRandomPosition(seed) {
-        const randomColor = '#' + Math.floor(Math.random() * 0xffffff).toString(16);
-        seed.style.backgroundColor = randomColor;
+        seed.style.backgroundColor = "hsl(" + 360 * Math.random() + ',' +
+                                        (75 + 30 * Math.random()) + '%,' + 
+                                        (45 + 10 * Math.random()) + '%)';
         const randomAngle = Math.random() * 180;
         seed.style.transform = 'rotate(' + randomAngle + 'deg)';
 

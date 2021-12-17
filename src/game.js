@@ -2,7 +2,11 @@ import Gameboard from './gameboard.js'
 
 export default class Game {
     // The purpose of this class is to be a controller for a gameboard
-    constructor() {}
+    constructor() {
+
+        //Gameboard
+        this.board = null;
+    }
 
     setupGameConfig() {
         this.board = new Gameboard();
