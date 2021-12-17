@@ -67,15 +67,13 @@
     border-radius: 10em;
 }
 
-
-/* Seeds */
 .seed {
-    display: inline-block;
     position: relative;
     background-color: #A82727;
 
-    width: 1em;
+    width: 2em;
     height: 1em;
+    border-radius: 50%;
 }
 
 /* Messages */

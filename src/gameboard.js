@@ -1,7 +1,6 @@
 export default class Gameboard {
     constructor() {
         this.settings = {};
-
         this.readUserSettings();
         this.buildBoard();
         this.placeSeeds();
@@ -11,7 +10,6 @@ export default class Gameboard {
         this.settings.startTurn = document.getElementById('f-turn').checked;
         this.settings.numberOfHoles = document.getElementById('n-holes').innerHTML;
         this.settings.numberOfSeedsPerHole = parseInt(document.getElementById('n-seeds').innerHTML);
-        Object.seal(this.settings);
     }
 
     buildHole(typeOfHole) {
@@ -45,7 +43,7 @@ export default class Gameboard {
         this.seeds = new Array(2 * this.settings.numberOfHoles + 2);
         this.seeds.fill(this.settings.numberOfSeedsPerHole);
 
-        // Hard to read but these are the seeds in the deposits.
+        // These are the seeds in the deposits.
         // Players' initial score is always 0.
         this.seeds[0] = 0;
         this.seeds[this.seeds.length - 1] = 0;
@@ -58,12 +56,24 @@ export default class Gameboard {
     }
 
     placeSeedsOnHole(parentHole, nseeds) {
-        let newSeed = document.createElement('div');
-        newSeed.className = 'seed';
+        const seed = document.createElement('div');
+        seed.className = 'seed';
 
         for (let i = 0; i < nseeds; i++) {
-            let oldSeed = parentHole.querySelector('.seed');
-            parentHole.insertBefore(newSeed, oldSeed);
+            let newSeed = seed.cloneNode();
+            parentHole.appendChild(newSeed);
+            this.generateRandomPosition(newSeed);
         }
     }
+
+    generateRandomPosition(seed) {
+        const randomColor = '#' + Math.floor(Math.random() * 0xffffff).toString(16);
+        seed.style.backgroundColor = randomColor;
+        const randomAngle = Math.random() * 180;
+        seed.style.transform = 'rotate(' + randomAngle + 'deg)';
+
+        seed.style.left = Math.random() * 2.5 + 0.5 + 'em';
+        seed.style.top = Math.random() * 4.5 + 1 + 'em';
+    }
 }
+
