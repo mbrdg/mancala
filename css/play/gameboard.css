@@ -1,3 +1,18 @@
+/* Game */
+.game {
+    padding: 7.5%;
+    display: none;
+}
+
+.game.disable {
+    pointer-events: none;
+    user-select: none;
+}
+
+.game.active {
+    display: flex;
+}
+
 /* Pause Button */
 #play .gameboard #pause-btn {
     background-color: #A82727;
@@ -31,23 +46,6 @@
 }
 
 /* Game Board */
-.game {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: stretch;
-    padding: 7.5%;
-    display: none;
-}
-
-.game.disable {
-    pointer-events: none;
-    user-select: none;
-}
-
-.game.active {
-    display: flex;
-}
-
 .gameboard {
     background-color: #C4C4C4;
     width: 77vw;
@@ -112,4 +110,3 @@
     height: 1em;
     border-radius: 50%;
 }
-

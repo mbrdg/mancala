@@ -202,7 +202,6 @@ header .hamburguer.active .bar::after{
 header .hamburguer.active .bar::before{
     bottom: 0.54rem;
 }
-/* End Header Section */
 
 /* Keyframes */
 @keyframes hamburguer_puls{
