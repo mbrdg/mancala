@@ -42,18 +42,28 @@ export default class Gameboard {
     }
 
     placeSeeds() {
-        let seed = document.createElement('div');
-        seed.className = 'seed';
-
-        const nseeds = this.settings.numberOfSeedsPerHole;
-        const nholes = this.settings.numberOfHoles;
-        this.seeds = new Array(2 * nholes + 2).fill(nseeds);
+        this.seeds = new Array(2 * this.settings.numberOfHoles + 2);
+        this.seeds.fill(this.settings.numberOfSeedsPerHole);
 
         // Hard to read but these are the seeds in the deposits.
         // Players' initial score is always 0.
         this.seeds[0] = 0;
-        this.seeds[nholes + 1] = 0;
+        this.seeds[this.seeds.length - 1] = 0;
 
+        let holes = document.querySelector('.gameboard').children;
+        for (const [i, nseeds] of this.seeds.entries()) {
+            this.placeSeedsOnHole(holes[i].children[0], nseeds);
+            holes[i].children[1].innerText = nseeds.toString(10);
+        }
+    }
 
+    placeSeedsOnHole(parentHole, nseeds) {
+        let newSeed = document.createElement('div');
+        newSeed.className = 'seed';
+
+        for (let i = 0; i < nseeds; i++) {
+            let oldSeed = parentHole.querySelector('.seed');
+            parentHole.insertBefore(newSeed, oldSeed);
+        }
     }
 }
