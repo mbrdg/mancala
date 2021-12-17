@@ -4,6 +4,7 @@ export function setUpAnimations() {
     navBarScrollAnimation();
     navBarButtonAnimation();
     welcomeMenuButtonsAnimation();
+    gameBoardButtonsAnimation();
     setDifficultyAnimation();
     moreSettingsAnimations();
 }
@@ -45,6 +46,7 @@ const navBarScrollAnimation = ()=>{
     let lastScrollTop = 0;
     const header = document.querySelector('#header');
     const moreSettingsMenu = document.querySelector('#play .more-settings');
+    const pauseMenu = document.querySelector('#play .pause-menu');
 
     document.addEventListener('scroll', ()=>{
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -55,7 +57,8 @@ const navBarScrollAnimation = ()=>{
         }
         lastScrollTop = scrollTop;
         
-        if(moreSettingsMenu.classList.contains('active')) header.style.top="-12vh"; 
+        if(moreSettingsMenu.classList.contains('active')) header.style.top="-12vh";
+        if(pauseMenu.classList.contains('active')) header.style.top="-12vh"; 
     });
 }
 
@@ -94,6 +97,34 @@ const welcomeMenuButtonsAnimation = ()=>{
     closeMoreSettingsBtn.addEventListener('click',() => {
         welcomeMenu.classList.toggle('active');
         moreSettingsMenu.classList.toggle('active');
+        document.body.style.overflow = 'visible';
+    });
+}
+
+const gameBoardButtonsAnimation = ()=>{
+    const play = document.querySelector('#play');
+
+    const gameBoard = document.querySelector('#play .game');
+    const pauseMenu = document.querySelector('#play .pause-menu');
+
+    const pauseMenuBtn = document.querySelector('#play .gameboard #pause-btn');
+    const continuePlaying = document.querySelector('#play .pause-menu #resume-btn');
+    const giveUp = document.querySelector('#play .pause-menu #leave-btn');
+
+    pauseMenuBtn.addEventListener('click',() => {
+        play.scrollIntoView();
+        gameBoard.classList.toggle('disable');
+        pauseMenu.classList.toggle('active');
+        document.body.style.overflow = 'hidden';
+    });
+    continuePlaying.addEventListener('click',() => {
+        pauseMenu.classList.toggle('active');
+        gameBoard.classList.toggle('disable');
+        document.body.style.overflow = 'visible';
+    });
+    giveUp.addEventListener('click',() => {
+        pauseMenu.classList.toggle('active');
+        gameBoard.classList.toggle('disable');
         document.body.style.overflow = 'visible';
     });
 }

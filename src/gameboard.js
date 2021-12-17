@@ -50,8 +50,9 @@ export default class Gameboard {
 
         let holes = document.querySelector('.gameboard').children;
         for (const [i, nseeds] of this.seeds.entries()) {
-            this.placeSeedsOnHole(holes[i].children[0], nseeds);
-            holes[i].children[1].innerText = nseeds.toString(10);
+            // Weird i+1, right? It's because of the pause button...
+            this.placeSeedsOnHole(holes[i+1].children[0], nseeds);
+            holes[i+1].children[1].innerText = nseeds.toString(10);
         }
     }
 

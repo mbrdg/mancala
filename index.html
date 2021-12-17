@@ -16,11 +16,11 @@
   <link href="./css/play/play.css" type="text/css" rel="stylesheet">
   <link href="./css/play/welcomeMenu.css" type="text/css" rel="stylesheet">
   <link href="./css/play/moreSettings.css" type="text/css" rel="stylesheet">
+  <link href="./css/play/pauseMenu.css" type="text/css" rel="stylesheet">
   <link href="./css/play/gameboard.css" type="text/css" rel="stylesheet">
   <link href="./css/highscores.css" type="text/css" rel="stylesheet">
   <link href="./css/header.css" type="text/css" rel="stylesheet">
   <link href="./css/footer.css" type="text/css" rel="stylesheet">
-
 </head>
 
 <body>
@@ -200,41 +200,53 @@
       </div>
       <!-- End More Settings -->
 
+      <!-- Pause Menu -->
+      <div class="pause-menu container">
+        <div class="banner">
+          <div class="text">
+            <h2>Pause</h2>
+            <p>Want to keep playing?</p>
+          </div>
+        </div>
+        <div class="buttons">
+          <button type="button" id="resume-btn">Resume</button>
+          <button type="button" id="leave-btn">Give Up</button>
+        </div>
+      </div>
+      <!-- End Pause Menu -->
+
       <!-- Game Board -->
       <div class="game container">
         <div class="gameboard">
+          <button type="button" id="pause-btn">
+            <img src="./assets/down-arrow.png" alt="Arrow icon">
+          </button>
 
           <div class="enemy-deposit">
             <div class="hole"></div>
             <div class="score"></div>
           </div>
-
           <div class="enemy-hole">
             <div class="hole"></div>
             <div class="score"></div>
           </div>
-
           <div class="enemy-hole">
             <div class="hole"></div>
             <div class="score"></div>
           </div>
-
           <div class="my-hole">
             <div class="hole"></div>
             <div class="score"></div>
           </div>
-
           <div class="my-hole">
             <div class="hole"></div>
             <div class="score"></div>
           </div>
-
           <div class="my-deposit">
             <div class="hole"></div>
             <div class="score"></div>
           </div>
         </div>
-
 
         <div class="messages">
           <div id="title">

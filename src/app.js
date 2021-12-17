@@ -23,3 +23,12 @@ playButton.addEventListener('click', () => {
     game.startGame();
 });
 
+const addMsgToChat = (className, text) => {
+    const newElem = document.createElement('p');
+    newElem.classList.add(className);
+    const node = document.createTextNode(text);
+    newElem.append(node);
+    const chat = document.getElementById('chat');
+    chat.prepend(newElem);
+    chat.scrollTop = chat.scrollHeight;
+}
