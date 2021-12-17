@@ -58,7 +58,7 @@ export default class Gameboard {
 
     placeSeedsOnHole(parentHole, nseeds) {
         const seed = document.createElement('div');
-        seed.className = 'seed';
+        seed.classList.add('seed');
 
         for (let i = 0; i < nseeds; i++) {
             let newSeed = seed.cloneNode();
@@ -73,8 +73,8 @@ export default class Gameboard {
         const randomAngle = Math.random() * 180;
         seed.style.transform = 'rotate(' + randomAngle + 'deg)';
 
-        seed.style.left = Math.random() * 2.5 + 0.5 + 'em';
-        seed.style.top = Math.random() * 4.5 + 1 + 'em';
+        seed.style.left = (40 + ((Math.random() * 30)-10)) + '%';
+        seed.style.top = (45 + ((Math.random() * 40)-20)) + '%';
     }
 }
 
