@@ -14,29 +14,37 @@ export default class Gameboard {
         Object.seal(this.settings);
     }
 
+    buildHole(typeOfHole) {
+        let newHole = document.createElement('div');
+        newHole.className = typeOfHole;
+
+        let hole = document.createElement('div');
+        hole.className = 'hole';
+        let score = document.createElement('div');
+        score.className = 'score';
+
+        newHole.append(hole);
+        newHole.append(score);
+
+        let oldHole = document.querySelector('.' + typeOfHole);
+        document.querySelector('.gameboard').insertBefore(newHole, oldHole);
+    }
+
     buildBoard() {
-        let gameboard = document.querySelector('#play .game .gameboard');
+        let gameboard = document.querySelector('.gameboard');
         gameboard.style.gridTemplateColumns = '1fr repeat(' + this.settings.numberOfHoles + ', 0.75fr) 1fr';
 
-        let myHole = document.createElement('div'); myHole.className = 'my-hole';
-        let otherHole = document.createElement('div'); otherHole.className = 'other-hole';
-        let holeScore = document.createElement('div'); holeScore.className = 'hole-score';
-
-        let myHoleStop = document.getElementsByClassName('my-deposit')[0];
-        let otherHoleStop = document.getElementsByClassName('my-deposit-score')[0];
-        let holeScoreStop = document.getElementsByClassName('other-deposit-score')[0];
-
-        // FIXME - not generating the grid correctly
-        for (let i = 5; i < this.settings.numberOfHoles; i++) {
-            document.insertBefore(otherHole, otherHoleStop);
-            document.insertBefore(myHole, myHoleStop);
-            document.insertBefore(holeScore, holeScoreStop);
+        const minNumberOfHoles = 2;
+        for (let i = minNumberOfHoles; i < this.settings.numberOfHoles; i++) {
+            this.buildHole('enemy-hole');
+            this.buildHole('my-hole');
         }
-
-        console.debug(gameboard);
     }
 
     placeSeeds() {
+        let seed = document.createElement('div');
+        seed.className = 'seed';
+
         const nseeds = this.settings.numberOfSeedsPerHole;
         const nholes = this.settings.numberOfHoles;
         this.seeds = new Array(2 * nholes + 2).fill(nseeds);
@@ -46,6 +54,6 @@ export default class Gameboard {
         this.seeds[0] = 0;
         this.seeds[nholes + 1] = 0;
 
-        // TODO - Place the seeds in the right holes at random positions
+
     }
 }
