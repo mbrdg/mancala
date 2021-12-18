@@ -104,7 +104,7 @@ const welcomeMenuButtonsAnimation = ()=>{
 const gameBoardButtonsAnimation = ()=>{
     const play = document.querySelector('#play');
 
-    const gameBoard = document.querySelector('#play .game');
+    const game = document.querySelector('#play .game');
     const pauseMenu = document.querySelector('#play .pause-menu');
 
     const pauseMenuBtn = document.querySelector('#play .gameboard #pause-btn');
@@ -113,18 +113,18 @@ const gameBoardButtonsAnimation = ()=>{
 
     pauseMenuBtn.addEventListener('click',() => {
         play.scrollIntoView();
-        gameBoard.classList.toggle('disable');
+        game.classList.toggle('disable');
         pauseMenu.classList.toggle('active');
         document.body.style.overflow = 'hidden';
     });
     continuePlaying.addEventListener('click',() => {
         pauseMenu.classList.toggle('active');
-        gameBoard.classList.toggle('disable');
+        game.classList.toggle('disable');
         document.body.style.overflow = 'visible';
     });
     giveUp.addEventListener('click',() => {
         pauseMenu.classList.toggle('active');
-        gameBoard.classList.toggle('disable');
+        game.classList.toggle('disable');
         document.body.style.overflow = 'visible';
     });
 }

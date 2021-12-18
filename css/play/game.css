@@ -30,16 +30,16 @@
     column-gap: 0.5em;
 }
 
-.enemy-deposit {
-    position: relative;
-    grid-row: 1 / -1;
-    grid-column: 1 / 2;
-}
-
 .my-deposit {
     position: relative;
     grid-row: 1 / -1;
     grid-column: -2 / -1;
+}
+
+.enemy-deposit {
+    position: relative;
+    grid-row: 1 / -1;
+    grid-column: 1 / 2;
 }
 
 .enemy-deposit, .my-deposit, .enemy-hole, .my-hole {
@@ -52,15 +52,14 @@
     height: 100%;
 }
 
-.enemy-deposit .score, .enemy-hole .score,
-.my-deposit .hole, .my-hole .hole {
+.my-hole .hole {
     order: 1;
 }
 
 .hole {
+    position: relative;
     width: 100%;
     height: 100%;
-    position: relative;
     
     background-color: #8A8888;
     border-radius: 5rem;
@@ -70,7 +69,6 @@
     position: absolute;
     top: 45%;
     left: 40%;
-    /* background-color: #A82727; */
 
     width: 20%;
     height: 10%;
@@ -84,12 +82,14 @@
     font-weight: 100;
 }
 
-.enemy-deposit .hole {
-    margin-bottom: 1.8rem;
-}
 .my-deposit .hole {
     margin-top: 1.8rem;
 }
+
+.enemy-deposit .hole {
+    margin-bottom: 1.8rem;
+}
+
 .my-deposit .score {
     position: absolute;
     bottom: 0;
@@ -99,6 +99,7 @@
     position: absolute;
     top: 0;
 }
+
 .enemy-deposit .score, .my-deposit .score {
     font-size: 2rem;
     font-weight: bold;
@@ -106,6 +107,18 @@
 
     width: 100%;
     text-align: center;
+}
+
+/* Active Holes */
+.hole.active {
+    box-shadow: 0 0 1px 0 #A82727;
+
+}
+.hole.active:hover {
+    cursor: pointer;
+    transition: 0.25s ease;
+    transition-property: box-shadow;
+    box-shadow: 0 0 4px 0 #A82727;
 }
 
 /* Pause Button */

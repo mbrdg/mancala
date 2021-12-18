@@ -1,7 +1,14 @@
 export default class Gameboard {
     constructor() {
         // Settings
-        this.settings = {startTurn: '', numberOfHoles: '', numberOfSeedsPerHole: ''};
+        this.settings = {
+            playerTurn: '',
+            numberOfHoles: '',
+            numberOfSeedsPerHole: '',
+            pvp: '',
+            online: '',
+            difficulty: ''
+        };
         // Seeds
         this.seeds = [];
 
@@ -11,9 +18,11 @@ export default class Gameboard {
     }
 
     readUserSettings() {
-        this.settings.startTurn = document.getElementById('f-turn').checked;
-        this.settings.numberOfHoles = document.getElementById('n-holes').innerHTML;
+        this.settings.playerTurn = document.getElementById('f-turn').checked;
+        this.settings.numberOfHoles = parseInt(document.getElementById('n-holes').innerHTML);
         this.settings.numberOfSeedsPerHole = parseInt(document.getElementById('n-seeds').innerHTML);
+        this.settings.pvp = document.getElementById('pvp').checked;
+        this.settings.difficulty = document.getElementById('difficulty').value;
     }
 
     buildHole(typeOfHole) {
@@ -67,7 +76,6 @@ export default class Gameboard {
 
         for (let i = 0; i < nseeds; i++) {
             let newSeed = seed.cloneNode();
-            console.log(newSeed);
             parentHole.appendChild(newSeed);
             this.generateRandomPosition(newSeed);
         }
