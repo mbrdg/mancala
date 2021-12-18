@@ -11,10 +11,13 @@ export default class Gameboard {
         };
         // Seeds
         this.seeds = [];
+        //Holes
+        this.holes = [];
 
         this.readUserSettings();
         this.buildBoard();
         this.placeSeeds();
+        this.readHoles();
     }
 
     readUserSettings() {
@@ -90,6 +93,17 @@ export default class Gameboard {
 
         seed.style.left = (40 + ((Math.random() * 30)-10)) + '%';
         seed.style.top = (45 + ((Math.random() * 40)-20)) + '%';
+    }
+
+    readHoles() {
+        document.querySelectorAll('.my-hole').forEach(element=>this.holes.push(element));
+        this.holes.push(document.querySelector('.my-deposit'));
+        const reverseHoles = document.querySelectorAll('.enemy-hole');
+        for (let index = reverseHoles.length-1; index >= 0; index--) {
+            const element = reverseHoles[index];
+            this.holes.push(element);
+        }
+        this.holes.push(document.querySelector('.enemy-deposit'));
     }
 }
 

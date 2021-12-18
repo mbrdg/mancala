@@ -115,13 +115,13 @@ export default class Game {
         switch (this.gameState) {
             case stateEnum.player1Turn:
                 if(index >= this.board.settings.numberOfHoles) return;
-                //if(!this.playHole(index)) return;
+                if(!this.playHoleP1(index)) return;
                 
-                this.changeState(this.board.settings.pvp ? stateEnum.player2Turn : stateEnum.botTurn); 
+                this.changeState(this.board.settings.pvp ? stateEnum.player2Turn : stateEnum.botTurn);
                 break;
             case stateEnum.player2Turn:
                 if(index < this.board.settings.numberOfHoles) return;
-                //if(!this.playHole(index)) return;
+                if(!this.playHoleP2(index)) return;
 
                 this.changeState(stateEnum.player1Turn);
                 break;
@@ -130,22 +130,119 @@ export default class Game {
         }
     }
 
-    playHole(index) {
-        console.log("has seeds");
-        return true;
-        /* const holes1 = this.board.settings.playerTurn ? document.querySelectorAll('.my-hole') : document.querySelectorAll('.enemy-hole');
+    /*Returns true in case of switching turns, otherwise false*/
+    playHoleP1(index) {
+        const holes = this.board.holes;
+        const numberOfHoles = this.board.settings.numberOfHoles;
 
-        if(!holes1[index].querySelector('.score').textContent) {
-            return;
+        let nSeeds = parseInt(holes[index].querySelector('.score').textContent);
+        if(nSeeds==0) {
+            console.debug('No seeds to withdraw');
+            return false;
         }
+
+        console.debug('Withdraw', nSeeds, 'seeds');
+        holes[index].querySelector('.score').textContent = 0;
+
+        let currIndex = index+1;
+        while (nSeeds>1) {
+            const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
+            holes[currIndex].querySelector('.score').textContent = currSeeds+1;
+
+            currIndex = (currIndex+1)!=this.board.holes.length-1 ? (currIndex+1) % holes.length : 0;
+            nSeeds--;
+        }
+
+        let changeTurn = currIndex > numberOfHoles;
         
-        holes1[index].querySelector('.score').textContent = 0;
-        //this.removeClickListener(holes1, '.hole');
-        console.log(this.board.settings.playerTurn);
-        this.board.settings.playerTurn = !this.board.settings.playerTurn;
-        console.log(this.board.settings.playerTurn); */
+        const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
+        holes[currIndex].querySelector('.score').textContent = currSeeds+1;
+
+        if(changeTurn) { //Seed in the enemy side
+            //Check if game can still be played: player2
+            //If so return true;
+            //else change state to according and return false;
+            return true;
+        }
+
+        if(currIndex==numberOfHoles){ //Seed in player deposit
+            //Check if game can still be played: player1
+            //Change state to according
+            return false;
+        }
+
+        if(currSeeds==0) { //Steal from player side
+            const oppositeSeeds = parseInt(holes[2*numberOfHoles-currIndex].querySelector('.score').textContent);
+            if(oppositeSeeds > 0){
+                holes[currIndex].querySelector('.score').textContent = 0;
+                holes[2*numberOfHoles-currIndex].querySelector('.score').textContent = 0;
+
+                const depositeSeeds = parseInt(holes[numberOfHoles].querySelector('.score').textContent);
+                holes[numberOfHoles].querySelector('.score').textContent = depositeSeeds + oppositeSeeds + 1;
+            } 
+        }
+
+        //Check if game can still be played: player2
+        //Change state to according
+        return true;
     }
 
+    playHoleP2(index) {
+        const holes = this.board.holes;
+        const numberOfHoles = this.board.settings.numberOfHoles;
+
+        let nSeeds = parseInt(holes[index].querySelector('.score').textContent);
+        if(nSeeds==0) {
+            console.debug('No seeds to withdraw');
+            return false;
+        }
+
+        console.debug('Withdraw', nSeeds, 'seeds');
+        holes[index].querySelector('.score').textContent = 0;
+
+        let currIndex = index+1;
+        while (nSeeds>1) {
+            const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
+            holes[currIndex].querySelector('.score').textContent = currSeeds+1;
+
+            currIndex = (currIndex+1)!=numberOfHoles ? (currIndex+1) % holes.length : numberOfHoles+1;            
+            nSeeds--;
+        }
+
+        let changeTurn = currIndex < numberOfHoles;
+        
+        const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
+        holes[currIndex].querySelector('.score').textContent = currSeeds+1;
+
+        if(changeTurn) { //Seed in the enemy side
+            //Check if game can still be played: player1
+            //If so return true;
+            //else change state to according and return false;
+            return true;
+        }
+
+        if(currIndex==(holes.length-1)){ //Seed in player deposit
+            //Check if game can still be played: player1
+            //Change state to according
+            return false;
+        }
+
+        if(currSeeds==0) { //Steal from player side
+            const oppositeSeeds = parseInt(holes[2*numberOfHoles-currIndex].querySelector('.score').textContent);
+            console.log(oppositeSeeds);
+            if(oppositeSeeds > 0){
+                holes[currIndex].querySelector('.score').textContent = 0;
+                holes[2*numberOfHoles-currIndex].querySelector('.score').textContent = 0;
+                
+                const depositeSeeds = parseInt(holes[holes.length-1].querySelector('.score').textContent);
+                holes[holes.length-1].querySelector('.score').textContent = depositeSeeds + oppositeSeeds + 1;
+            } 
+        }
+
+        //Check if game can still be played: player2
+        //Change state to according
+        return true;
+    }
     //UTILS
     removeClassNameFromList(list, className){
         list.forEach(element=>{

@@ -111,14 +111,16 @@
 
 /* Active Holes */
 .hole.active {
-    box-shadow: 0 0 1px 0 #A82727;
+    transition: 0.25s ease;
+    transition-property: box-shadow;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.802);/* #A82727; */
 
 }
 .hole.active:hover {
     cursor: pointer;
     transition: 0.25s ease;
     transition-property: box-shadow;
-    box-shadow: 0 0 4px 0 #A82727;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.823);
 }
 
 /* Pause Button */
