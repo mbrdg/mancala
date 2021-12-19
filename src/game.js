@@ -58,15 +58,23 @@ export default class Game {
 
         if(this.gameState == stateEnum.botTurn) {
             //Bot Play
+            this.addMsgToChat("GRRR I start!");
             this.changeState(stateEnum.player1Turn);
             return;
         }
+
+        let className, text;
+        if(this.gameState == stateEnum.player1Turn){
+            text= "Let's beggin!";
+            className =  '.my-hole .hole';
+        }else {
+            className = '.enemy-hole .hole';
+            text = "My turn!";
+        }
         
-        const className = this.gameState == stateEnum.player1Turn ? '.my-hole .hole' : '.enemy-hole .hole';
         const holes =  document.querySelectorAll(className);
-        holes.forEach(hole=>{
-            hole.classList.add('active');
-        });
+        this.addClassNameToList(holes, 'active');
+        this.addMsgToChat(text);
     }
 
     changeState(newState) {
@@ -87,20 +95,23 @@ export default class Game {
 
             this.removeClassNameFromList(holes, 'active');
 
-            if(newState==stateEnum.botTurn) {
+            if(newState==stateEnum.botTurn) { //Test: Bot Play
                 console.log('bot play');
+                this.gameState = newState;
+                this.addMsgToChat("It's my time to shine!");
                 this.changeState(stateEnum.player1Turn);
                 return;
-            }//Test: Bot Play
+            }
             
-            if(newState==stateEnum.giveUp) //Handle give up
-                console.log("someone gave up");
-
+            console.log("someone gave up");
+            this.addMsgToChat("I give up :(");
             this.gameState = newState;
             return;
         }
         
         this.gameState = newState;
+        this.addMsgToChat(Math.random() < 0.5 ? "I'm going to do my best!" : "It's my turn.");
+
         if(newState==stateEnum.player1Turn) {
             const holes =  document.querySelectorAll('.my-hole .hole');
             this.addClassNameToList(holes, 'active');
@@ -120,8 +131,6 @@ export default class Game {
     }
 
     handleHoleClick(index) {
-        //Index seen from: left my-hole -> my-deposit -> right enemy-hole -> enemy-deposit
-
         switch (this.gameState) {
             case stateEnum.player1Turn:
                 if(index >= this.board.settings.numberOfHoles) return;
@@ -153,31 +162,36 @@ export default class Game {
 
         console.debug('Withdraw', nSeeds, 'seeds');
         holes[index].querySelector('.score').textContent = 0;
+        this.resetSeedPos(holes[index]);
 
         let currIndex = index+1;
+        let scoredPoints = 0;
+
         while (nSeeds>1) {
             const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
             holes[currIndex].querySelector('.score').textContent = currSeeds+1;
 
+            //SEED Animation
+            this.tranferSeed(holes[index], holes[currIndex]);
+
+            scoredPoints = currIndex == numberOfHoles ? scoredPoints+1 : scoredPoints;
             currIndex = (currIndex+1)!=this.board.holes.length-1 ? (currIndex+1) % holes.length : 0;
             nSeeds--;
         }
-
-        let changeTurn = currIndex > numberOfHoles;
         
         const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
         holes[currIndex].querySelector('.score').textContent = currSeeds+1;
+        this.tranferSeed(holes[index], holes[currIndex]);
 
-        if(changeTurn) { //Seed in the enemy side
-            //Check if game can still be played: player2
-            if(this.checkPossiblePlay(holes.slice(numberOfHoles+1, 2*numberOfHoles+1)))
-                return true;
-            //change state to according: win or false;
-            this.changeState(stateEnum.win);
-            return false;
+        if(currIndex > numberOfHoles) { //Seed in the enemy side
+            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
+            return true;
         }
 
         if(currIndex==numberOfHoles){ //Seed in player deposit
+            scoredPoints++;
+            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
+
             //Check if game can still be played: player1
             if(this.checkPossiblePlay(holes.slice(0, numberOfHoles)))
                 return false;
@@ -187,14 +201,28 @@ export default class Game {
         }
 
         if(currSeeds==0) { //Steal from player side
-            const oppositeSeeds = parseInt(holes[2*numberOfHoles-currIndex].querySelector('.score').textContent);
+            const oppositeIndex = 2*numberOfHoles-currIndex;
+            const oppositeSeeds = parseInt(holes[oppositeIndex].querySelector('.score').textContent);
+
             if(oppositeSeeds > 0){
+                //TODO: Wait for seed anim
+                this.resetSeedPos(holes[oppositeIndex]);
+                this.tranferSeed(holes[currIndex], holes[numberOfHoles]);
+                this.tranferSeed(holes[oppositeIndex], holes[numberOfHoles], oppositeSeeds);
+
                 holes[currIndex].querySelector('.score').textContent = 0;
-                holes[2*numberOfHoles-currIndex].querySelector('.score').textContent = 0;
+                holes[oppositeIndex].querySelector('.score').textContent = 0;
 
                 const depositeSeeds = parseInt(holes[numberOfHoles].querySelector('.score').textContent);
                 holes[numberOfHoles].querySelector('.score').textContent = depositeSeeds + oppositeSeeds + 1;
+                scoredPoints+=oppositeSeeds+1;
             } 
+        }
+
+        if(scoredPoints>0)
+            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
+        else if(Math.random() > 0.7){
+            this.addMsgToChat("Better luck next time");
         }
 
         //Check if game can still be played: player2
@@ -217,34 +245,37 @@ export default class Game {
 
         console.debug('Withdraw', nSeeds, 'seeds');
         holes[index].querySelector('.score').textContent = 0;
+        this.resetSeedPos(holes[index]);
 
         let currIndex = index+1;
+        let scoredPoints = 0;
+
         while (nSeeds>1) {
             const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
             holes[currIndex].querySelector('.score').textContent = currSeeds+1;
 
+            //SEED Animation
+            this.tranferSeed(holes[index], holes[currIndex]);
+            
+            scoredPoints = currIndex==(holes.length-1) ? scoredPoints+1 : scoredPoints;
             currIndex = (currIndex+1)!=numberOfHoles ? (currIndex+1) % holes.length : numberOfHoles+1;            
             nSeeds--;
         }
 
-        let changeTurn = currIndex < numberOfHoles;
-        
         const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
         holes[currIndex].querySelector('.score').textContent = currSeeds+1;
+        this.tranferSeed(holes[index], holes[currIndex]);
 
-        if(changeTurn) { //Seed in the enemy side
-            //Check if game can still be played: player1
-            if(this.checkPossiblePlay(holes.slice(0, numberOfHoles)))
-                return true;
-
-            //Change state to according:  Win or lose;
-            this.changeState(stateEnum.win);
-            return false;
+        if(currIndex < numberOfHoles) { //Seed in the enemy side
+            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
+            return true;
         }
 
         if(currIndex==(holes.length-1)){ //Seed in player deposit
+            scoredPoints++;
+            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
+
             //Check if game can still be played: player2
-            console.log(holes.slice(numberOfHoles+1, 2*numberOfHoles+1));
             if(this.checkPossiblePlay(holes.slice(numberOfHoles+1, 2*numberOfHoles+1)))
                 return false;
 
@@ -254,15 +285,29 @@ export default class Game {
         }
 
         if(currSeeds==0) { //Steal from player side
-            const oppositeSeeds = parseInt(holes[2*numberOfHoles-currIndex].querySelector('.score').textContent);
-            console.log(oppositeSeeds);
+            const oppositeIndex = 2*numberOfHoles-currIndex;
+            const oppositeSeeds = parseInt(holes[oppositeIndex].querySelector('.score').textContent);
+
             if(oppositeSeeds > 0){
+                const myDeposit = holes.length-1;
+                //TODO: Wait for seed anim
+                this.resetSeedPos(holes[oppositeIndex]);
+                this.tranferSeed(holes[currIndex], holes[myDeposit]);
+                this.tranferSeed(holes[oppositeIndex], holes[myDeposit], oppositeSeeds);
+
                 holes[currIndex].querySelector('.score').textContent = 0;
-                holes[2*numberOfHoles-currIndex].querySelector('.score').textContent = 0;
+                holes[oppositeIndex].querySelector('.score').textContent = 0;
                 
-                const depositeSeeds = parseInt(holes[holes.length-1].querySelector('.score').textContent);
-                holes[holes.length-1].querySelector('.score').textContent = depositeSeeds + oppositeSeeds + 1;
+                const depositeSeeds = parseInt(holes[myDeposit].querySelector('.score').textContent);
+                holes[myDeposit].querySelector('.score').textContent = depositeSeeds + oppositeSeeds + 1;
+                scoredPoints+=oppositeSeeds+1;
             } 
+        }
+
+        if(scoredPoints>0)
+            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
+        else if(Math.random() > 0.7){
+            this.addMsgToChat("Better luck next time");
         }
 
         //Check if game can still be played: player1
@@ -280,6 +325,39 @@ export default class Game {
         return false;
     }
 
+    resetSeedPos(hole) {
+        const seeds = hole.querySelectorAll('.hole .seed');
+        seeds.forEach(seed=>{
+            seed.style.left = '40%';
+            seed.style.top = '45%';
+        });
+    }
+
+    tranferSeed(from, to, n=1){
+        const hole = from.querySelector('.hole');
+
+        while(n>0){
+            const seed = hole.removeChild(from.querySelector('.hole .seed'));
+            seed.style.left = (40 + ((Math.random() * 30)-10)) + '%';
+            seed.style.top = (45 + ((Math.random() * 40)-20)) + '%';
+            
+            const holeTo = to.querySelector('.hole');
+            holeTo.appendChild(seed);
+            n--;
+        }
+    }
+
+    addMsgToChat = (text) => {
+        const className = (this.gameState == stateEnum.player1Turn ) ? 'player-msg' : 'opponent-msg';
+        const newElem = document.createElement('p');
+        newElem.classList.add(className);
+        const node = document.createTextNode(text);
+        newElem.append(node);
+        const chat = document.getElementById('chat');
+        chat.prepend(newElem);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
     //UTILS
     removeClassNameFromList(list, className){
         list.forEach(element=>{
@@ -291,5 +369,4 @@ export default class Game {
             element.classList.add(className);
         });
     }
-
 }
