@@ -70,6 +70,16 @@ export default class Game {
     }
 
     changeState(newState) {
+        if(newState==stateEnum.win || newState==stateEnum.lose){
+            let holes =  document.querySelectorAll('.my-hole .hole');
+            this.removeClassNameFromList(holes, 'active');
+            holes = document.querySelectorAll('.enemy-hole .hole');
+            this.removeClassNameFromList(holes, 'active');
+            console.debug("Game ended");
+            this.gameState = newState;
+            return;
+        }
+
         if(newState==stateEnum.giveUp || newState==stateEnum.botTurn) {
 
             const className = this.gameState == stateEnum.player1Turn ? '.my-hole .hole' : '.enemy-hole .hole';
@@ -160,14 +170,19 @@ export default class Game {
 
         if(changeTurn) { //Seed in the enemy side
             //Check if game can still be played: player2
-            //If so return true;
-            //else change state to according and return false;
-            return true;
+            if(this.checkPossiblePlay(holes.slice(numberOfHoles+1, 2*numberOfHoles+1)))
+                return true;
+            //change state to according: win or false;
+            this.changeState(stateEnum.win);
+            return false;
         }
 
         if(currIndex==numberOfHoles){ //Seed in player deposit
             //Check if game can still be played: player1
-            //Change state to according
+            if(this.checkPossiblePlay(holes.slice(0, numberOfHoles)))
+                return false;
+            //Change state to according: win or lose
+            this.changeState(stateEnum.win);
             return false;
         }
 
@@ -183,8 +198,11 @@ export default class Game {
         }
 
         //Check if game can still be played: player2
+        if(this.checkPossiblePlay(holes.slice(numberOfHoles+1, 2*numberOfHoles+1)))
+            return true;
         //Change state to according
-        return true;
+        this.changeState(stateEnum.win);
+        return false;
     }
 
     playHoleP2(index) {
@@ -216,14 +234,22 @@ export default class Game {
 
         if(changeTurn) { //Seed in the enemy side
             //Check if game can still be played: player1
-            //If so return true;
-            //else change state to according and return false;
-            return true;
+            if(this.checkPossiblePlay(holes.slice(0, numberOfHoles)))
+                return true;
+
+            //Change state to according:  Win or lose;
+            this.changeState(stateEnum.win);
+            return false;
         }
 
         if(currIndex==(holes.length-1)){ //Seed in player deposit
-            //Check if game can still be played: player1
-            //Change state to according
+            //Check if game can still be played: player2
+            console.log(holes.slice(numberOfHoles+1, 2*numberOfHoles+1));
+            if(this.checkPossiblePlay(holes.slice(numberOfHoles+1, 2*numberOfHoles+1)))
+                return false;
+
+            //Change state to according: Win or lose;
+            this.changeState(stateEnum.win);
             return false;
         }
 
@@ -239,10 +265,21 @@ export default class Game {
             } 
         }
 
-        //Check if game can still be played: player2
-        //Change state to according
-        return true;
+        //Check if game can still be played: player1
+        if(this.checkPossiblePlay(holes.slice(0, numberOfHoles)))
+            return true;
+        //Change state to according: Win or lose;
+        this.changeState(stateEnum.win);
+        return false;
     }
+
+    checkPossiblePlay(holes) {
+        for (const hole of holes) {
+            if(hole.querySelector('.score').textContent!="0") return true;
+        }
+        return false;
+    }
+
     //UTILS
     removeClassNameFromList(list, className){
         list.forEach(element=>{
