@@ -162,6 +162,7 @@ export default class Game {
 
         console.debug('Withdraw', nSeeds, 'seeds');
         holes[index].querySelector('.score').textContent = 0;
+
         this.resetSeedPos(holes[index]);
 
         let currIndex = index+1;
@@ -175,7 +176,7 @@ export default class Game {
             this.tranferSeed(holes[index], holes[currIndex]);
 
             scoredPoints = currIndex == numberOfHoles ? scoredPoints+1 : scoredPoints;
-            currIndex = (currIndex+1)!=this.board.holes.length-1 ? (currIndex+1) % holes.length : 0;
+            currIndex = (currIndex+1)!= holes.length-1 ? (currIndex+1) % holes.length : 0;
             nSeeds--;
         }
         
@@ -195,7 +196,9 @@ export default class Game {
             //Check if game can still be played: player1
             if(this.checkPossiblePlay(holes.slice(0, numberOfHoles)))
                 return false;
+            
             //Change state to according: win or lose
+            this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
             this.changeState(stateEnum.win);
             return false;
         }
@@ -228,7 +231,9 @@ export default class Game {
         //Check if game can still be played: player2
         if(this.checkPossiblePlay(holes.slice(numberOfHoles+1, 2*numberOfHoles+1)))
             return true;
+
         //Change state to according
+        this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
         this.changeState(stateEnum.win);
         return false;
     }
@@ -245,6 +250,7 @@ export default class Game {
 
         console.debug('Withdraw', nSeeds, 'seeds');
         holes[index].querySelector('.score').textContent = 0;
+
         this.resetSeedPos(holes[index]);
 
         let currIndex = index+1;
@@ -280,6 +286,7 @@ export default class Game {
                 return false;
 
             //Change state to according: Win or lose;
+            this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
             this.changeState(stateEnum.win);
             return false;
         }
@@ -313,7 +320,9 @@ export default class Game {
         //Check if game can still be played: player1
         if(this.checkPossiblePlay(holes.slice(0, numberOfHoles)))
             return true;
+
         //Change state to according: Win or lose;
+        this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
         this.changeState(stateEnum.win);
         return false;
     }
@@ -344,6 +353,21 @@ export default class Game {
             const holeTo = to.querySelector('.hole');
             holeTo.appendChild(seed);
             n--;
+        }
+    }
+
+    removeRemainingSeeds(holes, to){
+        for (const hole of holes) {
+            const nSeeds = hole.querySelectorAll('.hole .seed').length;
+            if(nSeeds == 0) continue;
+            
+            //TODO: Wait for seed anim
+            hole.querySelector('.score').textContent = 0;
+            this.resetSeedPos(hole); 
+            this.tranferSeed(hole, to, nSeeds);
+
+            const currSeeds = parseInt(to.querySelector('.score').textContent);
+            to.querySelector('.score').textContent = currSeeds + nSeeds;
         }
     }
 
