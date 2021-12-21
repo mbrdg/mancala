@@ -92,7 +92,6 @@ const welcomeMenuButtonsAnimation = ()=>{
         play.scrollIntoView();
         welcomeMenu.classList.toggle('active');
         moreSettingsMenu.classList.toggle('active');
-        document.body.style.overflow = 'hidden';
     });
     closeMoreSettingsBtn.addEventListener('click',() => {
         welcomeMenu.classList.toggle('active');

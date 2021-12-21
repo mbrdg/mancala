@@ -130,27 +130,30 @@ export default class Game {
         }
     }
 
-    handleHoleClick(index) {
+    async handleHoleClick(index) {
         switch (this.gameState) {
-            case stateEnum.player1Turn:
+            case stateEnum.player1Turn:{
                 if(index >= this.board.settings.numberOfHoles) return;
-                if(!this.playHoleP1(index)) return;
+                const res = await (this.playHoleP1(index));
+                if(!res) return;
                 
                 this.changeState(this.board.settings.pvp ? stateEnum.player2Turn : stateEnum.botTurn);
                 break;
-            case stateEnum.player2Turn:
+            }
+            case stateEnum.player2Turn:{
                 if(index < this.board.settings.numberOfHoles) return;
                 if(!this.playHoleP2(index)) return;
 
                 this.changeState(stateEnum.player1Turn);
                 break;
+            }
             default:
                 break;
         }
     }
 
     /*Returns true in case of switching turns, otherwise false*/
-    playHoleP1(index) {
+    async playHoleP1(index) {
         const holes = this.board.holes;
         const numberOfHoles = this.board.settings.numberOfHoles;
 
@@ -164,6 +167,7 @@ export default class Game {
         holes[index].querySelector('.score').textContent = 0;
 
         this.resetSeedPos(holes[index]);
+        await this.sleep(300);
 
         let currIndex = index+1;
         let scoredPoints = 0;
@@ -174,6 +178,7 @@ export default class Game {
 
             //SEED Animation
             this.tranferSeed(holes[index], holes[currIndex]);
+            await this.sleep(200);
 
             scoredPoints = currIndex == numberOfHoles ? scoredPoints+1 : scoredPoints;
             currIndex = (currIndex+1)!= holes.length-1 ? (currIndex+1) % holes.length : 0;
@@ -183,6 +188,7 @@ export default class Game {
         const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
         holes[currIndex].querySelector('.score').textContent = currSeeds+1;
         this.tranferSeed(holes[index], holes[currIndex]);
+        await this.sleep(200);
 
         if(currIndex > numberOfHoles) { //Seed in the enemy side
             this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
@@ -199,6 +205,8 @@ export default class Game {
             
             //Change state to according: win or lose
             this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
+            await this.sleep(300);
+
             this.changeState(stateEnum.win);
             return false;
         }
@@ -210,8 +218,11 @@ export default class Game {
             if(oppositeSeeds > 0){
                 //TODO: Wait for seed anim
                 this.resetSeedPos(holes[oppositeIndex]);
+                await this.sleep(300);
                 this.tranferSeed(holes[currIndex], holes[numberOfHoles]);
+                await this.sleep(200);
                 this.tranferSeed(holes[oppositeIndex], holes[numberOfHoles], oppositeSeeds);
+                await this.sleep(200);
 
                 holes[currIndex].querySelector('.score').textContent = 0;
                 holes[oppositeIndex].querySelector('.score').textContent = 0;
@@ -234,11 +245,13 @@ export default class Game {
 
         //Change state to according
         this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
+        await this.sleep(300);
+
         this.changeState(stateEnum.win);
         return false;
     }
 
-    playHoleP2(index) {
+    async playHoleP2(index) {
         const holes = this.board.holes;
         const numberOfHoles = this.board.settings.numberOfHoles;
 
@@ -252,6 +265,7 @@ export default class Game {
         holes[index].querySelector('.score').textContent = 0;
 
         this.resetSeedPos(holes[index]);
+        await this.sleep(300);
 
         let currIndex = index+1;
         let scoredPoints = 0;
@@ -262,6 +276,7 @@ export default class Game {
 
             //SEED Animation
             this.tranferSeed(holes[index], holes[currIndex]);
+            await this.sleep(200);
             
             scoredPoints = currIndex==(holes.length-1) ? scoredPoints+1 : scoredPoints;
             currIndex = (currIndex+1)!=numberOfHoles ? (currIndex+1) % holes.length : numberOfHoles+1;            
@@ -271,6 +286,7 @@ export default class Game {
         const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
         holes[currIndex].querySelector('.score').textContent = currSeeds+1;
         this.tranferSeed(holes[index], holes[currIndex]);
+        await this.sleep(200);
 
         if(currIndex < numberOfHoles) { //Seed in the enemy side
             this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
@@ -287,6 +303,8 @@ export default class Game {
 
             //Change state to according: Win or lose;
             this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
+            await this.sleep(300);
+
             this.changeState(stateEnum.win);
             return false;
         }
@@ -299,8 +317,11 @@ export default class Game {
                 const myDeposit = holes.length-1;
                 //TODO: Wait for seed anim
                 this.resetSeedPos(holes[oppositeIndex]);
+                await this.sleep(300);
                 this.tranferSeed(holes[currIndex], holes[myDeposit]);
+                await this.sleep(200);
                 this.tranferSeed(holes[oppositeIndex], holes[myDeposit], oppositeSeeds);
+                await this.sleep(200);
 
                 holes[currIndex].querySelector('.score').textContent = 0;
                 holes[oppositeIndex].querySelector('.score').textContent = 0;
@@ -323,6 +344,8 @@ export default class Game {
 
         //Change state to according: Win or lose;
         this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
+        await this.sleep(300);
+
         this.changeState(stateEnum.win);
         return false;
     }
@@ -392,5 +415,9 @@ export default class Game {
         list.forEach(element=>{
             element.classList.add(className);
         });
+    }
+    
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
