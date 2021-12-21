@@ -17,6 +17,7 @@
   <link href="./css/play/welcomeMenu.css" type="text/css" rel="stylesheet">
   <link href="./css/play/moreSettings.css" type="text/css" rel="stylesheet">
   <link href="./css/play/pauseMenu.css" type="text/css" rel="stylesheet">
+  <link href="./css/play/endMenu.css" type="text/css" rel="stylesheet">
   <link href="./css/play/game.css" type="text/css" rel="stylesheet">
   <link href="./css/play/messages.css" type="text/css" rel="stylesheet">
   <link href="./css/highscores.css" type="text/css" rel="stylesheet">
@@ -215,6 +216,29 @@
         </div>
       </div>
       <!-- End Pause Menu -->
+
+      <!-- Win/Lose Menu -->
+      <div class="end-menu container">
+        <div class="banner">
+          <img src="./assets/trophy.png" alt="End Game Icon" id="leftEndIcon">
+          <h1>Victory</h1>
+          <img src="./assets/trophy.png" alt="End Game Icon" id="rightEndIcon">
+        </div>
+        <div class="information">
+          <div class="final-scores">
+            <div>
+              <p class="player-name">Player1</p>
+              <p class="player-score">20</p>
+            </div>
+            <div>
+              <p class="player-name">Player2</p>
+              <p class="player-score">10</p>
+            </div>
+          </div>
+          <button type="button" id="continue-btn">Continue</button>
+        </div>
+      </div>
+      <!-- End Win/Lose Menu -->
 
       <!-- Game Board -->
       <div class="game container">

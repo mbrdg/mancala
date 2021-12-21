@@ -7,6 +7,7 @@ export function setUpAnimations() {
     gameBoardButtonsAnimation();
     setDifficultyAnimation();
     moreSettingsAnimations();
+    endMenuAnimations();
 }
 
 const hamburguerAnimation = ()=>{
@@ -171,5 +172,24 @@ const moreSettingsAnimations = ()=>{
     subSeeds.addEventListener('click', ()=>{
         if(nSeeds.textContent < 3) return;
         nSeeds.textContent = (parseInt(nSeeds.textContent)-1).toString();
+    });
+}
+
+const endMenuAnimations = ()=>{
+    const continueBtn = document.getElementById('continue-btn');
+    const endMenu = document.querySelector('#play .end-menu');
+    const play = document.querySelector('#play');
+    const gameMenu = document.querySelector('#play .game');
+    const welcomeMenu = document.querySelector('#play .welcome-menu');
+
+    continueBtn.addEventListener('click', ()=>{
+        play.scrollIntoView();
+        gameMenu.classList.remove('active');
+        const imgs = endMenu.querySelectorAll('.banner img');
+        for (const img of imgs) {
+            img.style.visibility = 'hidden';
+        }
+        welcomeMenu.style.display = "flex";
+        endMenu.classList.remove('active');
     });
 }

@@ -1,6 +1,6 @@
 import Gameboard from './gameboard.js'
 
-const stateEnum = {'player1Turn': 1, 'player2Turn': 2,'botTurn': 3, 'giveUp': 4, 'win': 5, 'lose': 6};
+const stateEnum = {'player1Turn': 1, 'player2Turn': 2,'botTurn': 3, 'giveUp': 4, 'win': 5, 'lose': 6, 'draw': 7};
 Object.freeze(stateEnum)
 
 export default class Game {
@@ -51,6 +51,11 @@ export default class Game {
             const game = document.querySelector('#play .game');
             game.classList.toggle('disable');
         })
+
+        const continueBtn = document.getElementById('continue-btn');
+        continueBtn.addEventListener('click', ()=>{
+            this.resetGame();
+        });
     }
 
     startGame() {
@@ -78,12 +83,14 @@ export default class Game {
     }
 
     changeState(newState) {
-        if(newState==stateEnum.win || newState==stateEnum.lose){
+        if(newState==stateEnum.win || newState==stateEnum.lose || newState==stateEnum.draw){
             let holes =  document.querySelectorAll('.my-hole .hole');
             this.removeClassNameFromList(holes, 'active');
             holes = document.querySelectorAll('.enemy-hole .hole');
             this.removeClassNameFromList(holes, 'active');
             console.debug("Game ended");
+
+            this.showEndMenu(newState);
             this.gameState = newState;
             return;
         }
@@ -206,7 +213,7 @@ export default class Game {
             this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
             await this.sleep(300);
 
-            this.changeState(stateEnum.win);
+            this.endGame();
             return false;
         }
 
@@ -246,7 +253,7 @@ export default class Game {
         this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
         await this.sleep(300);
 
-        this.changeState(stateEnum.win);
+        this.endGame();
         return false;
     }
 
@@ -300,11 +307,10 @@ export default class Game {
             if(this.checkPossiblePlay(holes.slice(numberOfHoles+1, 2*numberOfHoles+1)))
                 return false;
 
-            //Change state to according: Win or lose;
             this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
             await this.sleep(300);
 
-            this.changeState(stateEnum.win);
+            this.endGame();
             return false;
         }
 
@@ -345,7 +351,7 @@ export default class Game {
         this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
         await this.sleep(300);
 
-        this.changeState(stateEnum.win);
+        this.endGame();
         return false;
     }
 
@@ -393,7 +399,7 @@ export default class Game {
         }
     }
 
-    addMsgToChat = (text) => {
+    addMsgToChat(text) {
         const className = (this.gameState == stateEnum.player1Turn ) ? 'player-msg' : 'opponent-msg';
         const newElem = document.createElement('p');
         newElem.classList.add(className);
@@ -402,6 +408,93 @@ export default class Game {
         const chat = document.getElementById('chat');
         chat.prepend(newElem);
         chat.scrollTop = chat.scrollHeight;
+    }
+
+    endGame(){
+        const p1Score = document.querySelector('#play .game .my-deposit .score').textContent;
+        const p2Score = document.querySelector('#play .game .enemy-deposit .score').textContent;
+
+        if(p1Score == p2Score) {
+            this.changeState(stateEnum.draw);
+            return;
+        }
+
+        p1Score>p2Score ? this.changeState(stateEnum.win) : this.changeState(stateEnum.lose);
+    }
+
+    showEndMenu(newState){
+        const endMenu = document.querySelector('#play .end-menu');
+
+        switch (newState) {
+            case stateEnum.win:{
+                endMenu.querySelector('.banner h1').textContent = 'VICTORY';
+                const leftImg = document.getElementById('leftEndIcon');
+                leftImg.style.visibility = 'visible';
+                const rightImg = document.getElementById('rightEndIcon');
+                rightImg.style.visibility = 'hidden';
+
+                const firstDiv = endMenu.querySelector(".information .final-scores div:first-of-type");
+                firstDiv.style.width = '55%';
+                const sndDiv = endMenu.querySelector(".information .final-scores div:nth-of-type(2)");
+                sndDiv.style.width = '45%';
+
+                break;
+            }
+            case stateEnum.lose:{
+                endMenu.querySelector('.banner h1').textContent = 'DEFEAT';
+                const leftImg = document.getElementById('leftEndIcon');
+                leftImg.style.visibility = 'hidden';
+                const rightImg = document.getElementById('rightEndIcon');
+                rightImg.style.visibility = 'visible';
+
+                const firstDiv = endMenu.querySelector(".information .final-scores div:first-of-type");
+                firstDiv.style.width = '45%';
+                const sndDiv = endMenu.querySelector(".information .final-scores div:nth-of-type(2)");
+                sndDiv.style.width = '55%';
+
+                break;
+            }
+            case stateEnum.draw:{
+                endMenu.querySelector('.banner h1').textContent = 'DRAW';
+                const imgs = endMenu.querySelectorAll('.banner img');
+                for (const img of imgs) {
+                    img.style.visibility = 'visible';
+                }
+
+                const firstDiv = endMenu.querySelector(".information .final-scores div:first-of-type");
+                firstDiv.style.width = '50%';
+                const sndDiv = endMenu.querySelector(".information .final-scores div:nth-of-type(2)");
+                sndDiv.style.width = '50%';
+                break;
+            }
+            default :
+                break;
+        }
+
+        const scores = endMenu.querySelectorAll('.information .final-scores .player-score');
+        scores[0].textContent = document.querySelector('#play .game .my-deposit .score').textContent;
+        scores[1].textContent = document.querySelector('#play .game .enemy-deposit .score').textContent;
+
+        const names = endMenu.querySelectorAll('.information .final-scores .player-name');
+        names[0].textContent = 'Player 1'; //TODO: Change to name of user;
+        names[1].textContent = this.board.settings.pvp ? 'Player 2' : 'Bot'; //TODO: Change to name of user;
+
+        endMenu.classList.add('active');
+    }
+
+    resetGame(){
+        console.log("remove msg, remove seeds from all holes");
+    }
+
+    resetToWelcomeMenu(){
+        const play = document.querySelector('#play');
+        const gameMenu = document.querySelector('#play .game');
+        const welcomeMenu = document.querySelector('#play .welcome-menu');
+
+
+        play.scrollIntoView();
+        gameMenu.classList.remove('active');
+        welcomeMenu.style.display = "flex";
     }
 
     //UTILS
@@ -415,7 +508,6 @@ export default class Game {
             element.classList.add(className);
         });
     }
-    
     sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
