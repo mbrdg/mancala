@@ -136,14 +136,13 @@ export default class Game {
                 if(index >= this.board.settings.numberOfHoles) return;
                 const res = await (this.playHoleP1(index));
                 if(!res) return;
-                
                 this.changeState(this.board.settings.pvp ? stateEnum.player2Turn : stateEnum.botTurn);
                 break;
             }
             case stateEnum.player2Turn:{
                 if(index < this.board.settings.numberOfHoles) return;
-                if(!this.playHoleP2(index)) return;
-
+                const res = await (this.playHoleP2(index));
+                if(!res) return;
                 this.changeState(stateEnum.player1Turn);
                 break;
             }
@@ -152,7 +151,7 @@ export default class Game {
         }
     }
 
-    /*Returns true in case of switching turns, otherwise false*/
+    /* Returns true in case of switching turns, false otherwise */
     async playHoleP1(index) {
         const holes = this.board.holes;
         const numberOfHoles = this.board.settings.numberOfHoles;
