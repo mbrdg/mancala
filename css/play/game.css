@@ -45,11 +45,13 @@
 .enemy-deposit, .my-deposit, .enemy-hole, .my-hole {
     display: flex;
     flex-direction: column;
-   /*  justify-content: space-between;
-    align-items: stretch; */
 
     width: 100%;
     height: 100%;
+}
+
+.enemy-deposit, .my-deposit {
+    min-width: 1.2rem;
 }
 
 .my-hole .hole {
@@ -72,10 +74,15 @@
 
     width: 20%;
     height: 10%;
+
     border-radius: 50%;
 
     transition: 0.5s ease;
     transition-property: top, left;
+}
+
+.enemy-deposit .seed, .my-deposit .seed {
+    height: 5%;
 }
 
 .score {

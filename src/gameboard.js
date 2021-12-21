@@ -46,7 +46,7 @@ export default class Gameboard {
 
     buildBoard() {
         let gameboard = document.querySelector('.gameboard');
-        gameboard.style.gridTemplateColumns = '1fr repeat(' + this.settings.numberOfHoles + ', 0.75fr) 1fr';
+        gameboard.style.gridTemplateColumns = '1fr repeat(' + this.settings.numberOfHoles + ', 1fr) 1fr';
 
         const minNumberOfHoles = 2;
         for (let i = minNumberOfHoles; i < this.settings.numberOfHoles; i++) {
