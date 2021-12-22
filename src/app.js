@@ -11,7 +11,7 @@ const play = document.querySelector('#play');
 const welcomeMenu = document.querySelector('#play .welcome-menu');
 const gameMenu = document.querySelector('#play .game');
 const playButton = document.querySelector('#play .welcome-menu #play-btn');
-
+const continueButton = document.getElementById('continue-btn');
 
 playButton.addEventListener('click', () => {
     play.scrollIntoView();
@@ -21,4 +21,8 @@ playButton.addEventListener('click', () => {
     // Start game with current setting
     game.setupGameConfig();
     game.startGame();
+});
+
+continueButton.addEventListener('click', ()=>{
+    game.resetGame();
 });

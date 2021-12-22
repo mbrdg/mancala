@@ -12,6 +12,14 @@ export default class Game {
 
         //State
         this.gameState = null;
+
+        //ClickEvents
+        const giveUpBtn = document.getElementById('leave-btn');
+        giveUpBtn.addEventListener('click', ()=> {
+            document.getElementById('play').scrollIntoView();
+            const oldState = this.changeState(stateEnum.giveUp);
+            this.endGame(oldState);
+        })
     }
 
     setupGameConfig() {
@@ -43,18 +51,6 @@ export default class Game {
                 //New index is counted starting from player1 holes
                 this.handleHoleClick(2*this.board.settings.numberOfHoles-i);
             });
-        });
-
-        const giveUpBtn = document.getElementById('leave-btn');
-        giveUpBtn.addEventListener('click', ()=>{
-            this.changeState(stateEnum.giveUp);
-            const game = document.querySelector('#play .game');
-            game.classList.toggle('disable');
-        })
-
-        const continueBtn = document.getElementById('continue-btn');
-        continueBtn.addEventListener('click', ()=>{
-            this.resetGame();
         });
     }
 
@@ -110,10 +106,14 @@ export default class Game {
                 return;
             }
             
-            console.log("someone gave up");
             this.addMsgToChat("I give up :(");
+
+            const deposit = (this.gameState == stateEnum.player1Turn ) ? 'my-deposit' : 'enemy-deposit';
+            document.querySelector(`#play .game .${deposit} .score`).textContent = 0;
+
+            const oldState = this.gameState;
             this.gameState = newState;
-            return;
+            return oldState;
         }
         
         this.gameState = newState;
@@ -410,7 +410,11 @@ export default class Game {
         chat.scrollTop = chat.scrollHeight;
     }
 
-    endGame(){
+    endGame(giveUp=0){
+        if(giveUp){
+            giveUp == stateEnum.player1Turn ? this.changeState(stateEnum.lose) : this.changeState(stateEnum.win);
+            return;
+        }
         const p1Score = document.querySelector('#play .game .my-deposit .score').textContent;
         const p2Score = document.querySelector('#play .game .enemy-deposit .score').textContent;
 
@@ -483,18 +487,20 @@ export default class Game {
     }
 
     resetGame(){
-        console.log("remove msg, remove seeds from all holes");
-    }
+        const chat = document.getElementById('chat');
+        chat.textContent = '';
 
-    resetToWelcomeMenu(){
-        const play = document.querySelector('#play');
-        const gameMenu = document.querySelector('#play .game');
-        const welcomeMenu = document.querySelector('#play .welcome-menu');
+        const enemyDeposit = document.querySelector('#play .game .enemy-deposit .hole');
+        const myDeposit = document.querySelector('#play .game .my-deposit .hole');
+        enemyDeposit.textContent = '';
+        myDeposit.textContent = '';
 
-
-        play.scrollIntoView();
-        gameMenu.classList.remove('active');
-        welcomeMenu.style.display = "flex";
+        for (const hole of document.querySelectorAll('.my-hole')) {
+            hole.remove();
+        }
+        for (const hole of document.querySelectorAll('.enemy-hole')) {
+            hole.remove();
+        }
     }
 
     //UTILS

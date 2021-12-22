@@ -36,12 +36,12 @@
     height: 45px;
 }
 
-/* #play .end-menu #leftEndIcon {
-    /* animation: rotate 0.8s ease infinite;
+#play .end-menu #leftEndIcon {
+    animation: rotate 0.8s ease infinite;
 }
 #play .end-menu #rightEndIcon {
-    /* animation: rotate 0.8s ease infinite;
-} */
+    animation: rotate 0.8s ease infinite;
+}
 
 /* Information */
 #play .end-menu .information {
@@ -122,8 +122,8 @@
     top: 0;
     left: 0;
     opacity: 1;
-    /* transition: 0.3s ease;
-    transition-property: left, visibility, opacity; */
+    transition: 0.3s ease;
+    transition-property: visibility, opacity;
     background: rgba(26, 26, 29, 0.92);
 }
 

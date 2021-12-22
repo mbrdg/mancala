@@ -40,16 +40,23 @@ export default class Gameboard {
         newHole.append(hole);
         newHole.append(score);
 
-        let oldHole = document.querySelector('.' + typeOfHole);
+        if(typeOfHole=='enemy-hole'){
+            const oldHole = document.querySelector('.enemy-deposit');
+            const h = oldHole.nextSibling;
+            oldHole.parentNode.insertBefore(newHole, oldHole.nextSibling);
+            return;
+        }
+
+        const oldHole = document.querySelector('.my-deposit');
         document.querySelector('.gameboard').insertBefore(newHole, oldHole);
+        return;
     }
 
     buildBoard() {
         let gameboard = document.querySelector('.gameboard');
         gameboard.style.gridTemplateColumns = '1fr repeat(' + this.settings.numberOfHoles + ', 1fr) 1fr';
 
-        const minNumberOfHoles = 2;
-        for (let i = minNumberOfHoles; i < this.settings.numberOfHoles; i++) {
+        for (let i = 0; i < this.settings.numberOfHoles; i++) {
             this.buildHole('enemy-hole');
             this.buildHole('my-hole');
         }

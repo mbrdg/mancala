@@ -1,6 +1,6 @@
 /* Pause Menu */
 #play .pause-menu {
-    position: fixed;
+    position: absolute;
     left: -13%;
     z-index: 10;
     

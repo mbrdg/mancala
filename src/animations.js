@@ -115,7 +115,6 @@ const gameBoardButtonsAnimation = ()=>{
         play.scrollIntoView();
         game.classList.toggle('disable');
         pauseMenu.classList.toggle('active');
-        document.body.style.overflow = 'hidden';
     });
     continuePlaying.addEventListener('click',() => {
         pauseMenu.classList.toggle('active');
