@@ -24,5 +24,6 @@ playButton.addEventListener('click', () => {
 });
 
 continueButton.addEventListener('click', ()=>{
+    play.scrollIntoView();
     game.resetGame();
 });

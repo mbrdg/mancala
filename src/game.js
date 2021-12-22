@@ -54,12 +54,12 @@ export default class Game {
         });
     }
 
-    startGame() {
+    async startGame() {
         console.debug('Game Starting');
 
-        if(this.gameState == stateEnum.botTurn) {
-            //Bot Play
+        if(this.gameState == stateEnum.botTurn) { //Bot Play
             this.addMsgToChat("GRRR I start!");
+            await this.playBot();
             this.changeState(stateEnum.player1Turn);
             return;
         }
@@ -78,7 +78,7 @@ export default class Game {
         this.addMsgToChat(text);
     }
 
-    changeState(newState) {
+    async changeState(newState) {
         if(newState==stateEnum.win || newState==stateEnum.lose || newState==stateEnum.draw){
             let holes =  document.querySelectorAll('.my-hole .hole');
             this.removeClassNameFromList(holes, 'active');
@@ -98,10 +98,10 @@ export default class Game {
 
             this.removeClassNameFromList(holes, 'active');
 
-            if(newState==stateEnum.botTurn) { //Test: Bot Play
-                console.log('bot play');
+            if(newState==stateEnum.botTurn) { //Bot Play
                 this.gameState = newState;
                 this.addMsgToChat("It's my time to shine!");
+                await this.playBot();
                 this.changeState(stateEnum.player1Turn);
                 return;
             }
@@ -210,8 +210,7 @@ export default class Game {
                 return false;
             
             //Change state to according: win or lose
-            this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
-            await this.sleep(300);
+            await this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
 
             this.endGame();
             return false;
@@ -250,8 +249,7 @@ export default class Game {
             return true;
 
         //Change state to according
-        this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
-        await this.sleep(300);
+        await this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
 
         this.endGame();
         return false;
@@ -307,8 +305,7 @@ export default class Game {
             if(this.checkPossiblePlay(holes.slice(numberOfHoles+1, 2*numberOfHoles+1)))
                 return false;
 
-            this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
-            await this.sleep(300);
+            await this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
 
             this.endGame();
             return false;
@@ -348,11 +345,15 @@ export default class Game {
             return true;
 
         //Change state to according: Win or lose;
-        this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
-        await this.sleep(300);
+        await this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
 
         this.endGame();
         return false;
+    }
+
+    async playBot(){
+        console.log("MIKE");
+        await this.sleep(1000);
     }
 
     checkPossiblePlay(holes) {
@@ -384,15 +385,17 @@ export default class Game {
         }
     }
 
-    removeRemainingSeeds(holes, to){
+    async removeRemainingSeeds(holes, to){
         for (const hole of holes) {
             const nSeeds = hole.querySelectorAll('.hole .seed').length;
             if(nSeeds == 0) continue;
             
             //TODO: Wait for seed anim
             hole.querySelector('.score').textContent = 0;
-            this.resetSeedPos(hole); 
+            this.resetSeedPos(hole);
+            await this.sleep(300);
             this.tranferSeed(hole, to, nSeeds);
+            await this.sleep(200);
 
             const currSeeds = parseInt(to.querySelector('.score').textContent);
             to.querySelector('.score').textContent = currSeeds + nSeeds;
