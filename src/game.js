@@ -15,10 +15,10 @@ export default class Game {
 
         //ClickEvents
         const giveUpBtn = document.getElementById('leave-btn');
-        giveUpBtn.addEventListener('click', ()=> {
-            document.getElementById('play').scrollIntoView();
+        giveUpBtn.addEventListener('click', ()=> {            
             const oldState = this.changeState(stateEnum.giveUp);
             this.endGame(oldState);
+            document.getElementById('play').scrollIntoView();
         })
     }
 

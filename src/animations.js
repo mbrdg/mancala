@@ -29,6 +29,9 @@ const hamburguerAnimation = ()=>{
 }
 
 const navBarButtonAnimation = ()=>{
+    const play = document.querySelector('#play');
+    const instructions = document.querySelector('#instructions');
+
     const playButton = document.querySelector('#play-button');
     const instructionsButton = document.querySelector('#instructions-button');
 
@@ -38,6 +41,7 @@ const navBarButtonAnimation = ()=>{
     });
 
     instructionsButton.addEventListener('click', ()=>{
+        console.log(play);
         play.classList.add('active');
         instructions.classList.add('active');
     });
@@ -46,20 +50,27 @@ const navBarButtonAnimation = ()=>{
 const navBarScrollAnimation = ()=>{
     let lastScrollTop = 0;
     const header = document.querySelector('#header');
+    const menu=document.querySelector('header nav .nav-list ul');
+
+    const instructions = document.querySelector('#instructions');
     const moreSettingsMenu = document.querySelector('#play .more-settings');
     const pauseMenu = document.querySelector('#play .pause-menu');
+
 
     document.addEventListener('scroll', ()=>{
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         if(scrollTop > lastScrollTop) {
+            menu.classList.remove('active');
             header.style.top="-12vh";
         } else {
             header.style.top="0";
         }
         lastScrollTop = scrollTop;
         
-        if(moreSettingsMenu.classList.contains('active')) header.style.top="-12vh";
-        if(pauseMenu.classList.contains('active')) header.style.top="-12vh"; 
+        if(moreSettingsMenu.classList.contains('active') || pauseMenu.classList.contains('active') || instructions.classList.contains('active')) {
+            menu.classList.remove('active');
+            header.style.top="-12vh";
+        }   
     });
 }
 
@@ -97,7 +108,6 @@ const welcomeMenuButtonsAnimation = ()=>{
     closeMoreSettingsBtn.addEventListener('click',() => {
         welcomeMenu.classList.toggle('active');
         moreSettingsMenu.classList.toggle('active');
-        document.body.style.overflow = 'visible';
     });
 }
 
@@ -117,14 +127,13 @@ const gameBoardButtonsAnimation = ()=>{
         pauseMenu.classList.toggle('active');
     });
     continuePlaying.addEventListener('click',() => {
+        play.scrollIntoView();
         pauseMenu.classList.toggle('active');
         game.classList.toggle('disable');
-        document.body.style.overflow = 'visible';
     });
     giveUp.addEventListener('click',() => {
         pauseMenu.classList.toggle('active');
         game.classList.toggle('disable');
-        document.body.style.overflow = 'visible';
     });
 }
 

@@ -64,12 +64,13 @@ header .nav-list ul li a {
     font-weight: 600;
     letter-spacing: .1rem;
     text-decoration: none;
-    color: white;
+    color: #ffffffab;
     padding: 2px 4px;
 }
 
 header .nav-list ul li:hover a{
-    color:#ff0550;/*#400b1b;*/
+    color:#ffffff;
+    transition: color 0.1s ease;
 }
 
 /*Form*/

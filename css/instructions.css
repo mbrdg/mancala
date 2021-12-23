@@ -66,3 +66,18 @@
     background-color: #A82727;
     transition: .2s ease;
 }
+
+/* Scrollbar */
+#instructions ::-webkit-scrollbar {
+    width: 10px;
+}
+#instructions ::-webkit-scrollbar-track {
+    margin: 1.3rem 0;
+    background: rgb(125 118 118);
+    border-radius: 15px;
+}
+
+#instructions ::-webkit-scrollbar-thumb {
+    background: #cc3737f1;
+    border-radius: 15px;
+}
