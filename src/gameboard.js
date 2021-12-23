@@ -9,6 +9,7 @@ export default class Gameboard {
             online: '',
             difficulty: ''
         };
+
         // Seeds
         this.seeds = [];
         //Holes
@@ -16,8 +17,8 @@ export default class Gameboard {
 
         this.readUserSettings();
         this.buildBoard();
-        this.placeSeeds();
         this.readHoles();
+        this.placeSeeds();
     }
 
     readUserSettings() {
@@ -62,21 +63,30 @@ export default class Gameboard {
         }
     }
 
+    readHoles() {
+        document.querySelectorAll('.my-hole').forEach(element=>this.holes.push(element));
+        this.holes.push(document.querySelector('.my-deposit'));
+        const reverseHoles = document.querySelectorAll('.enemy-hole');
+        for (let index = reverseHoles.length-1; index >= 0; index--) {
+            const element = reverseHoles[index];
+            this.holes.push(element);
+        }
+        this.holes.push(document.querySelector('.enemy-deposit'));
+    }
+
     placeSeeds() {
-        this.seeds = new Array(2 * this.settings.numberOfHoles + 2);
+        const numberOfHoles = this.settings.numberOfHoles;
+        this.seeds = new Array(2 * numberOfHoles + 2);
         this.seeds.fill(this.settings.numberOfSeedsPerHole);
 
         // These are the seeds in the deposits.
         // Players' initial score is always 0.
-        this.seeds[0] = 0;
+        this.seeds[numberOfHoles] = 0;
         this.seeds[this.seeds.length - 1] = 0;
 
-        let holes = document.querySelector('.gameboard').children;
-
         for (const [i, nseeds] of this.seeds.entries()) {
-            // Weird i+1, right? It's because of the pause button...
-            this.placeSeedsOnHole(holes[i+1].children[0], nseeds);
-            holes[i+1].children[1].innerText = nseeds.toString(10);
+            this.placeSeedsOnHole(this.holes[i].children[0], nseeds);
+            this.holes[i].children[1].innerText = nseeds.toString(10);
         }
     }
 
@@ -102,15 +112,59 @@ export default class Gameboard {
         seed.style.top = (45 + ((Math.random() * 40)-20)) + '%';
     }
 
-    readHoles() {
-        document.querySelectorAll('.my-hole').forEach(element=>this.holes.push(element));
-        this.holes.push(document.querySelector('.my-deposit'));
-        const reverseHoles = document.querySelectorAll('.enemy-hole');
-        for (let index = reverseHoles.length-1; index >= 0; index--) {
-            const element = reverseHoles[index];
-            this.holes.push(element);
+    setupEventListeners(handleHoleClick) {
+        const holes1 = document.querySelectorAll('.my-hole .hole');
+        holes1.forEach((hole,i) => {
+            hole.addEventListener('click', ()=>{
+                handleHoleClick(i);
+            });
+        });
+
+        const holes2 = document.querySelectorAll('.enemy-hole .hole');
+        holes2.forEach((hole,i) => {
+            hole.addEventListener('click', ()=>{
+                //New index is counted starting from player1 holes
+                handleHoleClick(2*this.settings.numberOfHoles-i);
+            });
+        });
+    }
+
+    /* Logic */
+    async removeSeedsFromHole(index) {
+        this.updateHoleScore(index, 0);
+        this.resetSeedPosition(this.holes[index]);
+        await this.sleep(300);
+    }
+    
+    resetSeedPosition(hole) {
+        const seeds = hole.querySelectorAll('.hole .seed');
+        seeds.forEach(seed=>{
+            seed.style.left = '40%';
+            seed.style.top = '45%';
+        });
+    }
+
+    updateHoleScore(index, newScore) {
+        this.holes[index].querySelector('.score').textContent = newScore;
+    }
+
+    async tranferSeed(from, to, n=1){
+        const holeFrom = this.holes[from].querySelector('.hole');
+        const holeTo = this.holes[to].querySelector('.hole');
+
+        while(n>0){
+            const seed = holeFrom.removeChild(holeFrom.querySelector('.seed'));
+            seed.style.left = (40 + ((Math.random() * 30)-10)) + '%';
+            seed.style.top = (45 + ((Math.random() * 40)-20)) + '%';
+            
+            holeTo.appendChild(seed);
+            n--;
         }
-        this.holes.push(document.querySelector('.enemy-deposit'));
+        await this.sleep(200);
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 

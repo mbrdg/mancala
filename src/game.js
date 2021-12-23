@@ -27,31 +27,12 @@ export default class Game {
         this.board = new Gameboard();
 
         //Set state
-        if(this.board.settings.pvp)
-            this.gameState = this.board.settings.playerTurn ? stateEnum.player1Turn : stateEnum.player2Turn;
-        else
-            this.gameState = this.board.settings.playerTurn ? stateEnum.player1Turn : stateEnum.botTurn;
+        if(this.board.settings.playerTurn) this.gameState = stateEnum.player1Turn;
+        else this.gameState = this.board.settings.pvp ? stateEnum.player2Turn : stateEnum.botTurn;
         
         //Set eventListenners
-        this.setupEventListeners();
+        this.board.setupEventListeners(this.handleHoleClick);
         console.debug("Game Configured");
-    }
-
-    setupEventListeners() {
-        const holes1 = document.querySelectorAll('.my-hole .hole');
-        holes1.forEach((hole,i) => {
-            hole.addEventListener('click', ()=>{
-                this.handleHoleClick(i);
-            });
-        });
-
-        const holes2 = document.querySelectorAll('.enemy-hole .hole');
-        holes2.forEach((hole,i) => {
-            hole.addEventListener('click', ()=>{
-                //New index is counted starting from player1 holes
-                this.handleHoleClick(2*this.board.settings.numberOfHoles-i);
-            });
-        });
     }
 
     async startGame() {
@@ -137,25 +118,78 @@ export default class Game {
         }
     }
 
-    async handleHoleClick(index) {
-        switch (this.gameState) {
-            case stateEnum.player1Turn:{
-                if(index >= this.board.settings.numberOfHoles) return;
-                const res = await (this.playHoleP1(index));
-                if(!res) return;
-                this.changeState(this.board.settings.pvp ? stateEnum.player2Turn : stateEnum.botTurn);
-                break;
-            }
-            case stateEnum.player2Turn:{
-                if(index < this.board.settings.numberOfHoles) return;
-                const res = await (this.playHoleP2(index));
-                if(!res) return;
-                this.changeState(stateEnum.player1Turn);
-                break;
-            }
-            default:
-                break;
+    handleHoleClick = async (index) => {
+        const depositP1 = this.board.settings.numberOfHoles;
+        const depositP2 = this.board.seeds.length-1;
+        if(this.gameState == stateEnum.player1Turn){
+            if(index >= this.board.settings.numberOfHoles) return;
+            const res = await (this.executeMove(index, depositP1, depositP2));
+            if(!res) return;
+            this.changeState(this.board.settings.pvp ? stateEnum.player2Turn : stateEnum.botTurn);
+            return;
         }
+
+        if(this.gameState == stateEnum.player2Turn){
+            if(index < this.board.settings.numberOfHoles) return;
+            const res = await (this.playHoleP2(index));
+            if(!res) return;
+            this.changeState(stateEnum.player1Turn);
+            return;
+        }
+    }
+
+    async executeMove(index, myDepositIndex, enemyDepositIndex) {
+        let seedsPerHole = this.board.seeds;
+
+        let nSeeds = seedsPerHole[index];
+        if(nSeeds==0) {
+            console.debug('No seeds to withdraw');
+            return false;
+        }
+
+        console.debug('Withdraw', nSeeds, 'seeds');
+
+        seedsPerHole[index]=0;
+        await this.board.removeSeedsFromHole(index);
+
+        let currIndex = index+1;
+        let scoredPoints = 0;
+
+        while (nSeeds>1) {
+
+            seedsPerHole[currIndex]+=1;
+            this.board.updateHoleScore(currIndex, seedsPerHole[currIndex]);
+
+            //SEED Animation
+            await this.board.tranferSeed(index, currIndex);
+
+            scoredPoints = currIndex == myDepositIndex ? scoredPoints+1 : scoredPoints;
+            currIndex = (currIndex+1) != enemyDepositIndex ? (currIndex+1) % seedsPerHole.length : (enemyDepositIndex+1) % seedsPerHole.length;
+            nSeeds--;
+        }
+
+        seedsPerHole[currIndex]+=1;
+        this.board.updateHoleScore(currIndex, seedsPerHole[currIndex]);
+        await this.board.tranferSeed(index, currIndex);
+
+        if(this.gameState==stateEnum.player1Turn ? currIndex > myDepositIndex : currIndex < enemyDepositIndex) { //Seed in the enemy side
+            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
+            return true;
+        }
+
+        if(currIndex==myDepositIndex){ //Seed in player deposit
+            scoredPoints++;
+            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
+
+            if(!this.gameOver(this.gameState, seedsPerHole))
+                return false;
+
+            await this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
+
+            this.endGame();
+            return false;
+        }
+
     }
 
     /* Returns true in case of switching turns, false otherwise */
@@ -354,6 +388,16 @@ export default class Game {
     async playBot(){
         console.log("MIKE");
         await this.sleep(1000);
+    }
+
+    gameOver(nextState, seeds) {
+        const numberOfHoles = this.board.settings.numberOfHoles;
+        const arr = nextState == stateEnum.player1Turn ? seeds.slice(0, numberOfHoles) : seeds.slice(numberOfHoles+1, seeds.length-1);
+
+        for (const seeds of arr) {
+            if(seeds) return false;
+        }
+        return true;
     }
 
     checkPossiblePlay(holes) {
