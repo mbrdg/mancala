@@ -131,13 +131,14 @@ export default class Game {
 
         if(this.gameState == stateEnum.player2Turn){
             if(index < this.board.settings.numberOfHoles) return;
-            const res = await (this.playHoleP2(index));
+            const res = await (this.executeMove(index, depositP2, depositP1));
             if(!res) return;
             this.changeState(stateEnum.player1Turn);
             return;
         }
     }
 
+    /* Returns true in case of switching turns, false otherwise */
     async executeMove(index, myDepositIndex, enemyDepositIndex) {
         let seedsPerHole = this.board.seeds;
 
@@ -156,21 +157,20 @@ export default class Game {
         let scoredPoints = 0;
 
         while (nSeeds>1) {
+            //SEED Animation
+            await this.board.tranferSeed(index, currIndex);
 
             seedsPerHole[currIndex]+=1;
             this.board.updateHoleScore(currIndex, seedsPerHole[currIndex]);
-
-            //SEED Animation
-            await this.board.tranferSeed(index, currIndex);
 
             scoredPoints = currIndex == myDepositIndex ? scoredPoints+1 : scoredPoints;
             currIndex = (currIndex+1) != enemyDepositIndex ? (currIndex+1) % seedsPerHole.length : (enemyDepositIndex+1) % seedsPerHole.length;
             nSeeds--;
         }
 
+        await this.board.tranferSeed(index, currIndex);
         seedsPerHole[currIndex]+=1;
         this.board.updateHoleScore(currIndex, seedsPerHole[currIndex]);
-        await this.board.tranferSeed(index, currIndex);
 
         if(this.gameState==stateEnum.player1Turn ? currIndex > myDepositIndex : currIndex < enemyDepositIndex) { //Seed in the enemy side
             this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
@@ -181,189 +181,38 @@ export default class Game {
             scoredPoints++;
             this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
 
+            //Check if game can still be played: current player
             if(!this.gameOver(this.gameState, seedsPerHole))
                 return false;
-
-            await this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
-
-            this.endGame();
-            return false;
-        }
-
-    }
-
-    /* Returns true in case of switching turns, false otherwise */
-    async playHoleP1(index) {
-        const holes = this.board.holes;
-        const numberOfHoles = this.board.settings.numberOfHoles;
-
-        let nSeeds = parseInt(holes[index].querySelector('.score').textContent);
-        if(nSeeds==0) {
-            console.debug('No seeds to withdraw');
-            return false;
-        }
-
-        console.debug('Withdraw', nSeeds, 'seeds');
-        holes[index].querySelector('.score').textContent = 0;
-
-        this.resetSeedPos(holes[index]);
-        await this.sleep(300);
-
-        let currIndex = index+1;
-        let scoredPoints = 0;
-
-        while (nSeeds>1) {
-            const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
-            holes[currIndex].querySelector('.score').textContent = currSeeds+1;
-
-            //SEED Animation
-            this.tranferSeed(holes[index], holes[currIndex]);
-            await this.sleep(200);
-
-            scoredPoints = currIndex == numberOfHoles ? scoredPoints+1 : scoredPoints;
-            currIndex = (currIndex+1)!= holes.length-1 ? (currIndex+1) % holes.length : 0;
-            nSeeds--;
-        }
-        
-        const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
-        holes[currIndex].querySelector('.score').textContent = currSeeds+1;
-        this.tranferSeed(holes[index], holes[currIndex]);
-        await this.sleep(200);
-
-        if(currIndex > numberOfHoles) { //Seed in the enemy side
-            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
-            return true;
-        }
-
-        if(currIndex==numberOfHoles){ //Seed in player deposit
-            scoredPoints++;
-            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
-
-            //Check if game can still be played: player1
-            if(this.checkPossiblePlay(holes.slice(0, numberOfHoles)))
-                return false;
             
-            //Change state to according: win or lose
-            await this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
+            await this.removeRemainingSeeds(this.gameState, enemyDepositIndex);
 
             this.endGame();
             return false;
         }
 
-        if(currSeeds==0) { //Steal from player side
+        if(seedsPerHole[currIndex]==1) { //Steal from enemy side
+            const numberOfHoles = this.board.settings.numberOfHoles;
             const oppositeIndex = 2*numberOfHoles-currIndex;
-            const oppositeSeeds = parseInt(holes[oppositeIndex].querySelector('.score').textContent);
+            const oppositeSeeds = seedsPerHole[oppositeIndex];
 
             if(oppositeSeeds > 0){
                 //TODO: Wait for seed anim
-                this.resetSeedPos(holes[oppositeIndex]);
-                await this.sleep(300);
-                this.tranferSeed(holes[currIndex], holes[numberOfHoles]);
-                await this.sleep(200);
-                this.tranferSeed(holes[oppositeIndex], holes[numberOfHoles], oppositeSeeds);
-                await this.sleep(200);
 
-                holes[currIndex].querySelector('.score').textContent = 0;
-                holes[oppositeIndex].querySelector('.score').textContent = 0;
-
-                const depositeSeeds = parseInt(holes[numberOfHoles].querySelector('.score').textContent);
-                holes[numberOfHoles].querySelector('.score').textContent = depositeSeeds + oppositeSeeds + 1;
-                scoredPoints+=oppositeSeeds+1;
-            } 
-        }
-
-        if(scoredPoints>0)
-            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
-        else if(Math.random() > 0.7){
-            this.addMsgToChat("Better luck next time");
-        }
-
-        //Check if game can still be played: player2
-        if(this.checkPossiblePlay(holes.slice(numberOfHoles+1, 2*numberOfHoles+1)))
-            return true;
-
-        //Change state to according
-        await this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
-
-        this.endGame();
-        return false;
-    }
-
-    async playHoleP2(index) {
-        const holes = this.board.holes;
-        const numberOfHoles = this.board.settings.numberOfHoles;
-
-        let nSeeds = parseInt(holes[index].querySelector('.score').textContent);
-        if(nSeeds==0) {
-            console.debug('No seeds to withdraw');
-            return false;
-        }
-
-        console.debug('Withdraw', nSeeds, 'seeds');
-        holes[index].querySelector('.score').textContent = 0;
-
-        this.resetSeedPos(holes[index]);
-        await this.sleep(300);
-
-        let currIndex = index+1;
-        let scoredPoints = 0;
-
-        while (nSeeds>1) {
-            const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
-            holes[currIndex].querySelector('.score').textContent = currSeeds+1;
-
-            //SEED Animation
-            this.tranferSeed(holes[index], holes[currIndex]);
-            await this.sleep(200);
-            
-            scoredPoints = currIndex==(holes.length-1) ? scoredPoints+1 : scoredPoints;
-            currIndex = (currIndex+1)!=numberOfHoles ? (currIndex+1) % holes.length : numberOfHoles+1;            
-            nSeeds--;
-        }
-
-        const currSeeds = parseInt(holes[currIndex].querySelector('.score').textContent);
-        holes[currIndex].querySelector('.score').textContent = currSeeds+1;
-        this.tranferSeed(holes[index], holes[currIndex]);
-        await this.sleep(200);
-
-        if(currIndex < numberOfHoles) { //Seed in the enemy side
-            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
-            return true;
-        }
-
-        if(currIndex==(holes.length-1)){ //Seed in player deposit
-            scoredPoints++;
-            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
-
-            //Check if game can still be played: player2
-            if(this.checkPossiblePlay(holes.slice(numberOfHoles+1, 2*numberOfHoles+1)))
-                return false;
-
-            await this.removeRemainingSeeds(holes.slice(0, numberOfHoles), holes[numberOfHoles]);
-
-            this.endGame();
-            return false;
-        }
-
-        if(currSeeds==0) { //Steal from player side
-            const oppositeIndex = 2*numberOfHoles-currIndex;
-            const oppositeSeeds = parseInt(holes[oppositeIndex].querySelector('.score').textContent);
-
-            if(oppositeSeeds > 0){
-                const myDeposit = holes.length-1;
-                //TODO: Wait for seed anim
-                this.resetSeedPos(holes[oppositeIndex]);
-                await this.sleep(300);
-                this.tranferSeed(holes[currIndex], holes[myDeposit]);
-                await this.sleep(200);
-                this.tranferSeed(holes[oppositeIndex], holes[myDeposit], oppositeSeeds);
-                await this.sleep(200);
-
-                holes[currIndex].querySelector('.score').textContent = 0;
-                holes[oppositeIndex].querySelector('.score').textContent = 0;
+                //Remove from oposite side
+                seedsPerHole[oppositeIndex]=0;
+                await this.board.removeSeedsFromHole(oppositeIndex);
+                await this.board.tranferSeed(oppositeIndex, myDepositIndex, oppositeSeeds);
+                seedsPerHole[myDepositIndex]+=oppositeSeeds;
+                this.board.updateHoleScore(myDepositIndex, seedsPerHole[myDepositIndex]);
                 
-                const depositeSeeds = parseInt(holes[myDeposit].querySelector('.score').textContent);
-                holes[myDeposit].querySelector('.score').textContent = depositeSeeds + oppositeSeeds + 1;
+                //Remove from final seed hole
+                seedsPerHole[currIndex]=0;
+                await this.board.removeSeedsFromHole(currIndex);
+                await this.board.tranferSeed(currIndex, myDepositIndex);
+                seedsPerHole[myDepositIndex]+=1;
+                this.board.updateHoleScore(myDepositIndex, seedsPerHole[myDepositIndex]);
+                
                 scoredPoints+=oppositeSeeds+1;
             } 
         }
@@ -374,12 +223,12 @@ export default class Game {
             this.addMsgToChat("Better luck next time");
         }
 
-        //Check if game can still be played: player1
-        if(this.checkPossiblePlay(holes.slice(0, numberOfHoles)))
+        //Check if game can still be played: oposite player
+        const enemyState = this.gameState==stateEnum.player1Turn ? stateEnum.player2Turn : stateEnum.player1Turn;
+        if(!this.gameOver(enemyState, seedsPerHole))
             return true;
 
-        //Change state to according: Win or lose;
-        await this.removeRemainingSeeds(holes.slice(numberOfHoles+1, -1), holes[holes.length-1]);
+        await this.removeRemainingSeeds(enemyState, myDepositIndex);
 
         this.endGame();
         return false;
@@ -400,49 +249,27 @@ export default class Game {
         return true;
     }
 
-    checkPossiblePlay(holes) {
-        for (const hole of holes) {
-            if(hole.querySelector('.score').textContent!="0") return true;
+    async removeRemainingSeeds(nextState, depositIndex) {
+        const numberOfHoles = this.board.settings.numberOfHoles;
+
+        let index = 0;
+        let arr = this.board.seeds.slice(index, numberOfHoles);
+        
+        if(nextState == stateEnum.player1Turn){
+            index = numberOfHoles+1; 
+            arr = this.board.seeds.slice(index, this.board.seeds.length-1);
         }
-        return false;
-    }
 
-    resetSeedPos(hole) {
-        const seeds = hole.querySelectorAll('.hole .seed');
-        seeds.forEach(seed=>{
-            seed.style.left = '40%';
-            seed.style.top = '45%';
-        });
-    }
-
-    tranferSeed(from, to, n=1){
-        const hole = from.querySelector('.hole');
-
-        while(n>0){
-            const seed = hole.removeChild(from.querySelector('.hole .seed'));
-            seed.style.left = (40 + ((Math.random() * 30)-10)) + '%';
-            seed.style.top = (45 + ((Math.random() * 40)-20)) + '%';
+        let i=-1;
+        for (let seeds of arr) {
+            i++;
+            if(seeds == 0) continue;
             
-            const holeTo = to.querySelector('.hole');
-            holeTo.appendChild(seed);
-            n--;
-        }
-    }
+            this.board.seeds[index+i]=0;
+            await this.board.removeSeedsFromHole(index+i);
 
-    async removeRemainingSeeds(holes, to){
-        for (const hole of holes) {
-            const nSeeds = hole.querySelectorAll('.hole .seed').length;
-            if(nSeeds == 0) continue;
-            
-            //TODO: Wait for seed anim
-            hole.querySelector('.score').textContent = 0;
-            this.resetSeedPos(hole);
-            await this.sleep(300);
-            this.tranferSeed(hole, to, nSeeds);
-            await this.sleep(200);
-
-            const currSeeds = parseInt(to.querySelector('.score').textContent);
-            to.querySelector('.score').textContent = currSeeds + nSeeds;
+            await this.board.tranferSeed(index+i, depositIndex, seeds);
+            this.board.updateHoleScore(depositIndex, this.board.seeds[depositIndex]+seeds);
         }
     }
 
