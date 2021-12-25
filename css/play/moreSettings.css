@@ -97,7 +97,7 @@
     font-size: 1.2rem;
     min-width: 15vw;
     text-align: center;
-    padding: 3px 0px;
+    padding: 1% 2%;
     transition: background-color 200ms ease;
     border-radius: 25px;
 }
@@ -111,7 +111,7 @@
 /* Text Areas */
 #play #number-holes p, #play #number-seeds p {
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 90%;
     color: rgb(33, 30, 30);
 }
 

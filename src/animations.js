@@ -143,13 +143,13 @@ const setDifficultyAnimation = ()=>{
     const singleMode = document.getElementById('singleplayer');
 
     difficultyLevel.onchange = ()=>{
-        difficultyLevel.selectedIndex > 0 ? singleMode.checked=true  : pvpMode.checked=true;
+        difficultyLevel.selectedIndex > 1 ? singleMode.checked=true  : pvpMode.checked=true;
     };
     pvpMode.addEventListener('click', ()=>{
-        difficultyLevel.selectedIndex = 0;
+        difficultyLevel.selectedIndex = difficultyLevel.selectedIndex > 1 ? 0 : difficultyLevel.selectedIndex;
     });
     singleMode.addEventListener('click', ()=>{
-        difficultyLevel.selectedIndex = 1;
+        difficultyLevel.selectedIndex = difficultyLevel.selectedIndex > 1 ? difficultyLevel.selectedIndex : 2;
     });
 }
 
