@@ -1,4 +1,4 @@
-import { setUpAnimations } from './animations.js';
+import { setUpAnimations, signInAnimation } from './animations.js';
 import Game from './game.js';
 
 setUpAnimations();
@@ -27,3 +27,21 @@ continueButton.addEventListener('click', ()=>{
     game.resetGame();
     play.scrollIntoView();
 });
+
+const signInForm = document.getElementById('sign-form');
+signInForm.addEventListener('submit', async (e)=> {
+    e.preventDefault();
+    const nick = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+
+    if(!nick || !pass) return;
+    const res = await game.api.register(nick, pass);
+    
+    if(res!=nick) {
+        alert(res);
+        return;
+    }
+    
+    game.setPlayerName(nick);
+    signInAnimation(nick);
+})

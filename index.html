@@ -41,13 +41,14 @@
             <li><a href="#highscores" id="high-scores-button">High Scores</a></li>
           </ul>
         </div>
-        <form class="authenticator">
+        <form class="authenticator" id="sign-form">
           <label for="username">Username:</label>
-          <input type="text" name="username" placeholder="" id="username">
+          <input type="text" name="username" placeholder="" id="username" required>
           <label for="password">Password:</label>
-          <input type="password" name="password" placeholder="" id="password">
+          <input type="password" name="password" placeholder="" id="password" required>
           <input type="submit" name="signin" value="Sign in">
         </form>
+        <h2 id="player-name"></h2>
       </nav>
     </header>
   </section>

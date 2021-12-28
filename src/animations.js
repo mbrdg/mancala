@@ -201,3 +201,11 @@ const endMenuAnimations = ()=>{
         endMenu.classList.remove('active');
     });
 }
+
+export function signInAnimation(name) {
+    const signInForm = document.getElementById('sign-form');
+    const playerName = document.getElementById('player-name');
+    signInForm.classList.add('disable');
+    playerName.textContent = name;
+    playerName.classList.add('active');
+}

@@ -139,6 +139,23 @@ header .nav-list ul li:hover a{
     transition-property: background-color, color;
 }
 
+#sign-form.disable {
+    display: none;
+}
+
+/* Player Name */
+#player-name {
+    display: none;
+}
+
+#player-name.active {
+    display: block;
+    padding-right: 2rem;
+    
+    color: white;
+    font-weight: 100;
+}
+
 /*Hamburguer*/
 header .hamburguer{
     width: 3rem;

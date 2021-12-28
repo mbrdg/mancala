@@ -1,4 +1,5 @@
 import Gameboard from './gameboard.js'
+import ServerApi from './serverApi.js';
 
 const stateEnum = {'player1Turn': 1, 'player2Turn': 2,'botTurn': 3, 'giveUp': 4, 'win': 5, 'lose': 6, 'draw': 7};
 Object.freeze(stateEnum)
@@ -13,13 +14,20 @@ export default class Game {
         //State
         this.gameState = null;
 
+        this.api = new ServerApi();
+        this.playerName = 'Player 1';
+
         //ClickEvents
         const giveUpBtn = document.getElementById('leave-btn');
-        giveUpBtn.addEventListener('click', ()=> {            
-            const oldState = this.changeState(stateEnum.giveUp);
+        giveUpBtn.addEventListener('click', async ()=> {            
+            const oldState = await this.changeState(stateEnum.giveUp);
             this.endGame(oldState);
             document.getElementById('play').scrollIntoView();
         })
+    }
+
+    setPlayerName(newName) {
+        this.playerName = newName;
     }
 
     setupGameConfig() {
@@ -41,7 +49,7 @@ export default class Game {
         if(this.gameState == stateEnum.botTurn) { //Bot Play
             this.addMsgToChat("GRRR I start!");
             await this.playBot();
-            this.changeState(stateEnum.player1Turn);
+            await this.changeState(stateEnum.player1Turn);
             return;
         }
 
@@ -354,7 +362,7 @@ export default class Game {
         scores[1].textContent = document.querySelector('#play .game .enemy-deposit .score').textContent;
 
         const names = endMenu.querySelectorAll('.information .final-scores .player-name');
-        names[0].textContent = 'Player 1'; //TODO: Change to name of user;
+        names[0].textContent = this.playerName; //TODO: Change to name of user;
         names[1].textContent = this.board.settings.pvp ? 'Player 2' : 'Bot'; //TODO: Change to name of user;
 
         endMenu.classList.add('active');
