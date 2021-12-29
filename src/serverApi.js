@@ -3,10 +3,9 @@ export default class ServerApi {
         this.url = 'http://twserver.alunos.dcc.fc.up.pt:8008/';
     }
 
-    async register(nick, pass) {
+    async register(nick, password) {
         const data = {
-            nick: nick,
-            password: pass
+            nick, password
         }
         
         try {
@@ -19,10 +18,15 @@ export default class ServerApi {
             if (json.error)
                 throw json.error;
 
-            console.log("sign in successful");
+            console.debug("Sign in successful");
             return nick;
         } catch (err) {
             return err;
         }
+    }
+
+    join(data) {
+        
+        console.log(data);
     }
 }

@@ -13,13 +13,19 @@ const gameMenu = document.querySelector('#play .game');
 const playButton = document.querySelector('#play .welcome-menu #play-btn');
 const continueButton = document.getElementById('continue-btn');
 
-playButton.addEventListener('click', () => {
-    welcomeMenu.style.display = "none";
-    gameMenu.classList.toggle('active');
+playButton.addEventListener('click', async () => {
 
     // Start game with current setting
     game.setupGameConfig();
-    game.startGame();
+    const res = await game.startGame();
+    if(!res) {
+        alert("User not registered");
+        game.resetGame();
+        return;
+    }
+
+    welcomeMenu.style.display = "none";
+    gameMenu.classList.toggle('active');
     play.scrollIntoView();
 });
 
@@ -42,6 +48,6 @@ signInForm.addEventListener('submit', async (e)=> {
         return;
     }
     
-    game.setPlayerName(nick);
+    game.setPlayerInfo({nick, pass});
     signInAnimation(nick);
 })

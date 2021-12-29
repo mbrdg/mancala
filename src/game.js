@@ -16,6 +16,7 @@ export default class Game {
 
         this.api = new ServerApi();
         this.playerName = 'Player 1';
+        this.playerPass = '';
 
         //ClickEvents
         const giveUpBtn = document.getElementById('leave-btn');
@@ -26,8 +27,9 @@ export default class Game {
         })
     }
 
-    setPlayerName(newName) {
-        this.playerName = newName;
+    setPlayerInfo(info) {
+        this.playerName = info.nick;
+        this.playerPass = info.pass;
     }
 
     setupGameConfig() {
@@ -46,11 +48,25 @@ export default class Game {
     async startGame() {
         console.debug('Game Starting');
 
+        if(this.board.settings.online){
+            if(this.playerName == 'Player 1' && this.playerPass == '') return false; //Not registered
+
+            const data = {
+                group:99, //default value
+                nick: this.playerName,
+                password: this.playerPass,
+                size: this.board.settings.numberOfHoles,
+                initial: this.board.settings.numberOfSeedsPerHole
+            }
+            this.api.join(data);
+            return true;
+        }
+
         if(this.gameState == stateEnum.botTurn) { //Bot Play
             this.addMsgToChat("GRRR I start!");
             await this.playBot();
             await this.changeState(stateEnum.player1Turn);
-            return;
+            return true;
         }
 
         let className, text;
@@ -65,6 +81,7 @@ export default class Game {
         const holes =  document.querySelectorAll(className);
         this.addClassNameToList(holes, 'active');
         this.addMsgToChat(text);
+        return true;
     }
 
     async changeState(newState) {
@@ -155,8 +172,6 @@ export default class Game {
             console.debug('No seeds to withdraw');
             return false;
         }
-
-        console.debug('Withdraw', nSeeds, 'seeds');
 
         seedsPerHole[index]=0;
         await this.board.removeSeedsFromHole(index);
@@ -383,6 +398,7 @@ export default class Game {
         for (const hole of document.querySelectorAll('.enemy-hole')) {
             hole.remove();
         }
+        console.debug('Reset game');
     }
 
     //UTILS
