@@ -297,8 +297,8 @@ export default class Game {
             giveUp == stateEnum.player1Turn ? this.changeState(stateEnum.lose) : this.changeState(stateEnum.win);
             return;
         }
-        const p1Score = document.querySelector('#play .game .my-deposit .score').textContent;
-        const p2Score = document.querySelector('#play .game .enemy-deposit .score').textContent;
+        const p1Score = parseInt(document.querySelector('#play .game .my-deposit .score').textContent);
+        const p2Score = parseInt(document.querySelector('#play .game .enemy-deposit .score').textContent);
 
         if(p1Score == p2Score) {
             this.changeState(stateEnum.draw);
