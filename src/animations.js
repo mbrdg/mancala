@@ -7,6 +7,7 @@ export function setUpAnimations() {
     gameBoardButtonsAnimation();
     setDifficultyAnimation();
     moreSettingsAnimations();
+    waitMenuAnimations();
     endMenuAnimations();
 }
 
@@ -183,15 +184,26 @@ const moreSettingsAnimations = ()=>{
     });
 }
 
+const waitMenuAnimations = ()=>{
+    const waitBtn = document.getElementById('wait-btn');
+    const gameMenu = document.querySelector('#play .game');
+    const waitMenu = document.querySelector('#play .wait-menu');
+    const welcomeMenu = document.querySelector('#play .welcome-menu');
+
+    waitBtn.addEventListener('click', ()=>{
+        gameMenu.classList.remove('active');
+        waitMenu.classList.remove('active');
+        welcomeMenu.style.display = "flex";
+    });
+}
+
 const endMenuAnimations = ()=>{
     const continueBtn = document.getElementById('continue-btn');
     const endMenu = document.querySelector('#play .end-menu');
-    const play = document.querySelector('#play');
     const gameMenu = document.querySelector('#play .game');
     const welcomeMenu = document.querySelector('#play .welcome-menu');
 
     continueBtn.addEventListener('click', ()=>{
-        play.scrollIntoView();
         gameMenu.classList.remove('active');
         const imgs = endMenu.querySelectorAll('.banner img');
         for (const img of imgs) {

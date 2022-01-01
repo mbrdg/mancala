@@ -59,6 +59,7 @@ export default class Game {
                 initial: this.board.settings.numberOfSeedsPerHole
             }
             this.api.join(data);
+            document.querySelector('#play .wait-menu').classList.add('active');
             return true;
         }
 

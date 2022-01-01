@@ -11,21 +11,30 @@ const play = document.querySelector('#play');
 const welcomeMenu = document.querySelector('#play .welcome-menu');
 const gameMenu = document.querySelector('#play .game');
 const playButton = document.querySelector('#play .welcome-menu #play-btn');
-const continueButton = document.getElementById('continue-btn');
 
 playButton.addEventListener('click', async () => {
 
-    // Start game with current setting
+    // Start game with current configuration
     game.setupGameConfig();
     const res = await game.startGame();
-    if(!res) {
+    
+    if(!res) { //Case of error
         alert("User not registered");
         game.resetGame();
         return;
     }
 
     welcomeMenu.style.display = "none";
-    gameMenu.classList.toggle('active');
+    gameMenu.classList.add('active');
+    play.scrollIntoView();
+});
+
+// Reset buttons
+const waitBtn = document.getElementById('wait-btn');
+const continueButton = document.getElementById('continue-btn');
+
+waitBtn.addEventListener('click', ()=>{
+    game.resetGame();
     play.scrollIntoView();
 });
 
@@ -34,6 +43,7 @@ continueButton.addEventListener('click', ()=>{
     play.scrollIntoView();
 });
 
+// Sign-in form
 const signInForm = document.getElementById('sign-form');
 signInForm.addEventListener('submit', async (e)=> {
     e.preventDefault();
