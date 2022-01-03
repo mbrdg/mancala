@@ -1,7 +1,7 @@
 /* Messages */
 .messages {
     position: relative;
-    right: 4%;
+    right: 1.5%;
 
     display: flex;
     flex-direction: column;
