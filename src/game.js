@@ -1,5 +1,6 @@
 import Gameboard from './gameboard.js'
 import Chat from "./chat.js";
+import AI from "./minimax.js";
 
 /**
  * Enum for representing all the different game states.
@@ -34,12 +35,16 @@ export default class Game {
         this.board = new Gameboard(this.loop.bind(this));
         this.state = this.getInitialGameState(this.board.settings);
 
+        if (this.board.settings.pvp)
+            this.ai = new AI(this, 8);
+
         this.setupRequiredClickEvents();
     }
 
     // Helper functions
     isPlayer1Turn = () => this.state === GameState.PLAYER1;
     isPlayer2Turn = () => !this.isPlayer1Turn();
+    between = (min, target, max) => min <= target && target < max;
 
     /**
      * Gets the initial state of the game
@@ -74,7 +79,7 @@ export default class Game {
      * @returns {void}
      */
     loop(event) {
-        if (this.isOver())
+        if (this.isOver(this.board.mySeeds, this.board.enemySeeds))
             return this.end(false);
 
         this.board.generateMove(event);
@@ -86,13 +91,14 @@ export default class Game {
 
     /**
      * Checks whether the game is over or not.
+     * @param mySeeds Object containing the information about the player 1 seeds
+     * @param enemySeeds Object containing the information about the player 2 seeds
      * @returns {boolean} True if the game is over, false otherwise
      */
-    isOver() {
-        const p1GotNoSeeds = this.board.mySeeds.seeds.every(item => item === 0);
-        const p2GotNoSeeds = this.board.enemySeeds.seeds.every(item => item === 0);
+    isOver(mySeeds, enemySeeds) {
+        const p1GotNoSeeds = mySeeds.seeds.every(item => item === 0);
+        const p2GotNoSeeds = enemySeeds.seeds.every(item => item === 0);
 
-        console.debug('Result of Game.isOver(): ', p1GotNoSeeds || p2GotNoSeeds);
         return p1GotNoSeeds || p2GotNoSeeds;
     }
 
@@ -181,7 +187,7 @@ export default class Game {
      * @param verbose true if messages should be displayed
      * @return True if a player gets the turn again, false otherwise
      */
-    executeMove(mySeeds, enemySeeds, move, verbose) {
+    executeMove(mySeeds, enemySeeds, move, verbose = false) {
         console.debug('Executing a move');
         let board = Array.prototype.concat(mySeeds.seeds, [mySeeds.deposit], enemySeeds.seeds, [enemySeeds.deposit]);
 
@@ -198,9 +204,9 @@ export default class Game {
             board[move]--;
         }
 
-        let between = (min, target, max) => min <= target && target < max;
-        let endedInItsOwnHoles = (this.isPlayer2Turn() && between(0, i, this.board.settings.numberOfHoles)) ||
-            (this.isPlayer1Turn() && between(this.board.settings.numberOfHoles + 1, i, board.length - 1));
+        let endedInItsOwnHoles =
+            (this.isPlayer2Turn() && this.between(0, i, this.board.settings.numberOfHoles)) ||
+            (this.isPlayer1Turn() && this.between(this.board.settings.numberOfHoles + 1, i, board.length - 1));
 
         if (endedInItsOwnHoles && isLastHoleEmpty)
             this.executeSteal(board, lastHole, this.isPlayer1Turn());
