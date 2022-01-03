@@ -17,7 +17,7 @@ Object.freeze(TypeOfHole);
  */
 export default class Gameboard {
 
-    constructor() {
+    constructor(gameLoop) {
         this.readSettings();
 
         this.mySeeds = {
@@ -29,7 +29,7 @@ export default class Gameboard {
             'deposit' : 0,
         };
         this.move = {};
-        this.gotInputFromUser = false;
+        this.gameLoopCallBack = gameLoop;
 
         this.buildBoard();
         console.debug('Gameboard object created.');
@@ -123,16 +123,16 @@ export default class Gameboard {
 
         switch (gameState) {
             case GameState.PLAYER1:
-                this.removeEventListenerFromNodeList(myHoles, 'click', this.generateMove);
-                this.addEventListenerToNodeList(enemyHoles, 'click', this.generateMove);
+                this.removeEventListenerFromNodeList(myHoles, 'click', this.gameLoopCallBack);
+                this.addEventListenerToNodeList(enemyHoles, 'click', this.gameLoopCallBack);
                 break;
             case GameState.PLAYER2:
-                this.addEventListenerToNodeList(myHoles, 'click', this.generateMove);
-                this.removeEventListenerFromNodeList(enemyHoles, 'click', this.generateMove);
+                this.addEventListenerToNodeList(myHoles, 'click', this.gameLoopCallBack);
+                this.removeEventListenerFromNodeList(enemyHoles, 'click', this.gameLoopCallBack);
                 break;
             default:
-                this.removeEventListenerFromNodeList(myHoles, 'click', this.generateMove);
-                this.removeEventListenerFromNodeList(enemyHoles, 'click', this.generateMove);
+                this.removeEventListenerFromNodeList(myHoles, 'click', this.gameLoopCallBack);
+                this.removeEventListenerFromNodeList(enemyHoles, 'click', this.gameLoopCallBack);
         }
         console.debug('Event Listeners updated');
     }
@@ -197,12 +197,11 @@ export default class Gameboard {
         console.debug('Seeds Updated');
     }
 
-    update(gameState, callback) {
+    update(gameState) {
         this.updateEventListeners(gameState);
         this.updateClassNames(gameState);
         this.updateScores();
         this.updateSeeds();
-        callback().bind(this);
     }
 
     generateMove(event) {

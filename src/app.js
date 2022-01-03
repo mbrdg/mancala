@@ -17,12 +17,9 @@ let game = new Game();
 playButton.addEventListener('click', () => {
     console.debug('Button Clicked');
 
-    game.loop();
-
     welcomeMenu.style.display = "none";
     gameMenu.classList.toggle('active');
     play.scrollIntoView();
-
 });
 
 continueButton.addEventListener('click', () => {

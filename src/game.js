@@ -15,7 +15,7 @@ export { GameState };
 export default class Game {
 
     constructor() {
-        this.board = new Gameboard();
+        this.board = new Gameboard(this.loop.bind(this));
         this.state = this.getInitialGameState(this.board.settings);
 
         this.setupRequiredClickEvents();
@@ -63,15 +63,13 @@ export default class Game {
 
     /**
      * Game Loop
-     * @returns {Promise<void>}
+     * @returns {void}
      */
-    async play() {
-        console.debug('Game started');
-    }
+    loop(event) {
+        if (this.isOver())
+            return this.end(false);
 
-    loop() {
-        if (!this.isOver())
-            this.end(false);
+        this.board.generateMove(event);
 
         let samePlayer = this.executeMove(this.board.mySeeds, this.board.enemySeeds, this.board.move);
         let previousState = this.state;
