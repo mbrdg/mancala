@@ -1,171 +1,280 @@
+import {GameState} from "./game.js";
+
+/**
+ * Enum containing the name of the DOM classes for the pits/holes creation
+ * @type {{MINE: string, OPPONENT: string}}
+ */
+const TypeOfHole = {
+    'MINE':     'my-hole',
+    'OPPONENT': 'enemy-hole',
+};
+Object.freeze(TypeOfHole);
+
+/**
+ * `Gameboard` is the viewer component of the game, this class
+ * is responsible for interact with the HTML and then making the
+ * connection with the controller component.
+ */
 export default class Gameboard {
+
     constructor() {
-        // Settings
-        this.settings = {
-            playerTurn: '',
-            numberOfHoles: '',
-            numberOfSeedsPerHole: '',
-            pvp: '',
-            online: '',
-            difficulty: ''
+        this.readSettings();
+
+        this.mySeeds = {
+            'seeds' : Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
+            'deposit' : 0,
         };
+        this.enemySeeds = {
+            'seeds': Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
+            'deposit' : 0,
+        };
+        this.move = {};
+        this.gotInputFromUser = false;
 
-        // Seeds
-        this.seeds = [];
-        //Holes
-        this.holes = [];
-
-        this.readUserSettings();
         this.buildBoard();
-        this.readHoles();
-        this.placeSeeds();
+        console.debug('Gameboard object created.');
     }
 
-    readUserSettings() {
-        this.settings.playerTurn = document.getElementById('f-turn').checked;
-        this.settings.numberOfHoles = parseInt(document.getElementById('n-holes').innerHTML);
-        this.settings.numberOfSeedsPerHole = parseInt(document.getElementById('n-seeds').innerHTML);
-        this.settings.pvp = document.getElementById('pvp').checked;
-        this.settings.difficulty = document.getElementById('difficulty').value;
-        this.settings.online = this.settings.difficulty == 'multi_player' ? true : false;
+    /**
+     * Reads the configuration before starting the game.
+     * This configuration is read from a form in HTML.
+     */
+    readSettings() {
+        this.settings = {
+            player1Starts: document.getElementById('f-turn').checked,
+            numberOfHoles: parseInt(document.getElementById('n-holes').innerHTML),
+            seedsPerHole: parseInt(document.getElementById('n-seeds').innerHTML),
+            pvp: document.getElementById('pvp').checked,
+        }
+        // this.settings.difficulty = document.getElementById('difficulty').value;
+        // this.settings.online = this.settings.difficulty === 'multi_player';;
     }
 
+    /**
+     * Builds a hole according to the typeOfHole
+     * @param typeOfHole it can have the values defined in TypeOfHole
+     */
     buildHole(typeOfHole) {
-        let newHole = document.createElement('div');
-        newHole.classList.add(typeOfHole);
+        let pit = document.createElement('div');
+        pit.classList.add(typeOfHole);
 
         let hole = document.createElement('div');
         hole.classList.add('hole');
         let score = document.createElement('div');
         score.classList.add('score');
 
-        newHole.append(hole);
-        newHole.append(score);
+        pit.append(hole);
+        pit.append(score);
 
-        if(typeOfHole=='enemy-hole'){
-            const oldHole = document.querySelector('.enemy-deposit');
-            const h = oldHole.nextSibling;
-            oldHole.parentNode.insertBefore(newHole, oldHole.nextSibling);
-            return;
+        let oldPit;
+        if (typeOfHole === TypeOfHole.OPPONENT) {
+            oldPit = document.querySelector('.enemy-deposit');
+            oldPit.parentNode.insertBefore(pit, oldPit.nextSibling);
         }
 
-        const oldHole = document.querySelector('.my-deposit');
-        document.querySelector('.gameboard').insertBefore(newHole, oldHole);
-        return;
+        if (typeOfHole === TypeOfHole.MINE) {
+            oldPit = document.querySelector('.my-deposit');
+            document.querySelector('.gameboard').insertBefore(pit, oldPit);
+        }
+
+        this.placeSeedsOnHole(pit.querySelector('.hole'), this.settings.seedsPerHole);
     }
 
+    /**
+     * Builds the board inserting the desired number of holes/pits
+     * in each of the sides.
+     */
     buildBoard() {
-        let gameboard = document.querySelector('.gameboard');
-        gameboard.style.gridTemplateColumns = '1fr repeat(' + this.settings.numberOfHoles + ', 1fr) 1fr';
+        let board = document.querySelector('.gameboard');
+        board.style.gridTemplateColumns = '1fr repeat(' + this.settings.numberOfHoles + ', 1fr) 1fr';
 
         for (let i = 0; i < this.settings.numberOfHoles; i++) {
-            this.buildHole('enemy-hole');
-            this.buildHole('my-hole');
+            this.buildHole(TypeOfHole.OPPONENT);
+            this.buildHole(TypeOfHole.MINE);
         }
     }
 
-    readHoles() {
-        document.querySelectorAll('.my-hole').forEach(element=>this.holes.push(element));
-        this.holes.push(document.querySelector('.my-deposit'));
-        const reverseHoles = document.querySelectorAll('.enemy-hole');
-        for (let index = reverseHoles.length-1; index >= 0; index--) {
-            const element = reverseHoles[index];
-            this.holes.push(element);
-        }
-        this.holes.push(document.querySelector('.enemy-deposit'));
-    }
-
-    placeSeeds() {
-        const numberOfHoles = this.settings.numberOfHoles;
-        this.seeds = new Array(2 * numberOfHoles + 2);
-        this.seeds.fill(this.settings.numberOfSeedsPerHole);
-
-        // These are the seeds in the deposits.
-        // Players' initial score is always 0.
-        this.seeds[numberOfHoles] = 0;
-        this.seeds[this.seeds.length - 1] = 0;
-
-        for (const [i, nseeds] of this.seeds.entries()) {
-            this.placeSeedsOnHole(this.holes[i].children[0], nseeds);
-            this.holes[i].children[1].innerText = nseeds.toString(10);
-        }
-    }
-
-    placeSeedsOnHole(parentHole, nseeds) {
+    placeSeedsOnHole(parentHole, numberOfSeeds) {
         const seed = document.createElement('div');
         seed.classList.add('seed');
 
-        for (let i = 0; i < nseeds; i++) {
-            let newSeed = seed.cloneNode();
-            parentHole.appendChild(newSeed);
-            this.generateRandomPosition(newSeed);
+        for (let i = 0; i < numberOfSeeds; i++) {
+            let cloneSeed = seed.cloneNode();
+            parentHole.appendChild(cloneSeed);
+            this.generateRandomPosition(cloneSeed);
         }
     }
 
     generateRandomPosition(seed) {
         seed.style.backgroundColor = "hsl(" + 360 * Math.random() + ',' +
-                                        (75 + 30 * Math.random()) + '%,' + 
-                                        (45 + 10 * Math.random()) + '%)';
-        const randomAngle = Math.random() * 180;
-        seed.style.transform = 'rotate(' + randomAngle + 'deg)';
+                                         (75 + 30 * Math.random()) + '%,' +
+                                         (45 + 10 * Math.random()) + '%)';
+
+        seed.style.transform = 'rotate(' + Math.random() * 180 + 'deg)';
 
         seed.style.left = (40 + ((Math.random() * 30)-10)) + '%';
         seed.style.top = (45 + ((Math.random() * 40)-20)) + '%';
     }
 
-    setupEventListeners(handleHoleClick) {
-        const holes1 = document.querySelectorAll('.my-hole .hole');
-        holes1.forEach((hole,i) => {
-            hole.addEventListener('click', ()=>{
-                handleHoleClick(i);
-            });
-        });
+    updateEventListeners(gameState) {
+        console.debug(gameState);
+        const myHoles = document.querySelectorAll('.my-hole .hole');
+        const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
 
-        const holes2 = document.querySelectorAll('.enemy-hole .hole');
-        holes2.forEach((hole,i) => {
-            hole.addEventListener('click', ()=>{
-                //New index is counted starting from player1 holes
-                handleHoleClick(2*this.settings.numberOfHoles-i);
-            });
-        });
+        switch (gameState) {
+            case GameState.PLAYER1:
+                this.removeEventListenerFromNodeList(myHoles, 'click', this.generateMove);
+                this.addEventListenerToNodeList(enemyHoles, 'click', this.generateMove);
+                break;
+            case GameState.PLAYER2:
+                this.addEventListenerToNodeList(myHoles, 'click', this.generateMove);
+                this.removeEventListenerFromNodeList(enemyHoles, 'click', this.generateMove);
+                break;
+            default:
+                this.removeEventListenerFromNodeList(myHoles, 'click', this.generateMove);
+                this.removeEventListenerFromNodeList(enemyHoles, 'click', this.generateMove);
+        }
+        console.debug('Event Listeners updated');
+    }
+
+    updateClassNames(gameState) {
+        console.debug(gameState);
+        const myHoles = document.querySelectorAll('.my-hole .hole');
+        const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
+
+        switch (gameState) {
+            case GameState.PLAYER1:
+                this.removeClassNameFromNodeList(myHoles, 'active');
+                this.addClassNameToNodeList(enemyHoles, 'active');
+                break;
+            case GameState.PLAYER2:
+                this.addClassNameToNodeList(myHoles, 'active');
+                this.removeClassNameFromNodeList(enemyHoles, 'active');
+                break;
+            default:
+                this.removeClassNameFromNodeList(myHoles, 'active');
+                this.removeClassNameFromNodeList(enemyHoles, 'active');
+        }
+        console.debug('Class Names updated');
+    }
+
+    updateScores() {
+        let myHoles = document.querySelectorAll('.my-hole');
+        let enemyHoles = document.querySelectorAll('.enemy-hole');
+
+        for (let [i, hole] in myHoles.entries())
+            hole.querySelector('.hole .score').textContent = this.mySeeds.seeds[i];
+        document.querySelector('.my-deposit .score').textContent = this.mySeeds.deposit;
+
+        for (let [i, hole] in Array.from(enemyHoles).reverse().entries())
+            hole.querySelector('.hole .score').textContent = this.enemySeeds.seeds[i];
+        document.querySelector('.enemy-deposit .score').textContent = this.enemySeeds.deposit;
+
+        console.debug('Scores Updated');
+    }
+
+    updateSeeds() {
+        const myHoles = document.querySelectorAll('.my-hole');
+        const enemyHoles = document.querySelectorAll('.enemy-hole');
+
+        myHoles.forEach(hole => hole.querySelector('.hole').textContent = '');
+        enemyHoles.forEach(hole => hole.querySelector('.hole').textContent = '');
+
+        for (let [i, hole] in myHoles.entries())
+            this.placeSeedsOnHole(hole.querySelector('.hole'), this.mySeeds.seeds[i]);
+
+        const myDepositHole = document.querySelector('.my-deposit .hole');
+        myDepositHole.textContent = '';
+        this.placeSeedsOnHole(myDepositHole, this.mySeeds.deposit);
+
+        for (let [i, hole] in Array.from(enemyHoles).reverse().entries())
+            this.placeSeedsOnHole(hole.querySelector('.hole'), this.enemySeeds.seeds[i]);
+
+        const enemyDepositHole = document.querySelector('.enemy-deposit .hole');
+        enemyDepositHole.textContent = '';
+        this.placeSeedsOnHole(enemyDepositHole, this.mySeeds.deposit);
+
+        console.debug('Seeds Updated');
+    }
+
+    update(gameState, callback) {
+        this.updateEventListeners(gameState);
+        this.updateClassNames(gameState);
+        this.updateScores();
+        this.updateSeeds();
+        callback().bind(this);
+    }
+
+    generateMove(event) {
+        let clickedHole = event.target.classList.contains('seed') ? event.target.parentElement.parentElement :
+                                                                    event.target.parentElement;
+        let holePosition = Array.from(clickedHole.parentNode.children).indexOf(clickedHole);
+        console.debug(clickedHole, holePosition);
+
+        this.move = {};
+        console.debug('Move Generated');
     }
 
     /* Logic */
-    async removeSeedsFromHole(index) {
-        this.updateHoleScore(index, 0);
-        this.resetSeedPosition(this.holes[index]);
+    async removeSeedsFromHole(i) {
+        this.updateHoleScore(i, 0);
+        this.resetSeedPosition(this.holes[i]);
         await this.sleep(300);
     }
-    
+
     resetSeedPosition(hole) {
         const seeds = hole.querySelectorAll('.hole .seed');
-        seeds.forEach(seed=>{
+        seeds.forEach(seed => {
             seed.style.left = '40%';
             seed.style.top = '45%';
         });
     }
 
-    updateHoleScore(index, newScore) {
-        this.holes[index].querySelector('.score').textContent = newScore;
-    }
-
-    async tranferSeed(from, to, n=1){
+    async transferSeed(from, to, n= 1) {
         const holeFrom = this.holes[from].querySelector('.hole');
         const holeTo = this.holes[to].querySelector('.hole');
 
-        while(n>0){
+        while (n > 0) {
             const seed = holeFrom.removeChild(holeFrom.querySelector('.seed'));
             seed.style.left = (40 + ((Math.random() * 30)-10)) + '%';
             seed.style.top = (45 + ((Math.random() * 40)-20)) + '%';
-            
+
             holeTo.appendChild(seed);
             n--;
         }
         await this.sleep(200);
     }
 
+
+    addEventListenerToNodeList(list, type, listener) {
+        list.forEach(node => {
+            node.addEventListener(type, listener);
+            console.debug('Event listener added');
+        });
+    }
+
+    removeEventListenerFromNodeList(list, type, listener) {
+        list.forEach(node => {
+            node.removeEventListener(type, listener);
+            console.debug('Event listener removed');
+        });
+    }
+
+    addClassNameToNodeList(list, className) {
+        list.forEach(node => {
+            node.classList.add(className);
+        });
+    }
+
+    removeClassNameFromNodeList(list, className) {
+        list.forEach(node => {
+            node.classList.remove(className);
+        });
+    }
+
     sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
+
 

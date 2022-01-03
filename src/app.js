@@ -1,36 +1,32 @@
 import { setUpAnimations, signInAnimation } from './animations.js';
 import Game from './game.js';
+import ServerApi from "./serverApi.js";
 
 setUpAnimations();
 
-//Create Game
-let game = new Game();
-
-//HTML Elements
+// HTML Elements
 const play = document.querySelector('#play');
 const welcomeMenu = document.querySelector('#play .welcome-menu');
 const gameMenu = document.querySelector('#play .game');
 const playButton = document.querySelector('#play .welcome-menu #play-btn');
 const continueButton = document.getElementById('continue-btn');
 
-playButton.addEventListener('click', async () => {
+let api = new ServerApi();
+let game = new Game();
 
-    // Start game with current setting
-    game.setupGameConfig();
-    const res = await game.startGame();
-    if(!res) {
-        alert("User not registered");
-        game.resetGame();
-        return;
-    }
+playButton.addEventListener('click', () => {
+    console.debug('Button Clicked');
+
+    game.loop();
 
     welcomeMenu.style.display = "none";
     gameMenu.classList.toggle('active');
     play.scrollIntoView();
+
 });
 
-continueButton.addEventListener('click', ()=>{
-    game.resetGame();
+continueButton.addEventListener('click', () => {
+    game.reset();
     play.scrollIntoView();
 });
 
@@ -41,9 +37,9 @@ signInForm.addEventListener('submit', async (e)=> {
     const pass = document.getElementById('password').value;
 
     if(!nick || !pass) return;
-    const res = await game.api.register(nick, pass);
+    const res = await api.register(nick, pass);
     
-    if(res!=nick) {
+    if (res!=nick) {
         alert(res);
         return;
     }

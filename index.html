@@ -43,9 +43,9 @@
         </div>
         <form class="authenticator" id="sign-form">
           <label for="username">Username:</label>
-          <input type="text" name="username" placeholder="" id="username" required>
+          <input type="text" name="username" placeholder="" id="username" autocomplete="username" required>
           <label for="password">Password:</label>
-          <input type="password" name="password" placeholder="" id="password" required>
+          <input type="password" name="password" placeholder="" id="password" autocomplete="current-password" required>
           <input type="submit" name="signin" value="Sign in">
         </form>
         <h2 id="player-name"></h2>
@@ -344,7 +344,7 @@
   </footer>
   <!-- End of Footer Section -->
 
-  <script type="module" src="./src/app.js"></script>
+  <script type="module" src="src/app.js"></script>
 </body>
 
 </html>
