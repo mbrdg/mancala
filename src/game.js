@@ -1,6 +1,10 @@
 import Gameboard from './gameboard.js'
-import ServerApi from './serverApi.js';
+import Chat from "./chat.js";
 
+/**
+ * Enum for representing all the different game states.
+ * @type {{PLAYER1: number, PLAYER2: number, DRAW: number, LOSE: number, GIVEUP: number, WIN: number}}
+ */
 const GameState = {
     'PLAYER1': 1,
     'PLAYER2': 2,
@@ -12,26 +16,30 @@ const GameState = {
 Object.freeze(GameState);
 export { GameState };
 
+/**
+ * This is the Game class which purpose is to hold all the logic of
+ * all the models aka board and chat.
+ */
 export default class Game {
 
     constructor() {
+        this.chat = new Chat();
+        console.debug('Game object created.');
+    }
+
+    /**
+     * Sets all the necessary things to start a game
+     */
+    setup() {
         this.board = new Gameboard(this.loop.bind(this));
         this.state = this.getInitialGameState(this.board.settings);
 
         this.setupRequiredClickEvents();
-        console.debug('Game object created.');
     }
 
     // Helper functions
-    isPLayer1Turn = () => this.state === GameState.PLAYER1;
-
-    timeout = async ms => new Promise(res => setTimeout(res, ms));
-    async waitUserInput() {
-        while (this.board.gotInputFromUser === false) {
-            await this.timeout(50);
-        }
-        this.board.gotInputFromUser = false;
-    }
+    isPlayer1Turn = () => this.state === GameState.PLAYER1;
+    isPlayer2Turn = () => !this.isPlayer1Turn();
 
     /**
      * Gets the initial state of the game
@@ -71,10 +79,9 @@ export default class Game {
 
         this.board.generateMove(event);
 
-        let samePlayer = this.executeMove(this.board.mySeeds, this.board.enemySeeds, this.board.move);
-        let previousState = this.state;
-        this.updateState(samePlayer);
-        this.board.update(previousState, this.loop);
+        let repeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, this.board.move, true);
+        this.updateState(repeatTurn);
+        this.board.update(this.state, this.loop);
     }
 
     /**
@@ -95,17 +102,20 @@ export default class Game {
      */
     end(giveUp = false) {
         if (giveUp) {
-            this.state = this.isPLayer1Turn() ? GameState.LOSE : GameState.WIN;
+            this.state = this.isPlayer1Turn() ? GameState.LOSE : GameState.WIN;
         } else {
             const p1Score = this.board.mySeeds.deposit;
             const p2Score = this.board.enemySeeds.deposit;
 
             if (p1Score === p2Score)
                 this.state = GameState.DRAW;
+            else if (p1Score > p2Score)
+                this.state = GameState.WIN;
             else
-                this.state = p1Score > p2Score ? GameState.WIN : GameState.LOSE;
+                this.state = GameState.LOSE;
         }
 
+        this.showEndMenu(this.state);
         console.debug('Game Ended');
     }
 
@@ -118,286 +128,102 @@ export default class Game {
             return;
         }
 
-        this.state = this.isPLayer1Turn() ? GameState.PLAYER2 : GameState.PLAYER1;
+        this.state = this.isPlayer1Turn() ? GameState.PLAYER2 : GameState.PLAYER1;
         console.debug('Game.ChangeState() new state:', this.state);
     }
 
     /**
+     * Executes a steal if that's the case
+     * @param board Current status of the game board
+     * @param lastHole Index of the hole where was placed the last remaining seed
+     * @param isPlayer1Turn True if it's the player's 1 turn
+     */
+    executeSteal(board, lastHole, isPlayer1Turn) {
+        let enemyHole = 2 * this.board.settings.numberOfHoles - lastHole;
+        if (board[enemyHole] === 0)
+            return;
+
+        let deposit = isPlayer1Turn ? board.length - 1 : this.board.settings.numberOfHoles;
+
+        let stolenSeeds = board[enemyHole] + board[lastHole]
+        board[deposit] += stolenSeeds;
+        board[enemyHole] = 0;
+        board[lastHole] = 0;
+
+        this.chat.message("WOW! " + stolenSeeds.toString() + " seed(s) stolen!", !isPlayer1Turn);
+    }
+
+    /**
+     * Logs all the events in a move to the chat
+     * @param repeatTurn True whether the same player will play again or not
+     * @param board current board array
+     * @param mySeeds Object containing the information about the player 1 seeds
+     * @param enemySeeds Object containing the information about the player 2 seeds
+     * @param sender True if Player 1 is sending the message, false otherwise
+     */
+    messagesFromMove(repeatTurn, board, mySeeds, enemySeeds, sender) {
+        if (repeatTurn)
+            this.chat.message("I'm playing again!", sender);
+
+        let myDifference = board[this.board.settings.numberOfHoles] - mySeeds.deposit;
+        let enemyDifference = board[board.length - 1] - enemySeeds.deposit;
+        if (myDifference > 0)
+            this.chat.message(myDifference.toString() + " point(s) in the bag.", true);
+        if (enemyDifference > 0)
+            this.chat.message(enemyDifference.toString() + " point(s) in the bag.", false);
+    }
+
+    /**
      * Executes a move
-     * @param mySeeds
-     * @param enemySeeds
-     * @param move
+     * @param mySeeds Object containing the information about the player 1 seeds
+     * @param enemySeeds Object containing the information about the player 2 seeds
+     * @param move Index referring to which hole triggered the move
+     * @param verbose true if messages should be displayed
      * @return True if a player gets the turn again, false otherwise
      */
-    executeMove(mySeeds, enemySeeds, move) {
+    executeMove(mySeeds, enemySeeds, move, verbose) {
         console.debug('Executing a move');
-        console.log(this.board);
-        console.debug(mySeeds, enemySeeds, move);
-        return false;
-    }
+        let board = Array.prototype.concat(mySeeds.seeds, [mySeeds.deposit], enemySeeds.seeds, [enemySeeds.deposit]);
 
-    async startGame() {
-        console.debug('Game Starting');
-
-        if (this.board.settings.online) {
-            if (this.playerName == 'Player 1' && this.playerPass == '')
-                return false; //Not registered
-
-            const data = {
-                group:99, //default value
-                nick: this.playerName,
-                password: this.playerPass,
-                size: this.board.settings.numberOfHoles,
-                initial: this.board.settings.numberOfSeeds
-            }
-            this.api.join(data);
-            return true;
-        }
-
-        if (this.state == GameState.BOT) { //Bot Play
-            this.addMsgToChat("GRRR I start!");
-            await this.playBot();
-            await this.changeState(GameState.PLAYER1);
-            return true;
-        }
-
-        let className, text;
-        if (this.state == GameState.PLAYER1){
-            text= "Let's beggin!";
-            className =  '.my-hole .hole';
-        }else {
-            className = '.enemy-hole .hole';
-            text = "My turn!";
-        }
-        
-        const holes =  document.querySelectorAll(className);
-        this.addClassNameToList(holes, 'active');
-        this.addMsgToChat(text);
-        return true;
-    }
-
-    async changeState(newState) {
-        let myHoles = document.querySelectorAll('.my-hole .hole');
-        let enemyHoles = document.querySelectorAll('.enemy-hole .hole');
-
-        if (newState === GameState.WIN || newState === GameState.LOSE || newState === GameState.DRAW) {
-            this.removeClassNameFromList(myholes, 'active');
-            this.removeClassNameFromList(enemyHoles, 'active');
-            console.debug("Game ended");
-
-            this.showEndMenu(newState);
-            this.state = newState;
-            return;
-        }
-
-        if (newState === GameState.GIVEUP || newState === GameState.BOT) {
-
-            const holes = this.state === GameState.PLAYER1 ? myHoles : enemyHoles;
-            this.removeClassNameFromList(holes, 'active');
-
-            if (newState==GameState.BOT) { //Bot Play
-                this.state = newState;
-                this.addMsgToChat("It's my time to shine!");
-                await this.playBot();
-                this.changeState(GameState.PLAYER1);
-                return;
-            }
-            
-            this.addMsgToChat("I give up :(");
-
-            const deposit = (this.state == GameState.PLAYER1 ) ? 'my-deposit' : 'enemy-deposit';
-            document.querySelector(`#play .game .${deposit} .score`).textContent = 0;
-
-            const oldState = this.state;
-            this.state = newState;
-            return oldState;
-        }
-        
-        this.state = newState;
-        this.addMsgToChat(Math.random() < 0.5 ? "I'm going to do my best!" : "It's my turn.");
-
-        if(newState==GameState.PLAYER1) {
-            const holes =  document.querySelectorAll('.my-hole .hole');
-            this.addClassNameToList(holes, 'active');
-            if(this.board.settings.pvp) {
-                const holes_ =  document.querySelectorAll('.enemy-hole .hole');
-                this.removeClassNameFromList(holes_, 'active');
-            }
-            return;
-        }
-        if(newState==GameState.PLAYER2) {
-            let holes =  document.querySelectorAll('.my-hole .hole');
-            this.removeClassNameFromList(holes, 'active');
-            holes = document.querySelectorAll('.enemy-hole .hole');
-            this.addClassNameToList(holes, 'active');
-            return;
-        }
-    }
-
-    handleHoleClick = async (index) => {
-        const depositP1 = this.board.settings.numberOfHoles;
-        const depositP2 = this.board.seeds.length-1;
-        if(this.state == GameState.PLAYER1){
-            if(index >= this.board.settings.numberOfHoles) return;
-            const res = await (this.executeMove(index, depositP1, depositP2));
-            if(!res) return;
-            this.changeState(this.board.settings.pvp ? GameState.PLAYER2 : GameState.BOT);
-            return;
-        }
-
-        if(this.state == GameState.PLAYER2){
-            if(index < this.board.settings.numberOfHoles) return;
-            const res = await (this.executeMove(index, depositP2, depositP1));
-            if(!res) return;
-            this.changeState(GameState.PLAYER1);
-            return;
-        }
-    }
-
-    /* Returns true in case of switching turns, false otherwise
-    async executeMove(index, myDepositIndex, enemyDepositIndex) {
-        let seedsPerHole = this.board.seeds;
-
-        let nSeeds = seedsPerHole[index];
-        if(nSeeds == 0) {
-            console.debug('No seeds to withdraw');
-            return false;
-        }
-
-        seedsPerHole[index]=0;
-        await this.board.removeSeedsFromHole(index);
-
-        let currIndex = index+1;
-        let scoredPoints = 0;
-
-        while (nSeeds>1) {
-            //SEED Animation
-            await this.board.transferSeed(index, currIndex);
-
-            seedsPerHole[currIndex]+=1;
-            this.board.updateHoleScore(currIndex, seedsPerHole[currIndex]);
-
-            scoredPoints = currIndex == myDepositIndex ? scoredPoints+1 : scoredPoints;
-            currIndex = (currIndex+1) != enemyDepositIndex ? (currIndex+1) % seedsPerHole.length : (enemyDepositIndex+1) % seedsPerHole.length;
-            nSeeds--;
-        }
-
-        await this.board.tranferSeed(index, currIndex);
-        seedsPerHole[currIndex]+=1;
-        this.board.updateHoleScore(currIndex, seedsPerHole[currIndex]);
-
-        if(this.state==GameState.PLAYER1 ? currIndex > myDepositIndex : currIndex < enemyDepositIndex) { //Seed in the enemy side
-            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
-            return true;
-        }
-
-        if(currIndex==myDepositIndex){ //Seed in player deposit
-            scoredPoints++;
-            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
-
-            //Check if game can still be played: current player
-            if(!this.gameOver(this.state, seedsPerHole))
-                return false;
-            
-            await this.removeRemainingSeeds(this.state, enemyDepositIndex);
-
-            this.endGame();
-            return false;
-        }
-
-        if(seedsPerHole[currIndex]==1) { //Steal from enemy side
-            const numberOfHoles = this.board.settings.numberOfHoles;
-            const oppositeIndex = 2*numberOfHoles-currIndex;
-            const oppositeSeeds = seedsPerHole[oppositeIndex];
-
-            if(oppositeSeeds > 0){
-                //TODO: Wait for seed anim
-
-                //Remove from oposite side
-                seedsPerHole[oppositeIndex]=0;
-                await this.board.removeSeedsFromHole(oppositeIndex);
-                await this.board.tranferSeed(oppositeIndex, myDepositIndex, oppositeSeeds);
-                seedsPerHole[myDepositIndex]+=oppositeSeeds;
-                this.board.updateHoleScore(myDepositIndex, seedsPerHole[myDepositIndex]);
-                
-                //Remove from final seed hole
-                seedsPerHole[currIndex]=0;
-                await this.board.removeSeedsFromHole(currIndex);
-                await this.board.tranferSeed(currIndex, myDepositIndex);
-                seedsPerHole[myDepositIndex]+=1;
-                this.board.updateHoleScore(myDepositIndex, seedsPerHole[myDepositIndex]);
-                
-                scoredPoints+=oppositeSeeds+1;
-            } 
-        }
-
-        if(scoredPoints>0)
-            this.addMsgToChat(scoredPoints>1 ? scoredPoints + " points in the bag!" : "1 point in the bag!");
-        else if(Math.random() > 0.7){
-            this.addMsgToChat("Better luck next time");
-        }
-
-        //Check if game can still be played: oposite player
-        const enemyState = this.state==GameState.PLAYER1 ? GameState.PLAYER2 : GameState.PLAYER1;
-        if(!this.gameOver(enemyState, seedsPerHole))
+        if (!board[move])
             return true;
 
-        await this.removeRemainingSeeds(enemyState, myDepositIndex);
+        let i = move;
+        let lastHole = (move + board[move]) % board.length;
+        let isLastHoleEmpty = board[lastHole] === 0;
 
-        this.endGame();
-        return false;
-    } */
-
-    async playBot(){
-        console.log("MIKE");
-        await this.sleep(1000);
-    }
-
-    gameOver(nextState, seeds) {
-        const numberOfHoles = this.board.settings.numberOfHoles;
-        const arr = nextState == GameState.PLAYER1 ? seeds.slice(0, numberOfHoles) : seeds.slice(numberOfHoles+1, seeds.length-1);
-
-        for (const seeds of arr) {
-            if(seeds) return false;
-        }
-        return true;
-    }
-
-    async removeRemainingSeeds(nextState, depositIndex) {
-        const numberOfHoles = this.board.settings.numberOfHoles;
-
-        let index = 0;
-        let arr = this.board.seeds.slice(index, numberOfHoles);
-        
-        if(nextState == GameState.PLAYER1){
-            index = numberOfHoles+1; 
-            arr = this.board.seeds.slice(index, this.board.seeds.length-1);
+        while (board[move] > 0) {
+            i = (i + 1) % board.length;
+            board[i]++;
+            board[move]--;
         }
 
-        let i=-1;
-        for (let seeds of arr) {
-            i++;
-            if(seeds == 0) continue;
-            
-            this.board.seeds[index+i]=0;
-            await this.board.removeSeedsFromHole(index+i);
+        let between = (min, target, max) => min <= target && target < max;
+        let endedInItsOwnHoles = (this.isPlayer2Turn() && between(0, i, this.board.settings.numberOfHoles)) ||
+            (this.isPlayer1Turn() && between(this.board.settings.numberOfHoles + 1, i, board.length - 1));
 
-            await this.board.tranferSeed(index+i, depositIndex, seeds);
-            this.board.updateHoleScore(depositIndex, this.board.seeds[depositIndex]+seeds);
-        }
+        if (endedInItsOwnHoles && isLastHoleEmpty)
+            this.executeSteal(board, lastHole, this.isPlayer1Turn());
+
+        if (verbose)
+            this.messagesFromMove(endedInItsOwnHoles, board, mySeeds, enemySeeds, !this.isPlayer1Turn());
+
+        mySeeds.seeds = board.slice(0, this.board.settings.numberOfHoles);
+        mySeeds.deposit = board[this.board.settings.numberOfHoles]
+        enemySeeds.seeds = board.slice(this.board.settings.numberOfHoles + 1, board.length - 1);
+        enemySeeds.deposit = board[board.length - 1];
+        return endedInItsOwnHoles;
     }
 
-    addMsgToChat(text) {
-        const className = (this.state == GameState.PLAYER1 ) ? 'player-msg' : 'opponent-msg';
-        const newElem = document.createElement('p');
-        newElem.classList.add(className);
-        const node = document.createTextNode(text);
-        newElem.append(node);
-        const chat = document.getElementById('chat');
-        chat.prepend(newElem);
-        chat.scrollTop = chat.scrollHeight;
+
+    reset() {
+        this.chat.clear();
+        this.board.reset();
+        console.debug('Reset game');
     }
 
+    // FIXME - I believe this is not responsibility of the game class because
+    //         here we just control all the other components.
     showEndMenu(newState) {
         const endMenu = document.querySelector('#play .end-menu');
 
@@ -456,27 +282,5 @@ export default class Game {
         names[1].textContent = this.board.settings.pvp ? 'Player 2' : 'Bot'; //TODO: Change to name of user;
 
         endMenu.classList.add('active');
-    }
-
-    reset(){
-        const chat = document.getElementById('chat');
-        chat.textContent = '';
-
-        const enemyDeposit = document.querySelector('#play .game .enemy-deposit .hole');
-        const myDeposit = document.querySelector('#play .game .my-deposit .hole');
-        enemyDeposit.textContent = '';
-        myDeposit.textContent = '';
-
-        for (const hole of document.querySelectorAll('.my-hole'))
-            hole.remove();
-        for (const hole of document.querySelectorAll('.enemy-hole'))
-            hole.remove();
-        console.debug('Reset game');
-    }
-
-    //UTILS
-
-    sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }

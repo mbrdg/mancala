@@ -17,6 +17,12 @@ Object.freeze(TypeOfHole);
  */
 export default class Gameboard {
 
+    /**
+     * Constructor for Gameboard class
+     * @param gameLoop function in which the game loop happens.
+     * This approach is necessary because js doesn't stop execution
+     * meaning that we need to react to events instead of being proactive.
+     */
     constructor(gameLoop) {
         this.readSettings();
 
@@ -32,7 +38,7 @@ export default class Gameboard {
         this.gameLoopCallBack = gameLoop;
 
         this.buildBoard();
-        console.debug('Gameboard object created.');
+        console.debug('Board object created.');
     }
 
     /**
@@ -61,6 +67,7 @@ export default class Gameboard {
         let hole = document.createElement('div');
         hole.classList.add('hole');
         let score = document.createElement('div');
+        score.textContent = this.settings.seedsPerHole.toString();
         score.classList.add('score');
 
         pit.append(hole);
@@ -94,6 +101,12 @@ export default class Gameboard {
         }
     }
 
+    /**
+     * Function that places the seed on the desired holes while
+     * in board construction.
+     * @param parentHole HTML element in which an element seed will be added as a child.
+     * @param numberOfSeeds Number of seed elements to add.
+     */
     placeSeedsOnHole(parentHole, numberOfSeeds) {
         const seed = document.createElement('div');
         seed.classList.add('seed');
@@ -101,23 +114,27 @@ export default class Gameboard {
         for (let i = 0; i < numberOfSeeds; i++) {
             let cloneSeed = seed.cloneNode();
             parentHole.appendChild(cloneSeed);
-            this.generateRandomPosition(cloneSeed);
+            this.generateStyle(cloneSeed);
         }
     }
 
-    generateRandomPosition(seed) {
-        seed.style.backgroundColor = "hsl(" + 360 * Math.random() + ',' +
-                                         (75 + 30 * Math.random()) + '%,' +
-                                         (45 + 10 * Math.random()) + '%)';
-
+    /**
+     * Generates a style for a seed element
+     * @param seed HTML element
+     */
+    generateStyle(seed) {
+        let colors = ['firebrick', 'limegreen', 'navy', 'goldenrod'];
+        seed.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]
         seed.style.transform = 'rotate(' + Math.random() * 180 + 'deg)';
-
         seed.style.left = (40 + ((Math.random() * 30)-10)) + '%';
         seed.style.top = (45 + ((Math.random() * 40)-20)) + '%';
     }
 
+    /**
+     * Function that changes the holes for the event listeners according with the current game state.
+     * @param gameState
+     */
     updateEventListeners(gameState) {
-        console.debug(gameState);
         const myHoles = document.querySelectorAll('.my-hole .hole');
         const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
 
@@ -138,7 +155,6 @@ export default class Gameboard {
     }
 
     updateClassNames(gameState) {
-        console.debug(gameState);
         const myHoles = document.querySelectorAll('.my-hole .hole');
         const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
 
@@ -162,38 +178,46 @@ export default class Gameboard {
         let myHoles = document.querySelectorAll('.my-hole');
         let enemyHoles = document.querySelectorAll('.enemy-hole');
 
-        for (let [i, hole] in myHoles.entries())
-            hole.querySelector('.hole .score').textContent = this.mySeeds.seeds[i];
-        document.querySelector('.my-deposit .score').textContent = this.mySeeds.deposit;
+        for (let [i, pit] of myHoles.entries())
+            pit.querySelector('.score').textContent = this.mySeeds.seeds[i].toString();
+        document.querySelector('.my-deposit .score').textContent = this.mySeeds.deposit.toString();
 
-        for (let [i, hole] in Array.from(enemyHoles).reverse().entries())
-            hole.querySelector('.hole .score').textContent = this.enemySeeds.seeds[i];
-        document.querySelector('.enemy-deposit .score').textContent = this.enemySeeds.deposit;
+        for (let [i, pit] of Array.from(enemyHoles).reverse().entries())
+            pit.querySelector('.score').textContent = this.enemySeeds.seeds[i].toString();
+        document.querySelector('.enemy-deposit .score').textContent = this.enemySeeds.deposit.toString();
 
         console.debug('Scores Updated');
+    }
+
+
+    updateSeedsOnHole(parentHole, newNumberOfSeeds) {
+        const seed = document.createElement('div');
+        seed.classList.add('seed');
+
+        while (parentHole.children.length < newNumberOfSeeds) {
+            let cloneSeed = seed.cloneNode();
+            parentHole.appendChild(cloneSeed);
+            this.generateStyle(cloneSeed);
+        }
+        while (parentHole.children.length > newNumberOfSeeds)
+            parentHole.removeChild(parentHole.lastChild);
     }
 
     updateSeeds() {
         const myHoles = document.querySelectorAll('.my-hole');
         const enemyHoles = document.querySelectorAll('.enemy-hole');
 
-        myHoles.forEach(hole => hole.querySelector('.hole').textContent = '');
-        enemyHoles.forEach(hole => hole.querySelector('.hole').textContent = '');
-
-        for (let [i, hole] in myHoles.entries())
-            this.placeSeedsOnHole(hole.querySelector('.hole'), this.mySeeds.seeds[i]);
+        for (let [i, pit] of myHoles.entries())
+            this.updateSeedsOnHole(pit.querySelector('.hole'), this.mySeeds.seeds[i]);
 
         const myDepositHole = document.querySelector('.my-deposit .hole');
-        myDepositHole.textContent = '';
-        this.placeSeedsOnHole(myDepositHole, this.mySeeds.deposit);
+        this.updateSeedsOnHole(myDepositHole, this.mySeeds.deposit);
 
-        for (let [i, hole] in Array.from(enemyHoles).reverse().entries())
-            this.placeSeedsOnHole(hole.querySelector('.hole'), this.enemySeeds.seeds[i]);
+        for (let [i, pit] of Array.from(enemyHoles).reverse().entries())
+            this.updateSeedsOnHole(pit.querySelector('.hole'), this.enemySeeds.seeds[i]);
 
         const enemyDepositHole = document.querySelector('.enemy-deposit .hole');
-        enemyDepositHole.textContent = '';
-        this.placeSeedsOnHole(enemyDepositHole, this.mySeeds.deposit);
-
+        this.updateSeedsOnHole(enemyDepositHole, this.enemySeeds.deposit);
         console.debug('Seeds Updated');
     }
 
@@ -208,72 +232,49 @@ export default class Gameboard {
         let clickedHole = event.target.classList.contains('seed') ? event.target.parentElement.parentElement :
                                                                     event.target.parentElement;
         let holePosition = Array.from(clickedHole.parentNode.children).indexOf(clickedHole);
-        console.debug(clickedHole, holePosition);
 
-        this.move = {};
+        if (clickedHole.classList.contains('my-hole'))
+            this.move = holePosition - (this.settings.numberOfHoles + 2);
+        else if (clickedHole.classList.contains('enemy-hole'))
+            this.move = (this.settings.numberOfHoles + 1) + ((this.settings.numberOfHoles + 1) - holePosition)
+
         console.debug('Move Generated');
     }
 
-    /* Logic */
-    async removeSeedsFromHole(i) {
-        this.updateHoleScore(i, 0);
-        this.resetSeedPosition(this.holes[i]);
-        await this.sleep(300);
+    reset() {
+        this.mySeeds = {
+            'seeds' : Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
+            'deposit' : 0,
+        };
+        this.enemySeeds = {
+            'seeds': Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
+            'deposit' : 0,
+        };
+        this.move = {};
+
+        document.querySelector('.enemy-deposit .hole').textContent = '';
+        document.querySelector('.my-deposit .hole').textContent = '';
+
+        for (const hole of document.querySelectorAll('.my-hole'))
+            hole.remove();
+        for (const hole of document.querySelectorAll('.enemy-hole'))
+            hole.remove();
+
+        this.updateScores();
     }
 
-    resetSeedPosition(hole) {
-        const seeds = hole.querySelectorAll('.hole .seed');
-        seeds.forEach(seed => {
-            seed.style.left = '40%';
-            seed.style.top = '45%';
-        });
-    }
-
-    async transferSeed(from, to, n= 1) {
-        const holeFrom = this.holes[from].querySelector('.hole');
-        const holeTo = this.holes[to].querySelector('.hole');
-
-        while (n > 0) {
-            const seed = holeFrom.removeChild(holeFrom.querySelector('.seed'));
-            seed.style.left = (40 + ((Math.random() * 30)-10)) + '%';
-            seed.style.top = (45 + ((Math.random() * 40)-20)) + '%';
-
-            holeTo.appendChild(seed);
-            n--;
-        }
-        await this.sleep(200);
-    }
-
-
+    // Helpers
     addEventListenerToNodeList(list, type, listener) {
-        list.forEach(node => {
-            node.addEventListener(type, listener);
-            console.debug('Event listener added');
-        });
+        list.forEach(node => node.addEventListener(type, listener));
     }
-
     removeEventListenerFromNodeList(list, type, listener) {
-        list.forEach(node => {
-            node.removeEventListener(type, listener);
-            console.debug('Event listener removed');
-        });
+        list.forEach(node => node.removeEventListener(type, listener));
     }
 
     addClassNameToNodeList(list, className) {
-        list.forEach(node => {
-            node.classList.add(className);
-        });
+        list.forEach(node => node.classList.add(className));
     }
-
     removeClassNameFromNodeList(list, className) {
-        list.forEach(node => {
-            node.classList.remove(className);
-        });
-    }
-
-    sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        list.forEach(node => node.classList.remove(className));
     }
 }
-
-

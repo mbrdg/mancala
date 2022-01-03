@@ -8,20 +8,19 @@ setUpAnimations();
 const play = document.querySelector('#play');
 const welcomeMenu = document.querySelector('#play .welcome-menu');
 const gameMenu = document.querySelector('#play .game');
-const playButton = document.querySelector('#play .welcome-menu #play-btn');
-const continueButton = document.getElementById('continue-btn');
 
 let api = new ServerApi();
 let game = new Game();
 
+const playButton = document.querySelector('#play .welcome-menu #play-btn');
 playButton.addEventListener('click', () => {
-    console.debug('Button Clicked');
-
+    game.setup();
     welcomeMenu.style.display = "none";
     gameMenu.classList.toggle('active');
     play.scrollIntoView();
 });
 
+const continueButton = document.getElementById('continue-btn');
 continueButton.addEventListener('click', () => {
     game.reset();
     play.scrollIntoView();
