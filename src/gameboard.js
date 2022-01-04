@@ -26,19 +26,23 @@ export default class Gameboard {
     constructor(gameLoop) {
         this.readSettings();
 
-        this.mySeeds = {
-            'seeds' : Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
-            'deposit' : 0,
-        };
-        this.enemySeeds = {
-            'seeds': Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
-            'deposit' : 0,
-        };
-        this.move = {};
+        this.resetInformation();
         this.gameLoopCallBack = gameLoop;
 
         this.buildBoard();
         console.debug('Board object created.');
+    }
+
+    resetInformation() {
+        this.mySeeds = {
+            'seeds': Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
+            'deposit': 0,
+        };
+        this.enemySeeds = {
+            'seeds': Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
+            'deposit': 0,
+        };
+        this.move = {};
     }
 
     /**
@@ -250,15 +254,7 @@ export default class Gameboard {
     }
 
     reset() {
-        this.mySeeds = {
-            'seeds' : Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
-            'deposit' : 0,
-        };
-        this.enemySeeds = {
-            'seeds': Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
-            'deposit' : 0,
-        };
-        this.move = {};
+        this.resetInformation();
 
         document.querySelector('.enemy-deposit .hole').textContent = '';
         document.querySelector('.my-deposit .hole').textContent = '';
