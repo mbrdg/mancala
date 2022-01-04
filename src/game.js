@@ -37,9 +37,11 @@ export default class Game {
         this.board = new Gameboard(this.loop.bind(this));
         this.state = this.getInitialGameState(this.board.settings);
 
-        // FIXME : well he is too powerful
-        if (!this.board.settings.pvp)
-            this.ai = new AI(this, 1);
+        // FIXME : he is too powerful and buggy
+        if (!this.board.settings.pvp) {
+            let depth = this.board.settings.difficulty === 'easy' ? 1 : 4;
+            this.ai = new AI(this, depth);
+        }
 
         this.setupRequiredClickEvents();
     }
@@ -89,7 +91,7 @@ export default class Game {
         this.board.update(this.state, this.loop);
 
         if (this.ai !== undefined)
-            this.bot().then();
+            this.bot().then(() => console.log("Bot executed it's move"));
 
         if (this.isOver(this.board.mySeeds, this.board.enemySeeds)) {
             this.collectAllRemainingSeeds(this.board.mySeeds, this.board.enemySeeds);
@@ -177,6 +179,7 @@ export default class Game {
      * @param board Current status of the game board
      * @param lastHole Index of the hole where was placed the last remaining seed
      * @param isPlayer1Turn True if it's the player's 1 turn
+     * @param verbose True if messages should be displayed
      */
     executeSteal(board, lastHole, isPlayer1Turn, verbose) {
         let enemyHole = 2 * this.board.settings.numberOfHoles - lastHole;

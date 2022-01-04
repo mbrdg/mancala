@@ -11,9 +11,9 @@ export function setUpAnimations() {
 }
 
 const hamburguerAnimation = ()=>{
-    const hamburguer=document.querySelector('header nav .nav-list .hamburguer');
-    const menu=document.querySelector('header nav .nav-list ul');
-    const menuItem=document.querySelectorAll('header nav .nav-list ul li a');
+    const hamburguer = document.querySelector('header nav .nav-list .hamburguer');
+    const menu = document.querySelector('header nav .nav-list ul');
+    const menuItem = document.querySelectorAll('header nav .nav-list ul li a');
 
     hamburguer.addEventListener('click',() => {
         hamburguer.classList.toggle('active');
@@ -21,33 +21,33 @@ const hamburguerAnimation = ()=>{
     });
 
     menuItem.forEach((item) => {
-        item.addEventListener('click',()=>{
+        item.addEventListener('click',() =>{
             hamburguer.classList.toggle('active');
             menu.classList.remove('active');
         })
     });
 }
 
-const navBarButtonAnimation = ()=>{
+const navBarButtonAnimation = () => {
     const play = document.querySelector('#play');
     const instructions = document.querySelector('#instructions');
 
     const playButton = document.querySelector('#play-button');
     const instructionsButton = document.querySelector('#instructions-button');
 
-    playButton.addEventListener('click', ()=>{
+    playButton.addEventListener('click', () => {
         play.classList.remove('active');
         instructions.classList.remove('active');
     });
 
-    instructionsButton.addEventListener('click', ()=>{
+    instructionsButton.addEventListener('click', () => {
         console.log(play);
         play.classList.add('active');
         instructions.classList.add('active');
     });
 }
 
-const navBarScrollAnimation = ()=>{
+const navBarScrollAnimation = () => {
     let lastScrollTop = 0;
     const header = document.querySelector('#header');
     const menu=document.querySelector('header nav .nav-list ul');
@@ -57,7 +57,7 @@ const navBarScrollAnimation = ()=>{
     const pauseMenu = document.querySelector('#play .pause-menu');
 
 
-    document.addEventListener('scroll', ()=>{
+    document.addEventListener('scroll', () => {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         if(scrollTop > lastScrollTop) {
             menu.classList.remove('active');
@@ -140,20 +140,20 @@ const gameBoardButtonsAnimation = ()=>{
 const setDifficultyAnimation = ()=>{
     const difficultyLevel = document.getElementById('difficulty');
     const pvpMode = document.getElementById('pvp');
-    const singleMode = document.getElementById('singleplayer');
+    const singleMode = document.getElementById('single');
 
-    difficultyLevel.onchange = ()=>{
+    difficultyLevel.onchange = () => {
         difficultyLevel.selectedIndex > 1 ? singleMode.checked=true  : pvpMode.checked=true;
     };
-    pvpMode.addEventListener('click', ()=>{
+    pvpMode.addEventListener('click', () => {
         difficultyLevel.selectedIndex = difficultyLevel.selectedIndex > 1 ? 0 : difficultyLevel.selectedIndex;
     });
-    singleMode.addEventListener('click', ()=>{
+    singleMode.addEventListener('click', () => {
         difficultyLevel.selectedIndex = difficultyLevel.selectedIndex > 1 ? difficultyLevel.selectedIndex : 2;
     });
 }
 
-const moreSettingsAnimations = ()=>{
+const moreSettingsAnimations = () => {
     //Number Holes
     const nHoles = document.getElementById('n-holes');
     const sumHoles = document.querySelector('#number-holes .next');

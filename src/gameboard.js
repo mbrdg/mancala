@@ -55,9 +55,9 @@ export default class Gameboard {
             numberOfHoles:  parseInt(document.getElementById('n-holes').innerHTML),
             seedsPerHole:   parseInt(document.getElementById('n-seeds').innerHTML),
             pvp:            document.getElementById('pvp').checked,
+            difficulty:     document.getElementById('difficulty').value,
         }
         console.log(this.settings);
-        // this.settings.difficulty = document.getElementById('difficulty').value;
         // this.settings.online = this.settings.difficulty === 'multi_player';;
     }
 

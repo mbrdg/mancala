@@ -132,7 +132,7 @@
         <div class="banner">
           <div class="text">
             <h2>Welcome!</h2>
-            <p>Lets play Mancala</p>
+            <p>Let's play Mancala</p>
           </div>
           <div>
             <img src="./assets/mancala.png" alt="mancalaIcon" id="mancala-icon">
@@ -143,14 +143,15 @@
             <div id="mode">
               <input id="pvp" name="mode" value="pvp" type="radio" checked>
               <label for="pvp" class="mode-label">PVP</label>
-              <input id="singleplayer" name="mode" value="singleplayer" type="radio">
-              <label for="singleplayer" class="mode-label">Singleplayer</label>
+              <input id="single" name="mode" value="single" type="radio">
+              <label for="single" class="mode-label">Single-player</label>
             </div>
+            <label for="difficulty"></label>
             <select name="difficulty" id="difficulty">
-              <option value="local_player">Local Player</option>
-              <option value="multi_player">Multiplayer</option>
-              <option value="easy_bot">Easy Bot</option>
-              <option value="hard_bot">Hard Bot</option>
+              <option value="local">Local Player</option>
+              <option value="multi">Multi-player</option>
+              <option value="easy">Easy Bot</option>
+              <option value="hard">Hard Bot</option>
             </select>
             <button type="button" id="play-btn">Play <img src="./assets/play-button-arrowhead.png"
                 alt="Play icon"></button>
