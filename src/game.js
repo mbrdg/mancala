@@ -7,12 +7,13 @@ import AI from "./minimax.js";
  * @type {{PLAYER1: number, PLAYER2: number, DRAW: number, LOSE: number, GIVEUP: number, WIN: number}}
  */
 const GameState = {
-    'PLAYER1': 1,
-    'PLAYER2': 2,
-    'GIVEUP': 3,
-    'WIN': 4,
-    'LOSE': 5,
-    'DRAW': 6
+    'SETUP':    0,
+    'PLAYER1':  1,
+    'PLAYER2':  2,
+    'GIVEUP':   3,
+    'WIN':      4,
+    'LOSE':     5,
+    'DRAW':     6
 };
 Object.freeze(GameState);
 export { GameState };
@@ -35,6 +36,7 @@ export default class Game {
         this.board = new Gameboard(this.loop.bind(this));
         this.state = this.getInitialGameState(this.board.settings);
 
+        // TODO : it isn't tested yet
         if (this.board.settings.pvp)
             this.ai = new AI(this, 8);
 
@@ -52,9 +54,7 @@ export default class Game {
      * @returns {number} The initial state of the game
      */
     getInitialGameState(settings) {
-        // This is weird, but It's because in Gameboard.updateEventListeners the
-        // active will be setup correctly for the first turn.
-        return settings.player1Starts ? GameState.PLAYER2 : GameState.PLAYER1;
+        return settings.player1Starts ? GameState.PLAYER1 : GameState.PLAYER2;
     }
 
     /**
@@ -69,9 +69,10 @@ export default class Game {
             document.getElementById('play').scrollIntoView();
         });
 
-        // This is the reason for the comment in getInitialGameState()
-        this.board.updateEventListeners(this.state);
-        this.board.updateClassNames(this.state);
+        // This is weird, but It's because in Gameboard.updateEventListeners the
+        // active will be setup correctly for the first turn.
+        this.board.updateEventListeners(GameState.SETUP);
+        this.board.updateClassNames(GameState.SETUP);
     }
 
     /**
@@ -79,14 +80,33 @@ export default class Game {
      * @returns {void}
      */
     loop(event) {
-        if (this.isOver(this.board.mySeeds, this.board.enemySeeds))
-            return this.end(false);
-
+        console.log('Game Loop', 'State: ' + this.state);
         this.board.generateMove(event);
 
         let repeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, this.board.move, true);
         this.updateState(repeatTurn);
         this.board.update(this.state, this.loop);
+
+        if (this.isOver(this.board.mySeeds, this.board.enemySeeds)) {
+            this.collectAllRemainingSeeds(this.board.mySeeds, this.board.enemySeeds);
+            return this.end(false);
+        }
+    }
+
+    /**
+     * Collects all the seeds remaining in player's holes when the game is over
+     * @param mySeeds Object containing the information about the player 1 seeds
+     * @param enemySeeds Object containing the information about the player 2 seeds
+     */
+    collectAllRemainingSeeds(mySeeds, enemySeeds) {
+        if (this.isPlayer1Turn())
+            mySeeds.deposit += mySeeds.seeds.reduce((h , a) => h + a, 0);
+        else
+            enemySeeds.deposit += enemySeeds.seeds.reduce((h, a) => h + a, 0);
+
+        mySeeds.seeds.fill(0);
+        enemySeeds.seeds.fill(0);
+        console.log('seeds')
     }
 
     /**
@@ -121,8 +141,8 @@ export default class Game {
                 this.state = GameState.LOSE;
         }
 
+        console.log('Game End');
         this.showEndMenu(this.state);
-        console.debug('Game Ended');
     }
 
     /**
@@ -130,12 +150,11 @@ export default class Game {
      */
     updateState(samePlayer) {
         if (samePlayer) {
-            console.debug('Game.ChangeState() state remains the same');
+            console.info('The same players takes the turn again.');
             return;
         }
 
         this.state = this.isPlayer1Turn() ? GameState.PLAYER2 : GameState.PLAYER1;
-        console.debug('Game.ChangeState() new state:', this.state);
     }
 
     /**
@@ -149,14 +168,14 @@ export default class Game {
         if (board[enemyHole] === 0)
             return;
 
-        let deposit = isPlayer1Turn ? board.length - 1 : this.board.settings.numberOfHoles;
+        let deposit = isPlayer1Turn ? this.board.settings.numberOfHoles : board.length - 1;
 
         let stolenSeeds = board[enemyHole] + board[lastHole]
         board[deposit] += stolenSeeds;
         board[enemyHole] = 0;
         board[lastHole] = 0;
 
-        this.chat.message("WOW! " + stolenSeeds.toString() + " seed(s) stolen!", !isPlayer1Turn);
+        this.chat.message("WOW! " + stolenSeeds.toString() + " seed(s) stolen!", isPlayer1Turn);
     }
 
     /**
@@ -188,11 +207,9 @@ export default class Game {
      * @return True if a player gets the turn again, false otherwise
      */
     executeMove(mySeeds, enemySeeds, move, verbose = false) {
-        console.debug('Executing a move');
         let board = Array.prototype.concat(mySeeds.seeds, [mySeeds.deposit], enemySeeds.seeds, [enemySeeds.deposit]);
-
         if (!board[move])
-            return true;
+            return true; // There are no seeds in the clicked hole
 
         let i = move;
         let lastHole = (move + board[move]) % board.length;
@@ -205,27 +222,32 @@ export default class Game {
         }
 
         let endedInItsOwnHoles =
-            (this.isPlayer2Turn() && this.between(0, i, this.board.settings.numberOfHoles)) ||
-            (this.isPlayer1Turn() && this.between(this.board.settings.numberOfHoles + 1, i, board.length - 1));
+            (this.isPlayer1Turn() && this.between(0, i, this.board.settings.numberOfHoles)) ||
+            (this.isPlayer2Turn() && this.between(this.board.settings.numberOfHoles + 1, i, board.length - 1));
 
         if (endedInItsOwnHoles && isLastHoleEmpty)
             this.executeSteal(board, lastHole, this.isPlayer1Turn());
 
         if (verbose)
-            this.messagesFromMove(endedInItsOwnHoles, board, mySeeds, enemySeeds, !this.isPlayer1Turn());
+            this.messagesFromMove(endedInItsOwnHoles, board, mySeeds, enemySeeds, this.isPlayer1Turn());
 
         mySeeds.seeds = board.slice(0, this.board.settings.numberOfHoles);
         mySeeds.deposit = board[this.board.settings.numberOfHoles]
         enemySeeds.seeds = board.slice(this.board.settings.numberOfHoles + 1, board.length - 1);
         enemySeeds.deposit = board[board.length - 1];
+
+        console.log('Move Executed from Hole no. ' + move.toString(), 'Ended in own holes: ' + endedInItsOwnHoles);
         return endedInItsOwnHoles;
     }
 
-
+    /**
+     * Resets the board and chat elements, called whenever
+     * the game is ended.
+     */
     reset() {
         this.chat.clear();
         this.board.reset();
-        console.debug('Reset game');
+        console.log('Game Reset');
     }
 
     // FIXME - I believe this is not responsibility of the game class because
@@ -284,7 +306,7 @@ export default class Game {
         scores[1].textContent = document.querySelector('#play .game .enemy-deposit .score').textContent;
 
         const names = endMenu.querySelectorAll('.information .final-scores .player-name');
-        names[0].textContent = this.playerName; //TODO: Change to name of user;
+        names[0].textContent = 'Player 1'; //TODO: Change to name of user;
         names[1].textContent = this.board.settings.pvp ? 'Player 2' : 'Bot'; //TODO: Change to name of user;
 
         endMenu.classList.add('active');

@@ -131,49 +131,54 @@ export default class Gameboard {
     }
 
     /**
-     * Function that changes the holes for the event listeners according with the current game state.
-     * @param gameState
+     * Function that changes the holes for the event listeners according to the current game state.
+     * @param gameState Current State of the game given by a value of GameState object.
      */
     updateEventListeners(gameState) {
+        console.log('Game State in updateEventListeners is ' + gameState);
         const myHoles = document.querySelectorAll('.my-hole .hole');
         const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
 
         switch (gameState) {
+            case GameState.SETUP: /* FALLTHROUGH */
             case GameState.PLAYER1:
-                this.removeEventListenerFromNodeList(myHoles, 'click', this.gameLoopCallBack);
-                this.addEventListenerToNodeList(enemyHoles, 'click', this.gameLoopCallBack);
-                break;
-            case GameState.PLAYER2:
                 this.addEventListenerToNodeList(myHoles, 'click', this.gameLoopCallBack);
                 this.removeEventListenerFromNodeList(enemyHoles, 'click', this.gameLoopCallBack);
                 break;
+            case GameState.PLAYER2:
+                this.removeEventListenerFromNodeList(myHoles, 'click', this.gameLoopCallBack);
+                this.addEventListenerToNodeList(enemyHoles, 'click', this.gameLoopCallBack);
+                break;
             default:
                 this.removeEventListenerFromNodeList(myHoles, 'click', this.gameLoopCallBack);
                 this.removeEventListenerFromNodeList(enemyHoles, 'click', this.gameLoopCallBack);
         }
-        console.debug('Event Listeners updated');
     }
 
     updateClassNames(gameState) {
+        console.log('Game State in updateClassNames is ' + gameState);
         const myHoles = document.querySelectorAll('.my-hole .hole');
         const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
 
         switch (gameState) {
+            case GameState.SETUP: /* FALLTHROUGH */
             case GameState.PLAYER1:
-                this.removeClassNameFromNodeList(myHoles, 'active');
-                this.addClassNameToNodeList(enemyHoles, 'active');
-                break;
-            case GameState.PLAYER2:
                 this.addClassNameToNodeList(myHoles, 'active');
                 this.removeClassNameFromNodeList(enemyHoles, 'active');
+                break;
+            case GameState.PLAYER2:
+                this.removeClassNameFromNodeList(myHoles, 'active');
+                this.addClassNameToNodeList(enemyHoles, 'active');
                 break;
             default:
                 this.removeClassNameFromNodeList(myHoles, 'active');
                 this.removeClassNameFromNodeList(enemyHoles, 'active');
         }
-        console.debug('Class Names updated');
     }
 
+    /**
+     * Updates the scores in the game board after a move.
+     */
     updateScores() {
         let myHoles = document.querySelectorAll('.my-hole');
         let enemyHoles = document.querySelectorAll('.enemy-hole');
@@ -221,11 +226,14 @@ export default class Gameboard {
         console.debug('Seeds Updated');
     }
 
+    updateElements() {
+        this.updateScores();
+        this.updateSeeds();
+    }
     update(gameState) {
         this.updateEventListeners(gameState);
         this.updateClassNames(gameState);
-        this.updateScores();
-        this.updateSeeds();
+        this.updateElements();
     }
 
     generateMove(event) {
