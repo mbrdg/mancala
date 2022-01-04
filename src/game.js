@@ -10,10 +10,11 @@ const GameState = {
     'SETUP':    0,
     'PLAYER1':  1,
     'PLAYER2':  2,
-    'GIVEUP':   3,
-    'WIN':      4,
-    'LOSE':     5,
-    'DRAW':     6
+    'BOT':      3,
+    'GIVEUP':   4,
+    'WIN':      5,
+    'LOSE':     6,
+    'DRAW':     7
 };
 Object.freeze(GameState);
 export { GameState };
@@ -36,9 +37,9 @@ export default class Game {
         this.board = new Gameboard(this.loop.bind(this));
         this.state = this.getInitialGameState(this.board.settings);
 
-        // TODO : it isn't tested yet
-        if (this.board.settings.pvp)
-            this.ai = new AI(this, 8);
+        // FIXME : well he is too powerful
+        if (!this.board.settings.pvp)
+            this.ai = new AI(this, 1);
 
         this.setupRequiredClickEvents();
     }
@@ -87,10 +88,24 @@ export default class Game {
         this.updateState(repeatTurn);
         this.board.update(this.state, this.loop);
 
+        if (this.ai !== undefined)
+            this.bot().then();
+
         if (this.isOver(this.board.mySeeds, this.board.enemySeeds)) {
             this.collectAllRemainingSeeds(this.board.mySeeds, this.board.enemySeeds);
             return this.end(false);
         }
+    }
+
+    async bot() {
+        let aiRepeatTurn;
+        do {
+            await new Promise(r => setTimeout(r, 500));
+            let aiMove = this.ai.findMove(this.board.enemySeeds, this.board.mySeeds);
+            aiRepeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, aiMove, true);
+            this.updateState(aiRepeatTurn);
+            this.board.update(this.state, this.loop);
+        } while (aiRepeatTurn);
     }
 
     /**
@@ -163,10 +178,10 @@ export default class Game {
      * @param lastHole Index of the hole where was placed the last remaining seed
      * @param isPlayer1Turn True if it's the player's 1 turn
      */
-    executeSteal(board, lastHole, isPlayer1Turn) {
+    executeSteal(board, lastHole, isPlayer1Turn, verbose) {
         let enemyHole = 2 * this.board.settings.numberOfHoles - lastHole;
         if (board[enemyHole] === 0)
-            return;
+            return;     // There aren't seeds to be stolen, skip it.
 
         let deposit = isPlayer1Turn ? this.board.settings.numberOfHoles : board.length - 1;
 
@@ -175,7 +190,8 @@ export default class Game {
         board[enemyHole] = 0;
         board[lastHole] = 0;
 
-        this.chat.message("WOW! " + stolenSeeds.toString() + " seed(s) stolen!", isPlayer1Turn);
+        if (verbose)
+            this.chat.message("WOW! " + stolenSeeds.toString() + " seed(s) stolen!", isPlayer1Turn);
     }
 
     /**
@@ -209,7 +225,7 @@ export default class Game {
     executeMove(mySeeds, enemySeeds, move, verbose = false) {
         let board = Array.prototype.concat(mySeeds.seeds, [mySeeds.deposit], enemySeeds.seeds, [enemySeeds.deposit]);
         if (!board[move])
-            return true; // There are no seeds in the clicked hole
+            return true; // There aren't seeds in the clicked hole, skip it.
 
         let i = move;
         let lastHole = (move + board[move]) % board.length;
@@ -226,7 +242,7 @@ export default class Game {
             (this.isPlayer2Turn() && this.between(this.board.settings.numberOfHoles + 1, i, board.length - 1));
 
         if (endedInItsOwnHoles && isLastHoleEmpty)
-            this.executeSteal(board, lastHole, this.isPlayer1Turn());
+            this.executeSteal(board, lastHole, this.isPlayer1Turn(), verbose);
 
         if (verbose)
             this.messagesFromMove(endedInItsOwnHoles, board, mySeeds, enemySeeds, this.isPlayer1Turn());

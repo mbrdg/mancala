@@ -51,11 +51,12 @@ export default class Gameboard {
      */
     readSettings() {
         this.settings = {
-            player1Starts: document.getElementById('f-turn').checked,
-            numberOfHoles: parseInt(document.getElementById('n-holes').innerHTML),
-            seedsPerHole: parseInt(document.getElementById('n-seeds').innerHTML),
-            pvp: document.getElementById('pvp').checked,
+            player1Starts:  document.getElementById('f-turn').checked,
+            numberOfHoles:  parseInt(document.getElementById('n-holes').innerHTML),
+            seedsPerHole:   parseInt(document.getElementById('n-seeds').innerHTML),
+            pvp:            document.getElementById('pvp').checked,
         }
+        console.log(this.settings);
         // this.settings.difficulty = document.getElementById('difficulty').value;
         // this.settings.online = this.settings.difficulty === 'multi_player';;
     }

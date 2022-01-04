@@ -12,20 +12,19 @@ export default class AI {
      */
     findMove(maxPlayer, minPlayer) {
 
-        let findMoveHelper = (maxPlayer, minPlayer, alpha, beta, depth, isMax) => {
-
-            if (this.game.isOver(minPlayer, maxPlayer))
-                return { score: this.score(maxPlayer, minPlayer), move : -1 }
+        let findMoveHelper = (max, min, alpha, beta, depth, isMax) => {
+            if (this.game.isOver(min, max))
+                return { score: this.score(max, min), move : -1 }
             else if (!depth)
-                return { score: this.heuristic(maxPlayer, minPlayer), move: -1 }
+                return { score: this.heuristic(max, min), move: -1 }
 
             let finalScore = isMax ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
             let shouldReplace = isMax ? (x, y) => x > y : (x, y) => x < y;
             let finalMove = -1;
 
-            for (let child in this.children(maxPlayer, minPlayer, isMax)) {
-                let tmpValue = findMoveHelper(child.maxPlayer, child.minPlayer,
-                    alpha, beta, depth - 1, !child.repeat);
+            let children = this.children(max, min, isMax);
+            for (const child of children) {
+                let tmpValue = findMoveHelper(child.child.max, child.child.min, alpha, beta, depth - 1, child.repeat);
 
                 if (shouldReplace(tmpValue.score, finalScore)) {
                     finalScore = tmpValue.score;
@@ -67,14 +66,14 @@ export default class AI {
             if (!possibleMove(isMax, i - start))
                 continue;
 
-            let maxPlayerClone = maxPlayer.clone();
-            let minPlayerClone = minPlayer.clone();
+            let maxPlayerClone = Object.assign({}, maxPlayer);
+            let minPlayerClone = Object.assign({}, minPlayer);
             let repeatTurn = this.game.executeMove(minPlayerClone, maxPlayerClone, i);
             children.push({
                 move: i,
                 child: {
-                    maxPlayer: maxPlayerClone,
-                    minPlayer: minPlayerClone,
+                    max: maxPlayerClone,
+                    min: minPlayerClone,
                 },
                 repeat: repeatTurn
             });
