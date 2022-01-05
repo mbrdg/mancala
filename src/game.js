@@ -279,6 +279,7 @@ export default class Game {
     reset() {
         this.chat.clear();
         this.board.reset();
+        this.ai = undefined;
         console.log('Game Reset');
     }
 

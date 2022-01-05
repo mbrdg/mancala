@@ -259,6 +259,8 @@ export default class Gameboard {
 
         document.querySelector('.enemy-deposit .hole').textContent = '';
         document.querySelector('.my-deposit .hole').textContent = '';
+        document.querySelector('.my-deposit .score').textContent = '0';
+        document.querySelector('.enemy-deposit .score').textContent = '0';
 
         for (const hole of document.querySelectorAll('.my-hole'))
             hole.remove();
