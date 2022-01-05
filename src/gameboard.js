@@ -145,14 +145,14 @@ export default class Gameboard {
         const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
 
         switch (gameState) {
-            case GameState.SETUP: /* FALLTHROUGH */
             case GameState.PLAYER1:
                 this.addEventListenerToNodeList(myHoles, 'click', this.gameLoopCallBack);
                 this.removeEventListenerFromNodeList(enemyHoles, 'click', this.gameLoopCallBack);
                 break;
             case GameState.PLAYER2:
                 this.removeEventListenerFromNodeList(myHoles, 'click', this.gameLoopCallBack);
-                this.addEventListenerToNodeList(enemyHoles, 'click', this.gameLoopCallBack);
+                if (this.settings.pvp)
+                    this.addEventListenerToNodeList(enemyHoles, 'click', this.gameLoopCallBack);
                 break;
             default:
                 this.removeEventListenerFromNodeList(myHoles, 'click', this.gameLoopCallBack);
@@ -166,14 +166,14 @@ export default class Gameboard {
         const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
 
         switch (gameState) {
-            case GameState.SETUP: /* FALLTHROUGH */
             case GameState.PLAYER1:
                 this.addClassNameToNodeList(myHoles, 'active');
                 this.removeClassNameFromNodeList(enemyHoles, 'active');
                 break;
             case GameState.PLAYER2:
                 this.removeClassNameFromNodeList(myHoles, 'active');
-                this.addClassNameToNodeList(enemyHoles, 'active');
+                if (this.settings.pvp)
+                    this.addClassNameToNodeList(enemyHoles, 'active');
                 break;
             default:
                 this.removeClassNameFromNodeList(myHoles, 'active');

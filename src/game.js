@@ -7,14 +7,13 @@ import AI from "./minimax.js";
  * @type {{PLAYER1: number, PLAYER2: number, DRAW: number, LOSE: number, GIVEUP: number, WIN: number}}
  */
 const GameState = {
-    'SETUP':    0,
-    'PLAYER1':  1,
-    'PLAYER2':  2,
-    'BOT':      3,
-    'GIVEUP':   4,
-    'WIN':      5,
-    'LOSE':     6,
-    'DRAW':     7
+    'PLAYER1':  0,
+    'PLAYER2':  1,
+    'BOT':      2,
+    'GIVEUP':   3,
+    'WIN':      4,
+    'LOSE':     5,
+    'DRAW':     6
 };
 Object.freeze(GameState);
 export { GameState };
@@ -28,6 +27,13 @@ export default class Game {
     constructor() {
         this.chat = new Chat();
         console.debug('Game object created.');
+
+        //IT can only be set once ( or try removing the click event (needs pointer to function ))
+        const leaveButton = document.getElementById('leave-btn');
+        leaveButton.addEventListener('click', ()=>{
+            this.end(true);
+            document.getElementById('play').scrollIntoView();
+        });
     }
 
     /**
@@ -37,13 +43,15 @@ export default class Game {
         this.board = new Gameboard(this.loop.bind(this));
         this.state = this.getInitialGameState(this.board.settings);
 
+        this.setupRequiredClickEvents();
+
         // FIXME : he is too powerful and buggy
         if (!this.board.settings.pvp) {
             let depth = this.board.settings.difficulty === 'easy' ? 1 : 4;
             this.ai = new AI(this, depth);
-        }
 
-        this.setupRequiredClickEvents();
+            if (this.isPlayer2Turn()) this.bot().then(() => console.log("Bot executed it's move"));
+        }
     }
 
     // Helper functions
@@ -65,15 +73,6 @@ export default class Game {
      * if someone gives up.
      */
     setupRequiredClickEvents() {
-        const leaveButton = document.getElementById('leave-btn');
-
-        leaveButton.addEventListener('click', () => {
-            this.end(true);
-            document.getElementById('play').scrollIntoView();
-        });
-
-        // This is weird, but It's because in Gameboard.updateEventListeners the
-        // active will be setup correctly for the first turn.
         this.board.updateEventListeners(this.state);
         this.board.updateClassNames(this.state);
     }
@@ -86,11 +85,11 @@ export default class Game {
         console.log('Game Loop', 'State: ' + this.state);
         this.board.generateMove(event);
 
-        let repeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, this.board.move, true);
+        const repeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, this.board.move, true);
         this.updateState(repeatTurn);
         this.board.update(this.state);
 
-        if (this.ai !== undefined)
+        if (!repeatTurn && this.ai !== undefined)
             this.bot().then(() => console.log("Bot executed it's move"));
 
         if (this.isOver(this.board.mySeeds, this.board.enemySeeds)) {
@@ -280,6 +279,7 @@ export default class Game {
         this.chat.clear();
         this.board.reset();
         this.ai = undefined;
+
         console.log('Game Reset');
     }
 
