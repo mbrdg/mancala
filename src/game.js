@@ -74,8 +74,8 @@ export default class Game {
 
         // This is weird, but It's because in Gameboard.updateEventListeners the
         // active will be setup correctly for the first turn.
-        this.board.updateEventListeners(GameState.SETUP);
-        this.board.updateClassNames(GameState.SETUP);
+        this.board.updateEventListeners(this.state);
+        this.board.updateClassNames(this.state);
     }
 
     /**
@@ -88,7 +88,7 @@ export default class Game {
 
         let repeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, this.board.move, true);
         this.updateState(repeatTurn);
-        this.board.update(this.state, this.loop);
+        this.board.update(this.state);
 
         if (this.ai !== undefined)
             this.bot().then(() => console.log("Bot executed it's move"));
@@ -116,10 +116,8 @@ export default class Game {
      * @param enemySeeds Object containing the information about the player 2 seeds
      */
     collectAllRemainingSeeds(mySeeds, enemySeeds) {
-        if (this.isPlayer1Turn())
-            mySeeds.deposit += mySeeds.seeds.reduce((h , a) => h + a, 0);
-        else
-            enemySeeds.deposit += enemySeeds.seeds.reduce((h, a) => h + a, 0);
+        mySeeds.deposit += mySeeds.seeds.reduce((h , a) => h + a, 0);
+        enemySeeds.deposit += enemySeeds.seeds.reduce((h, a) => h + a, 0);
 
         mySeeds.seeds.fill(0);
         enemySeeds.seeds.fill(0);
@@ -136,7 +134,7 @@ export default class Game {
         const p1GotNoSeeds = mySeeds.seeds.every(item => item === 0);
         const p2GotNoSeeds = enemySeeds.seeds.every(item => item === 0);
 
-        return p1GotNoSeeds || p2GotNoSeeds;
+        return ( p1GotNoSeeds && this.isPlayer1Turn() )  || ( p2GotNoSeeds && this.isPlayer2Turn() );
     }
 
     /**
@@ -188,7 +186,7 @@ export default class Game {
 
         let deposit = isPlayer1Turn ? this.board.settings.numberOfHoles : board.length - 1;
 
-        let stolenSeeds = board[enemyHole] + board[lastHole]
+        let stolenSeeds = board[enemyHole] + board[lastHole];
         board[deposit] += stolenSeeds;
         board[enemyHole] = 0;
         board[lastHole] = 0;
@@ -231,16 +229,31 @@ export default class Game {
             return true; // There aren't seeds in the clicked hole, skip it.
 
         let i = move;
-        let lastHole = (move + board[move]) % board.length;
-        let isLastHoleEmpty = board[lastHole] === 0;
+        let seeds = board[move];
+        board[move] = 0;
 
-        while (board[move] > 0) {
+        const inEnemyDeposit = index =>
+            (this.isPlayer1Turn() && (index === board.length - 1)) || 
+            (this.isPlayer2Turn() && (index === this.board.settings.numberOfHoles));
+
+        while (seeds > 0) {
             i = (i + 1) % board.length;
+
+            if (inEnemyDeposit(i))
+                i = (i + 1) % board.length;
+
             board[i]++;
-            board[move]--;
+            seeds--;
         }
 
-        let endedInItsOwnHoles =
+        const lastHole = i;
+        const isLastHoleEmpty = board[lastHole] === 1;
+
+        const repeatTurn = 
+            (this.isPlayer1Turn() && (lastHole === this.board.settings.numberOfHoles)) ||
+            (this.isPlayer2Turn() && ( lastHole === board.length - 1));
+
+        const endedInItsOwnHoles =
             (this.isPlayer1Turn() && this.between(0, i, this.board.settings.numberOfHoles)) ||
             (this.isPlayer2Turn() && this.between(this.board.settings.numberOfHoles + 1, i, board.length - 1));
 
@@ -248,7 +261,7 @@ export default class Game {
             this.executeSteal(board, lastHole, this.isPlayer1Turn(), verbose);
 
         if (verbose)
-            this.messagesFromMove(endedInItsOwnHoles, board, mySeeds, enemySeeds, this.isPlayer1Turn());
+            this.messagesFromMove(repeatTurn, board, mySeeds, enemySeeds, this.isPlayer1Turn());
 
         mySeeds.seeds = board.slice(0, this.board.settings.numberOfHoles);
         mySeeds.deposit = board[this.board.settings.numberOfHoles]
@@ -256,7 +269,7 @@ export default class Game {
         enemySeeds.deposit = board[board.length - 1];
 
         console.log('Move Executed from Hole no. ' + move.toString(), 'Ended in own holes: ' + endedInItsOwnHoles);
-        return endedInItsOwnHoles;
+        return repeatTurn;
     }
 
     /**

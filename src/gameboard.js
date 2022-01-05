@@ -264,8 +264,6 @@ export default class Gameboard {
             hole.remove();
         for (const hole of document.querySelectorAll('.enemy-hole'))
             hole.remove();
-
-        this.updateScores();
     }
 
     // Helpers
