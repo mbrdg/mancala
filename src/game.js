@@ -106,7 +106,7 @@ export default class Game {
             let aiMove = this.ai.findMove(this.board.enemySeeds, this.board.mySeeds);
             aiRepeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, aiMove, true);
             this.updateState(aiRepeatTurn);
-            this.board.update(this.state, this.loop);
+            this.board.update(this.state);
         } while (aiRepeatTurn);
     }
 
@@ -121,7 +121,7 @@ export default class Game {
 
         mySeeds.seeds.fill(0);
         enemySeeds.seeds.fill(0);
-        console.log('seeds')
+        this.board.updateElements();
     }
 
     /**
