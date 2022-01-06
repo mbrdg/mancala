@@ -13,7 +13,7 @@ export default class AI {
     findMove(maxPlayer, minPlayer) {
 
         let findMoveHelper = (max, min, alpha, beta, depth, isMax) => {
-            if (this.game.isOver(min, max))
+            if (this.game.isOver(min, max, !isMax))
                 return { score: this.score(max, min), move : -1 }
             else if (!depth)
                 return { score: this.heuristic(max, min), move: -1 }
@@ -24,7 +24,8 @@ export default class AI {
 
             let children = this.children(max, min, isMax);
             for (const child of children) {
-                let tmpValue = findMoveHelper(child.child.max, child.child.min, alpha, beta, depth - 1, child.repeat);
+                const nextPlayer = child.repeat ? isMax : !isMax;
+                let tmpValue = findMoveHelper(child.child.max, child.child.min, alpha, beta, depth - 1, nextPlayer);
 
                 if (shouldReplace(tmpValue.score, finalScore)) {
                     finalScore = tmpValue.score;
@@ -68,7 +69,7 @@ export default class AI {
 
             let maxPlayerClone = Object.assign({}, maxPlayer);
             let minPlayerClone = Object.assign({}, minPlayer);
-            let repeatTurn = this.game.executeMove(minPlayerClone, maxPlayerClone, i);
+            let repeatTurn = this.game.executeMove(minPlayerClone, maxPlayerClone, i, !isMax);
             children.push({
                 move: i,
                 child: {
