@@ -73,8 +73,6 @@ export default class Game {
      * if someone gives up.
      */
     setupRequiredClickEvents() {
-        let state = this.state;
-        if (this.board.settings.online) state = GameState.PLAYER1;
         this.board.updateEventListeners(this.state);
         this.board.updateClassNames(this.state);
     }
