@@ -9,12 +9,21 @@ const play = document.querySelector('#play');
 const welcomeMenu = document.querySelector('#play .welcome-menu');
 const gameMenu = document.querySelector('#play .game');
 
-let api = new ServerApi();
+let api = new ServerApi('http://twserver.alunos.dcc.fc.up.pt:8008/');
 let game = new Game();
 
 const playButton = document.querySelector('#play .welcome-menu #play-btn');
 playButton.addEventListener('click', () => {
     game.setup();
+    if (game.board.settings.online) {
+        if (api.credentials === undefined) {
+            alert("User not registered");
+            game.reset();
+            return;
+        }
+        api.join(game.board.settings);
+        document.querySelector('#play .wait-menu').classList.add('active');
+    }
     welcomeMenu.style.display = "none";
     gameMenu.classList.add('active');
     play.scrollIntoView();
@@ -24,8 +33,9 @@ playButton.addEventListener('click', () => {
 const waitBtn = document.getElementById('wait-btn');
 const continueButton = document.getElementById('continue-btn');
 
-waitBtn.addEventListener('click', ()=>{
-    game.resetGame();
+waitBtn.addEventListener('click', async ()=>{
+    await api.leave();
+    game.reset();
     play.scrollIntoView();
 });
 
@@ -49,6 +59,5 @@ signInForm.addEventListener('submit', async (e)=> {
         return;
     }
     
-    //game.setPlayerInfo({nick, pass});
     signInAnimation(nick);
 })
