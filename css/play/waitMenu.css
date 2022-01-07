@@ -1,0 +1,134 @@
+/* Wait Menu */
+#play .wait-menu {
+    display: none;
+    position: absolute;
+    left: -13%;
+    z-index: 10;
+    
+    max-width: 100vw;
+    flex-direction: column;
+    
+    visibility: hidden;
+    opacity: 1;
+}
+
+/* Banner */
+#play .wait-menu .banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    width: 70vh;
+    height: 15vh;
+
+    background: #726B6B;
+    border-radius: 1.8rem 1.8rem 0px 0px;
+    overflow: hidden;
+
+    padding: 4px 20px;
+}
+#play .wait-menu .banner .text h2 {
+    font-weight: normal;
+    font-size: 1.2rem;
+}
+
+#play .wait-menu .banner .text p {
+    font-weight: 10;
+    font-size: 0.8rem;
+    position: relative;
+    top: -5px;
+}
+
+/* Content */
+#play .wait-menu .content {
+    background: #C4C4C4;
+    width: 70vh;
+    height: 22vh;
+    border-radius: 0 0 30px 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+/* Loading */
+#loading-animation {
+    display: flex;
+    width: 100%;
+    height: 15vh;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+#loading-animation p {
+    margin-right: 10px;
+    color: white;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.lds-dual-ring {
+    display: inline-block;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+.lds-dual-ring:after {
+    position: absolute;
+    top: -4px;
+    left: -3px;
+    left: 0;
+    content: " ";
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+
+/* Button */
+#play .wait-menu .content button {
+    color: white;
+    font-size: 0.9rem;
+    font-weight: lighter;
+    font-family: 'Nunito';
+
+    padding: 0.3rem 0.8rem;
+    margin-bottom: 5px;
+    
+    border: none;
+    border-radius: 10px;
+
+    cursor: pointer;
+    background-color: #A82727;
+    transition: 0.2s box-shadow ease;
+}
+
+#play .wait-menu .content button:hover {
+    box-shadow: 0 0 0 1.5px rgb(28 7 7 / 52%);
+    transition: .3s box-shadow ease;
+}
+
+#play .wait-menu.active {
+    display: flex;
+    visibility: visible;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    transition: 0.3s ease;
+    transition-property: left, visibility, opacity;
+    background: rgba(26, 26, 29, 0.92);
+}
+
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

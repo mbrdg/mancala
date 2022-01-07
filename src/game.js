@@ -204,8 +204,6 @@ export default class Game {
      * @param sender True if Player 1 is sending the message, false otherwise
      */
     messagesFromMove(repeatTurn, board, mySeeds, enemySeeds, sender) {
-        if (repeatTurn)
-            this.chat.message("I'm playing again!", sender);
 
         let myDifference = board[this.board.settings.numberOfHoles] - mySeeds.deposit;
         let enemyDifference = board[board.length - 1] - enemySeeds.deposit;
@@ -213,6 +211,9 @@ export default class Game {
             this.chat.message(myDifference.toString() + " point(s) in the bag.", true);
         if (enemyDifference > 0)
             this.chat.message(enemyDifference.toString() + " point(s) in the bag.", false);
+
+        if (repeatTurn)
+            this.chat.message("I'm playing again!", sender);
     }
 
     /**

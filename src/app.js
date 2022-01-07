@@ -16,7 +16,16 @@ const playButton = document.querySelector('#play .welcome-menu #play-btn');
 playButton.addEventListener('click', () => {
     game.setup();
     welcomeMenu.style.display = "none";
-    gameMenu.classList.toggle('active');
+    gameMenu.classList.add('active');
+    play.scrollIntoView();
+});
+
+// Reset buttons
+const waitBtn = document.getElementById('wait-btn');
+const continueButton = document.getElementById('continue-btn');
+
+waitBtn.addEventListener('click', ()=>{
+    game.resetGame();
     play.scrollIntoView();
 });
 
@@ -26,6 +35,7 @@ continueButton.addEventListener('click', () => {
     play.scrollIntoView();
 });
 
+// Sign-in form
 const signInForm = document.getElementById('sign-form');
 signInForm.addEventListener('submit', async (e)=> {
     e.preventDefault();
