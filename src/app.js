@@ -29,7 +29,6 @@ waitBtn.addEventListener('click', ()=>{
     play.scrollIntoView();
 });
 
-const continueButton = document.getElementById('continue-btn');
 continueButton.addEventListener('click', () => {
     game.reset();
     play.scrollIntoView();
@@ -50,6 +49,6 @@ signInForm.addEventListener('submit', async (e)=> {
         return;
     }
     
-    game.setPlayerInfo({nick, pass});
+    //game.setPlayerInfo({nick, pass});
     signInAnimation(nick);
 })
