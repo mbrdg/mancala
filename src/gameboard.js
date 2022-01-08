@@ -151,7 +151,7 @@ export default class Gameboard {
                 break;
             case GameState.PLAYER2:
                 this.removeEventListenerFromNodeList(myHoles, 'click', this.gameLoopCallBack);
-                if (this.settings.pvp)
+                if (this.settings.pvp && !this.settings.online)
                     this.addEventListenerToNodeList(enemyHoles, 'click', this.gameLoopCallBack);
                 break;
             default:
@@ -172,7 +172,7 @@ export default class Gameboard {
                 break;
             case GameState.PLAYER2:
                 this.removeClassNameFromNodeList(myHoles, 'active');
-                if (this.settings.pvp)
+                if (this.settings.pvp && !this.settings.online)
                     this.addClassNameToNodeList(enemyHoles, 'active');
                 break;
             default:

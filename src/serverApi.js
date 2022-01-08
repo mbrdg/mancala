@@ -50,14 +50,13 @@ export default class ServerApi {
 
             this.gameReference = json.game;
 
-            this.update();
-            return;
+            return true;
         } catch (err) {
-            return;
+            return false;
         }
     }
 
-    async update() {
+    update(handler) {
         const data = {
             nick: this.credentials.nick,
             game: this.gameReference
@@ -68,15 +67,7 @@ export default class ServerApi {
         eventSource.onopen = (e) => {
             document.querySelector('#play .wait-menu').classList.remove('active');
         }
-        eventSource.onmessage = (e) => {
-            const data = JSON.parse(e.data);
-            console.log("message",JSON.parse(e.data));
-
-            if (data.winner !== undefined){
-                console.debug("Closed event source");
-                eventSource.close();
-            }
-        }
+        eventSource.onmessage = (event) => { handler(event, eventSource); }; 
         eventSource.onerror = (e) => {
             console.log("error", e);
             eventSource.close();
@@ -100,7 +91,33 @@ export default class ServerApi {
             if (json.error)
                 throw json.error;
 
-            console.debug("Leave successful ");
+            console.debug("Leave successful");
+
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async notify(move) {
+        const data = {
+            nick: this.credentials.nick,
+            password: this.credentials.password,
+            game: this.gameReference,
+            move
+        }
+        
+        try {
+            const res = await fetch(`${this.url}notify`, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: { "Content-type": "application/json" }
+            });
+            const json = await res.json();
+            if (json.error)
+                throw json.error;
+
+            console.debug("Notify successful");
 
             return true;
         } catch (err) {

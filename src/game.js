@@ -24,8 +24,9 @@ export { GameState };
  */
 export default class Game {
 
-    constructor() {
+    constructor(serverApi) {
         this.chat = new Chat();
+        this.api = serverApi;
         console.debug('Game object created.');
 
         const leaveButton = document.getElementById('leave-btn');
@@ -65,7 +66,7 @@ export default class Game {
      * @returns {number} The initial state of the game
      */
     getInitialGameState(settings) {
-        return settings.player1Starts ? GameState.PLAYER1 : GameState.PLAYER2;
+        return (settings.player1Starts || settings.online) ? GameState.PLAYER1 : GameState.PLAYER2;
     }
 
     /**
@@ -73,8 +74,6 @@ export default class Game {
      * if someone gives up.
      */
     setupRequiredClickEvents() {
-        let state = this.state;
-        if (this.board.settings.online) state = GameState.PLAYER1;
         this.board.updateEventListeners(this.state);
         this.board.updateClassNames(this.state);
     }
@@ -86,6 +85,11 @@ export default class Game {
     async loop(event) {
         console.log('Game Loop', 'State: ' + this.state);
         this.board.generateMove(event);
+
+        if (this.board.settings.online) {
+            this.api.notify(this.board.move);
+            return;
+        }
 
         const repeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, this.board.move, this.isPlayer1Turn(),true);
         this.updateState(repeatTurn);
@@ -344,9 +348,57 @@ export default class Game {
         scores[1].textContent = document.querySelector('#play .game .enemy-deposit .score').textContent;
 
         const names = endMenu.querySelectorAll('.information .final-scores .player-name');
-        names[0].textContent = 'Player 1'; //TODO: Change to name of user;
-        names[1].textContent = this.board.settings.pvp ? 'Player 2' : 'Bot'; //TODO: Change to name of user;
+        names[0].textContent = this.board.settings.online ? this.api.credentials.nick : 'Player 1';
+        const opponentName = this.board.online ? this.api.opponent : 'Player 2';
+        names[1].textContent = this.board.settings.pvp ? opponentName : 'Bot';
 
         endMenu.classList.add('active');
+    }
+
+    joinHandler(event, eventSource) {
+        const data = JSON.parse(event.data);
+        console.log("\nmessage", data);
+
+        if (data.winner !== undefined){
+            console.debug("Closed event source");
+            eventSource.close();
+            return;
+        }
+        for (let playerName in data.stores) {
+            if (playerName !== this.api.credentials.nick) this.api.opponent = playerName;
+        }
+        
+        if (data.board.turn === this.api.opponent) { 
+            this.state = GameState.PLAYER2;
+            this.board.update(this.state);
+        }
+        eventSource.onmessage = (event) => { this.updateHandler(event, eventSource); };
+    }
+
+    updateHandler(event, eventSource) {
+        const data = JSON.parse(event.data);
+        console.log("\nmessage", data);
+
+        if (data.winner !== undefined){
+            alert("Game ended")
+            eventSource.close();
+            return;
+        }
+
+        const move = this.isPlayer1Turn() ? data.pit : data.pit + this.board.settings.numberOfHoles + 1;
+        this.playMove(move);
+    }
+
+    playMove(move) {
+        console.log('Game Loop', 'State: ' + this.state);
+
+        const repeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, move, this.isPlayer1Turn(), true);
+        this.updateState(repeatTurn);
+        this.board.update(this.state);
+
+        if (this.isOver(this.board.mySeeds, this.board.enemySeeds, this.isPlayer1Turn())) {
+            this.collectAllRemainingSeeds(this.board.mySeeds, this.board.enemySeeds);
+            return this.end(false);
+        }
     }
 }

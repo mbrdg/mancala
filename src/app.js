@@ -10,10 +10,10 @@ const welcomeMenu = document.querySelector('#play .welcome-menu');
 const gameMenu = document.querySelector('#play .game');
 
 let api = new ServerApi('http://twserver.alunos.dcc.fc.up.pt:8008/');
-let game = new Game();
+let game = new Game(api);
 
 const playButton = document.querySelector('#play .welcome-menu #play-btn');
-playButton.addEventListener('click', () => {
+playButton.addEventListener('click', async () => {
     game.setup();
     if (game.board.settings.online) {
         if (api.credentials === undefined) {
@@ -21,8 +21,16 @@ playButton.addEventListener('click', () => {
             game.reset();
             return;
         }
-        api.join(game.board.settings);
+        const res = await api.join(game.board.settings);
+        
+        if (!res){
+            alert("Server issue");
+            game.reset();
+            return;
+        }
+
         document.querySelector('#play .wait-menu').classList.add('active');
+        api.update(game.joinHandler.bind(game));
     }
     welcomeMenu.style.display = "none";
     gameMenu.classList.add('active');
