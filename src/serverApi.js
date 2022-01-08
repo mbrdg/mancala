@@ -46,7 +46,7 @@ export default class ServerApi {
             if (json.error)
                 throw json.error;
 
-            console.debug("Join successful ", json.game);
+            console.debug("Join successful");
 
             this.gameReference = json.game;
 

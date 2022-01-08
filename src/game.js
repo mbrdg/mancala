@@ -31,6 +31,11 @@ export default class Game {
 
         const leaveButton = document.getElementById('leave-btn');
         leaveButton.addEventListener('click', ()=>{
+            if (this.board.settings.online) {
+                this.api.leave();
+                return;
+            }
+
             this.end(true);
             document.getElementById('play').scrollIntoView();
         });
@@ -108,7 +113,7 @@ export default class Game {
         let aiRepeatTurn;
         do {
             let aiMove = this.ai.findMove(this.board.enemySeeds, this.board.mySeeds);
-            await new Promise(r => setTimeout(r, 50));
+            await this.sleep(500);
             aiRepeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, aiMove, this.isPlayer1Turn(),true);
             this.updateState(aiRepeatTurn);
             this.board.update(this.state);
@@ -147,8 +152,10 @@ export default class Game {
      * Determines the final state of the game.
      * @param giveUp true if the player gave up, false otherwise
      */
-    end(giveUp = false) {
+    async end(giveUp = false) {
         if (giveUp) {
+            this.chat.message("I give up :(", this.isPlayer1Turn());
+            await this.sleep(1000);
             this.state = this.isPlayer1Turn() ? GameState.LOSE : GameState.WIN;
         } else {
             const p1Score = this.board.mySeeds.deposit;
@@ -349,7 +356,7 @@ export default class Game {
 
         const names = endMenu.querySelectorAll('.information .final-scores .player-name');
         names[0].textContent = this.board.settings.online ? this.api.credentials.nick : 'Player 1';
-        const opponentName = this.board.online ? this.api.opponent : 'Player 2';
+        const opponentName = this.board.settings.online ? this.api.opponent : 'Player 2';
         names[1].textContent = this.board.settings.pvp ? opponentName : 'Bot';
 
         endMenu.classList.add('active');
@@ -357,10 +364,10 @@ export default class Game {
 
     joinHandler(event, eventSource) {
         const data = JSON.parse(event.data);
-        console.log("\nmessage", data);
+        console.log("message", data);
 
         if (data.winner !== undefined){
-            console.debug("Closed event source");
+            console.debug("Left wait menu");
             eventSource.close();
             return;
         }
@@ -379,8 +386,11 @@ export default class Game {
         const data = JSON.parse(event.data);
         console.log("\nmessage", data);
 
-        if (data.winner !== undefined){
-            alert("Game ended")
+        if (data.winner !== undefined && !data.board){ //Someone gave up
+            if (data.winner === this.api.credentials.nick) {
+                this.state = GameState.PLAYER2;
+            }
+            this.end(true);
             eventSource.close();
             return;
         }
@@ -400,5 +410,9 @@ export default class Game {
             this.collectAllRemainingSeeds(this.board.mySeeds, this.board.enemySeeds);
             return this.end(false);
         }
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }

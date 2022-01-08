@@ -140,7 +140,6 @@ export default class Gameboard {
      * @param gameState Current State of the game given by a value of GameState object.
      */
     updateEventListeners(gameState) {
-        console.log('Game State in updateEventListeners is ' + gameState);
         const myHoles = document.querySelectorAll('.my-hole .hole');
         const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
 
@@ -161,7 +160,6 @@ export default class Gameboard {
     }
 
     updateClassNames(gameState) {
-        console.log('Game State in updateClassNames is ' + gameState);
         const myHoles = document.querySelectorAll('.my-hole .hole');
         const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
 
