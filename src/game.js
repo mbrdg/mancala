@@ -379,6 +379,8 @@ export default class Game {
             this.state = GameState.PLAYER2;
             this.board.update(this.state);
         }
+
+        this.startTimer();
         eventSource.onmessage = (event) => { this.updateHandler(event, eventSource); };
     }
 
@@ -400,7 +402,7 @@ export default class Game {
     }
 
     playMove(move) {
-        console.log('Game Loop', 'State: ' + this.state);
+        this.resetTimer();
 
         const repeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, move, this.isPlayer1Turn(), true);
         this.updateState(repeatTurn);
@@ -410,6 +412,15 @@ export default class Game {
             this.collectAllRemainingSeeds(this.board.mySeeds, this.board.enemySeeds);
             return this.end(false);
         }
+    }
+
+    startTimer(){
+        document.getElementById('time').textContent='2:00';
+        document.getElementById('timer').classList.add('active');
+    }
+
+    startTimer(){
+        document.getElementById('time').textContent='2:00';
     }
 
     sleep(ms) {

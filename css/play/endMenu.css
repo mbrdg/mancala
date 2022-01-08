@@ -75,14 +75,6 @@
 
 #play .end-menu .information .final-scores div:first-of-type:after {
     content: '';
-    /* position: absolute;
-    width: 50%;
-    height: 20%;
-    background-color: #C4C4C4;
-    top: 50%;
-    right: -25%;
-    transform: rotate(-45deg);
-    border-radius: 10px 10px 10px 10px; */
 }
 
 #play .end-menu .information .final-scores div:nth-of-type(2) {
@@ -128,19 +120,8 @@
 }
 
 /* Keyframes */
-@keyframes bounce{
-    0%   {transform: translate(0, 0)} 
-    20%  {transform: translate(0,-5%)} 
-    40%  {transform: translate(2%,-25%)} 
-    50%  {transform: translate(15%,0)} 
-    /* 60%  {transform: translateY(-15%)translateX(30%)} 
-    80%  {transform: translateY(0)translateX(20%)}
-    100% {transform: translateY(0)translateX(20%)} */ 
-}
 @keyframes rotate{
     0%   {transform: rotate3d(0,0,1,-45deg)} 
     50% {transform: rotate3d(0,0,1,45deg)}
     100% {transform: rotate3d(0,0,1,-45deg)}
 }
-
-

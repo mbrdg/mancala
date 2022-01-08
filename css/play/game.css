@@ -164,3 +164,38 @@
 #play .gameboard #pause-btn img:hover {
     transform: rotate(270deg);
 }
+
+/* Timer */
+#timer {
+    display: none;
+    position: absolute;
+    left: 1.1rem;
+    bottom: 1.2rem;
+    color: #e8400ea3;
+    font-weight: 700;
+}
+
+#time {
+    padding-right: 3px;
+    margin-right: 2px;
+}
+
+#timer img {
+    width: 1rem;
+    height: 1rem;
+    animation: timer_anim 2s ease infinite;
+    opacity: 0.4;
+}
+
+#timer.active {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Keyframes */
+@keyframes timer_anim {
+    50% {transform: rotate(90deg);}
+    100% {transform: rotate(180deg);}
+}
