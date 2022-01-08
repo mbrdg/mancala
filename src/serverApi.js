@@ -7,24 +7,20 @@ export default class ServerApi {
         const data = {
             nick, password
         }
-        
-        try {
-            const res = await fetch(`${this.url}register`, {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: { "Content-type": "application/json" }
-            });
-            const json = await res.json();
-            if (json.error)
-                throw json.error;
 
-            console.debug("Register successful");
+        const res = await fetch(`${this.url}register`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: { "Content-type": "application/json" }
+        });
+        const json = await res.json();
+        if (json.error)
+            return json.error;
 
-            this.credentials = data;
-            return nick;
-        } catch (err) {
-            return err;
-        }
+        console.debug("Register successful");
+
+        this.credentials = data;
+        return nick;
     }
 
     async join(settings) {
@@ -35,25 +31,20 @@ export default class ServerApi {
             size: settings.numberOfHoles,
             initial: settings.seedsPerHole,
         }
-        
-        try {
-            const res = await fetch(`${this.url}join`, {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: { "Content-type": "application/json" }
-            });
-            const json = await res.json();
-            if (json.error)
-                throw json.error;
 
-            console.debug("Join successful");
-
-            this.gameReference = json.game;
-
-            return true;
-        } catch (err) {
+        const res = await fetch(`${this.url}join`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: { "Content-type": "application/json" }
+        });
+        const json = await res.json();
+        if (json.error)
             return false;
-        }
+
+        this.gameReference = json.game;
+        console.log("Join successful");
+
+        return true;
     }
 
     update(handler) {
@@ -80,23 +71,19 @@ export default class ServerApi {
             password: this.credentials.password,
             game: this.gameReference,
         }
-        
-        try {
-            const res = await fetch(`${this.url}leave`, {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: { "Content-type": "application/json" }
-            });
-            const json = await res.json();
-            if (json.error)
-                throw json.error;
 
-            console.debug("Leave successful");
-
-            return true;
-        } catch (err) {
+        const res = await fetch(`${this.url}leave`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: { "Content-type": "application/json" }
+        });
+        const json = await res.json();
+        if (json.error)
             return false;
-        }
+
+        console.debug("Leave successful");
+
+        return true;
     }
 
     async notify(move) {
@@ -106,22 +93,18 @@ export default class ServerApi {
             game: this.gameReference,
             move
         }
-        
-        try {
-            const res = await fetch(`${this.url}notify`, {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: { "Content-type": "application/json" }
-            });
-            const json = await res.json();
-            if (json.error)
-                throw json.error;
 
-            console.debug("Notify successful");
-
-            return true;
-        } catch (err) {
+        const res = await fetch(`${this.url}notify`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: { "Content-type": "application/json" }
+        });
+        const json = await res.json();
+        if (json.error)
             return false;
-        }
+
+        console.debug("Notify successful");
+
+        return true;
     }
 }

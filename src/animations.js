@@ -1,5 +1,4 @@
 export function setUpAnimations() {
-
     hamburguerAnimation();
     navBarScrollAnimation();
     navBarButtonAnimation();
@@ -11,7 +10,7 @@ export function setUpAnimations() {
     endMenuAnimations();
 }
 
-const hamburguerAnimation = ()=>{
+const hamburguerAnimation = () => {
     const hamburguer = document.querySelector('header nav .nav-list .hamburguer');
     const menu = document.querySelector('header nav .nav-list ul');
     const menuItem = document.querySelectorAll('header nav .nav-list ul li a');
@@ -60,7 +59,7 @@ const navBarScrollAnimation = () => {
 
     document.addEventListener('scroll', () => {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        if(scrollTop > lastScrollTop) {
+        if (scrollTop > lastScrollTop) {
             menu.classList.remove('active');
             header.style.top="-12vh";
         } else {
@@ -68,7 +67,7 @@ const navBarScrollAnimation = () => {
         }
         lastScrollTop = scrollTop;
         
-        if(moreSettingsMenu.classList.contains('active') || pauseMenu.classList.contains('active') || instructions.classList.contains('active')) {
+        if (moreSettingsMenu.classList.contains('active') || pauseMenu.classList.contains('active') || instructions.classList.contains('active')) {
             menu.classList.remove('active');
             header.style.top="-12vh";
         }   
@@ -89,12 +88,12 @@ const welcomeMenuButtonsAnimation = ()=>{
 
 
     //Instructions
-    instructionsBtn.addEventListener('click', ()=>{
+    instructionsBtn.addEventListener('click', () => {
         play.classList.toggle('active');
         instructions.classList.toggle('active');
         instructions.scrollIntoView();
     });
-    closeInstructions.addEventListener('click',()=>{
+    closeInstructions.addEventListener('click',() => {
         play.classList.toggle('active');
         instructions.classList.toggle('active');
         play.scrollIntoView();
@@ -197,17 +196,17 @@ const waitMenuAnimations = ()=>{
     });
 }
 
-const endMenuAnimations = ()=>{
-    const continueBtn = document.getElementById('continue-btn');
+const endMenuAnimations = () => {
+    const continueButton = document.getElementById('continue-btn');
     const endMenu = document.querySelector('#play .end-menu');
     const gameMenu = document.querySelector('#play .game');
     const welcomeMenu = document.querySelector('#play .welcome-menu');
 
-    continueBtn.addEventListener('click', ()=>{
+    continueButton.addEventListener('click', () => {
         gameMenu.classList.remove('active');
-        const imgs = endMenu.querySelectorAll('.banner img');
-        for (const img of imgs) {
-            img.style.visibility = 'hidden';
+        const images = endMenu.querySelectorAll('.banner img');
+        for (const image of images) {
+            image.style.visibility = 'hidden';
         }
         welcomeMenu.style.display = "flex";
         endMenu.classList.remove('active');

@@ -32,11 +32,11 @@ export default class Game {
         const leaveButton = document.getElementById('leave-btn');
         leaveButton.addEventListener('click', ()=>{
             if (this.board.settings.online) {
-                this.api.leave();
+                this.api.leave().then();
                 return;
             }
 
-            this.end(true);
+            this.end(true).then();
             document.getElementById('play').scrollIntoView();
         });
     }
@@ -50,7 +50,6 @@ export default class Game {
 
         this.setupRequiredClickEvents();
 
-        // FIXME : he is too powerful and buggy
         if (!this.board.settings.pvp) {
             let depth = this.board.settings.difficulty === 'easy' ? 1 : 4;
             this.ai = new AI(this, depth);
@@ -370,11 +369,12 @@ export default class Game {
         const data = JSON.parse(event.data);
         console.log("message", data);
 
-        if (data.winner !== undefined){
+        if (data.winner !== undefined) {
             console.debug("Left wait menu");
             eventSource.close();
             return;
         }
+
         for (let playerName in data.stores) {
             if (playerName !== this.api.credentials.nick) this.api.opponent = playerName;
         }
@@ -392,11 +392,11 @@ export default class Game {
         const data = JSON.parse(event.data);
         console.log("\nmessage", data);
 
-        if (data.winner !== undefined && !data.board){ //Someone gave up
+        if (data.winner !== undefined && !data.board) { // Someone gave up
             if (data.winner === this.api.credentials.nick) {
                 this.state = GameState.PLAYER2;
             }
-            this.end(true);
+            this.end(true).then();
             eventSource.close();
             return;
         }
@@ -427,19 +427,19 @@ export default class Game {
             let seconds = parseInt(time.slice(2,4));
 
             const totalSeconds = minutes*60 + seconds-1;
-            if(totalSeconds<0)  {
+            if(totalSeconds < 0) {
                 clearInterval(this.countdown);
                 return;
             }
             minutes = Math.floor(totalSeconds/60);
             seconds = totalSeconds-minutes*60 < 10 ? '0'+ (totalSeconds-minutes*60) : totalSeconds-minutes*60;
             
-            document.getElementById('time').textContent=`${minutes}:${seconds}`;
+            document.getElementById('time').textContent= `${minutes}:${seconds}`;
         }, 1000);
     }
 
-    resetTimer(){
-        document.getElementById('time').textContent='1:59';
+    resetTimer() {
+        document.getElementById('time').textContent = '1:59';
     }
 
     sleep(ms) {

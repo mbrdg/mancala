@@ -21,9 +21,9 @@ playButton.addEventListener('click', async () => {
             game.reset();
             return;
         }
-        const res = await api.join(game.board.settings);
-        
-        if (!res){
+
+        const response = await api.join(game.board.settings);
+        if (response === undefined) {
             alert("Server issue");
             game.reset();
             return;
@@ -38,10 +38,10 @@ playButton.addEventListener('click', async () => {
 });
 
 // Reset buttons
-const waitBtn = document.getElementById('wait-btn');
+const waitButton = document.getElementById('wait-btn');
 const continueButton = document.getElementById('continue-btn');
 
-waitBtn.addEventListener('click', async ()=>{
+waitButton.addEventListener('click', async ()=>{
     await api.leave();
     game.reset();
     play.scrollIntoView();
@@ -54,16 +54,20 @@ continueButton.addEventListener('click', () => {
 
 // Sign-in form
 const signInForm = document.getElementById('sign-form');
-signInForm.addEventListener('submit', async (e)=> {
-    e.preventDefault();
+signInForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
     const nick = document.getElementById('username').value;
     const pass = document.getElementById('password').value;
 
-    if(!nick || !pass) return;
-    const res = await api.register(nick, pass);
-    
-    if (res!=nick) {
-        alert(res);
+    if (!nick || !pass) {
+        console.error('Invalid nickname or password.');
+        return;
+    }
+
+    const response = await api.register(nick, pass);
+
+    if (response !== nick) {
+        alert(response);
         return;
     }
     
