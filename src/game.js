@@ -113,6 +113,7 @@ export default class Game {
         let aiRepeatTurn;
         do {
             let aiMove = this.ai.findMove(this.board.enemySeeds, this.board.mySeeds);
+            if (aiMove === -1) break;
             await this.sleep(500);
             aiRepeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, aiMove, this.isPlayer1Turn(),true);
             this.updateState(aiRepeatTurn);
@@ -295,6 +296,9 @@ export default class Game {
         this.chat.clear();
         this.board.reset();
         this.ai = undefined;
+        if(this.countdown)
+            clearInterval(this.countdown);
+        document.getElementById('timer').classList.remove('active');
 
         console.log('Game Reset');
     }
@@ -415,12 +419,27 @@ export default class Game {
     }
 
     startTimer(){
-        document.getElementById('time').textContent='2:00';
+        document.getElementById('time').textContent='1:59';
         document.getElementById('timer').classList.add('active');
+        this.countdown = setInterval(() => {
+            const time = document.getElementById('time').textContent;
+            let minutes = parseInt(time.slice(0,1));
+            let seconds = parseInt(time.slice(2,4));
+
+            const totalSeconds = minutes*60 + seconds-1;
+            if(totalSeconds<0)  {
+                clearInterval(this.countdown);
+                return;
+            }
+            minutes = Math.floor(totalSeconds/60);
+            seconds = totalSeconds-minutes*60 < 10 ? '0'+ (totalSeconds-minutes*60) : totalSeconds-minutes*60;
+            
+            document.getElementById('time').textContent=`${minutes}:${seconds}`;
+        }, 1000);
     }
 
-    startTimer(){
-        document.getElementById('time').textContent='2:00';
+    resetTimer(){
+        document.getElementById('time').textContent='1:59';
     }
 
     sleep(ms) {
