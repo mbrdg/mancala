@@ -1,6 +1,7 @@
 import { setUpAnimations, signInAnimation } from './animations.js';
-import Game from './game.js';
 import ServerApi from "./serverApi.js";
+import HighScores from "./highscores.js";
+import Game from './game.js';
 
 setUpAnimations();
 
@@ -10,6 +11,7 @@ const welcomeMenu = document.querySelector('#play .welcome-menu');
 const gameMenu = document.querySelector('#play .game');
 
 let api = new ServerApi('http://twserver.alunos.dcc.fc.up.pt:8008/');
+let highScores = new HighScores(api);
 let game = new Game(api);
 
 const playButton = document.querySelector('#play .welcome-menu #play-btn');
@@ -66,11 +68,12 @@ signInForm.addEventListener('submit', async (event) => {
     }
 
     const response = await api.register(nick, pass);
+    api.ranking().then();
 
     if (response !== nick) {
         alert(response);
         return;
     }
-    
+
     signInAnimation(nick);
 })

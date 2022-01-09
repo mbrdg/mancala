@@ -121,18 +121,17 @@ export default class ServerApi {
         return true;
     }
 
-    // TODO
     async ranking() {
-        const data = {};
-
+        let response;
         try {
-            await this.makeRequest(data, 'update');
+            response = await this.makeRequest({}, 'ranking');
+            console.log(response);
         } catch (e) {
             console.error('Ranking unsuccessful', e);
             return;
         }
 
         console.log('Ranking successful');
-        return {};
+        return response.ranking;
     }
 }
