@@ -15,6 +15,7 @@ let game = new Game(api);
 const playButton = document.querySelector('#play .welcome-menu #play-btn');
 playButton.addEventListener('click', async () => {
     game.setup();
+
     if (game.board.settings.online) {
         if (api.credentials === undefined) {
             alert("User not registered");
@@ -71,5 +72,6 @@ signInForm.addEventListener('submit', async (event) => {
         return;
     }
     
+    //game.setPlayerInfo({nick, pass});
     signInAnimation(nick);
 })

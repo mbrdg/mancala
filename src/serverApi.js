@@ -1,6 +1,6 @@
 export default class ServerApi {
-    constructor(url) {
-        this.url = url;
+    constructor() {
+        this.url = 'http://twserver.alunos.dcc.fc.up.pt:8008/';
     }
 
     async register(nick, password) {
@@ -55,7 +55,7 @@ export default class ServerApi {
 
         const eventSource = new EventSource(`${this.url}update?`+ new URLSearchParams(data));
         
-        eventSource.onopen = (e) => {
+        eventSource.onopen = (_) => {
             document.querySelector('#play .wait-menu').classList.remove('active');
         }
         eventSource.onmessage = (event) => { handler(event, eventSource); }; 
