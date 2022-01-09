@@ -1,49 +1,64 @@
 export default class ServerApi {
-    constructor() {
-        this.url = 'http://twserver.alunos.dcc.fc.up.pt:8008/';
+    constructor(url) {
+        this.url = url;
     }
 
-    async register(nick, password) {
-        const data = {
-            nick, password
-        }
-
-        const res = await fetch(`${this.url}register`, {
+    /**
+     * Makes a request to a given server
+     * @param data Request parameters as an object
+     * @param endpoint Request endpoint
+     * @returns {Promise<any>}
+     */
+    async makeRequest(data, endpoint) {
+        const request = await fetch(this.url + endpoint, {
             method: "POST",
             body: JSON.stringify(data),
             headers: { "Content-type": "application/json" }
         });
-        const json = await res.json();
+
+        const json = await request.json();
         if (json.error)
-            return json.error;
+            throw json.error;
 
-        console.debug("Register successful");
+        return json;
+    }
 
-        this.credentials = data;
+    async register(nick, password) {
+        const data = {
+            nick,
+            password
+        }
+
+        try {
+            await this.makeRequest(data, 'register');
+            this.credentials = data;
+        } catch (e) {
+            console.error('Register unsuccessful', e)
+            return e;
+        }
+
+        console.log('Register successful');
         return nick;
     }
 
     async join(settings) {
         const data = {
-            group: 11,
-            nick: this.credentials.nick,
-            password: this.credentials.password,
-            size: settings.numberOfHoles,
-            initial: settings.seedsPerHole,
+            group:      11,
+            nick:       this.credentials.nick,
+            password:   this.credentials.password,
+            size:       settings.numberOfHoles,
+            initial:    settings.seedsPerHole,
         }
 
-        const res = await fetch(`${this.url}join`, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json" }
-        });
-        const json = await res.json();
-        if (json.error)
+        try {
+            const response = await this.makeRequest(data, 'join');
+            this.gameReference = response.game;
+        } catch (e) {
+            console.error('Join unsuccessful', e);
             return false;
+        }
 
-        this.gameReference = json.game;
-        console.log("Join successful");
-
+        console.log('Join successful');
         return true;
     }
 
@@ -57,12 +72,16 @@ export default class ServerApi {
         
         eventSource.onopen = (_) => {
             document.querySelector('#play .wait-menu').classList.remove('active');
-        }
-        eventSource.onmessage = (event) => { handler(event, eventSource); }; 
+        };
+
+        eventSource.onmessage = (e) => {
+            handler(e, eventSource);
+        };
+
         eventSource.onerror = (e) => {
-            console.log("error", e);
+            console.error(e);
             eventSource.close();
-        }
+        };
     }
 
     async leave() {
@@ -72,17 +91,14 @@ export default class ServerApi {
             game: this.gameReference,
         }
 
-        const res = await fetch(`${this.url}leave`, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json" }
-        });
-        const json = await res.json();
-        if (json.error)
+        try {
+            await this.makeRequest(data, 'leave');
+        } catch (e) {
+            console.error('Leave unsuccessful', e);
             return false;
+        }
 
-        console.debug("Leave successful");
-
+        console.log('Leave successful');
         return true;
     }
 
@@ -94,17 +110,29 @@ export default class ServerApi {
             move
         }
 
-        const res = await fetch(`${this.url}notify`, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json" }
-        });
-        const json = await res.json();
-        if (json.error)
+        try {
+            await this.makeRequest(data, 'notify');
+        } catch (e) {
+            console.error('Notify unsuccessful', e);
             return false;
+        }
 
-        console.debug("Notify successful");
-
+        console.log('Notify successful');
         return true;
+    }
+
+    // TODO
+    async ranking() {
+        const data = {};
+
+        try {
+            await this.makeRequest(data, 'update');
+        } catch (e) {
+            console.error('Ranking unsuccessful', e);
+            return;
+        }
+
+        console.log('Ranking successful');
+        return {};
     }
 }
