@@ -12,7 +12,7 @@ const gameMenu = document.querySelector('#play .game');
 
 let api = new ServerApi('http://twserver.alunos.dcc.fc.up.pt:8008/');
 let highScores = new HighScores(api);
-let game = new Game(api);
+let game = new Game(api, highScores);
 
 const playButton = document.querySelector('#play .welcome-menu #play-btn');
 playButton.addEventListener('click', async () => {

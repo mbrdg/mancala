@@ -24,9 +24,10 @@ export { GameState };
  */
 export default class Game {
 
-    constructor(serverApi) {
+    constructor(serverApi, highScores) {
         this.chat = new Chat();
         this.api = serverApi;
+        this.highScores = highScores;
         console.debug('Game object created.');
 
         const leaveButton = document.getElementById('leave-btn');
@@ -167,6 +168,16 @@ export default class Game {
                 this.state = GameState.WIN;
             else
                 this.state = GameState.LOSE;
+            
+            if (this.state===GameState.WIN && !this.board.settings.online) {
+                const score = {
+                    nick: this.api.credentials ? this.api.credentials.nick : 'Player 1',
+                    points: this.board.mySeeds.deposit,
+                    opponent: this.board.settings.pvp ? 'Player 2' : 'Bot'
+                }
+
+                this.highScores.insertScore(score);
+            }
         }
 
         console.log('Game End');
