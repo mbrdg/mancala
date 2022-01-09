@@ -72,6 +72,5 @@ signInForm.addEventListener('submit', async (event) => {
         return;
     }
     
-    //game.setPlayerInfo({nick, pass});
     signInAnimation(nick);
 })
