@@ -24,16 +24,16 @@
     border-radius: 1.8rem 1.8rem 0px 0px;
     overflow: hidden;
 
-    padding: 4px 20px;
+    padding: 4px 30px;
 }
 #play .pause-menu .banner .text h2 {
     font-weight: normal;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 
 #play .pause-menu .banner .text p {
     font-weight: 10;
-    font-size: 0.8rem;
+    font-size: 1rem;
     position: relative;
     top: -5px;
 }
@@ -52,7 +52,7 @@
 
 #play .pause-menu .buttons button {
     color: white;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     font-weight: lighter;
     font-family: 'Nunito';
 

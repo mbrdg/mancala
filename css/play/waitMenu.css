@@ -25,16 +25,16 @@
     border-radius: 1.8rem 1.8rem 0px 0px;
     overflow: hidden;
 
-    padding: 4px 20px;
+    padding: 4px 30px;
 }
 #play .wait-menu .banner .text h2 {
     font-weight: normal;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 
 #play .wait-menu .banner .text p {
     font-weight: 10;
-    font-size: 0.8rem;
+    font-size: 1.2rem;
     position: relative;
     top: -5px;
 }
@@ -65,7 +65,7 @@
     margin-right: 10px;
     color: white;
     font-weight: 500;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 }
 
 .lds-dual-ring {
@@ -93,12 +93,11 @@
 /* Button */
 #play .wait-menu .content button {
     color: white;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     font-weight: lighter;
     font-family: 'Nunito';
 
     padding: 0.3rem 0.8rem;
-    margin-bottom: 5px;
     
     border: none;
     border-radius: 10px;

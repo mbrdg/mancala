@@ -28,12 +28,12 @@
 
 #play .end-menu .banner h1 {
     padding: 0 0.7rem;
-    font-size: 1.8rem;
+    font-size: 2rem;
 }
 
 #play .end-menu .banner img {
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
 }
 
 #play .end-menu #leftEndIcon {
@@ -64,6 +64,10 @@
     color: white;
 }
 
+#play .end-menu .information .final-scores p {
+    font-size: 1.25rem;
+}
+
 #play .end-menu .information .final-scores div:first-of-type {
     position: relative;
     width: 55%;
@@ -92,7 +96,7 @@
 /* Continue Button */
 #play #continue-btn {
     color: white;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     font-weight: lighter;
     font-family: 'Nunito';
 

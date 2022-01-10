@@ -42,7 +42,6 @@ const navBarButtonAnimation = () => {
     });
 
     instructionsButton.addEventListener('click', () => {
-        console.log(play);
         play.classList.add('active');
         instructions.classList.add('active');
     });

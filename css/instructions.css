@@ -43,9 +43,9 @@
 }
 
 #instructions .instructions img {
-    width: 1.4rem;
-    height: 1.4rem;
-    padding: 4px;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
 
     align-self: center;
     justify-self: center;
@@ -57,7 +57,7 @@
 
     border: none;
     border-radius: 5px;
-    height: 1.6rem;
+    height: 1.8rem;
 
     margin-left: 0.5rem;
 }

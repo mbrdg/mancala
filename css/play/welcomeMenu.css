@@ -17,30 +17,30 @@
     justify-content: space-between;
     color: white;
     width: 85vh;
-    height: 25vh;
+    height: 22vh;
 
     background: #797575;
     border-radius: 1.8rem 1.8rem 0px 0px;
     overflow: hidden;
 
-    padding: 4px 20px;
+    padding: 4px 30px;
 }
 
 #play .welcome-menu .banner .text h2 {
     font-weight: normal;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
 }
 
 #play .welcome-menu .banner .text p {
     font-weight: 10;
-    font-size: 0.8rem;
+    font-size: 1rem;
     position: relative;
     top: -5px;
 }
 
 #play .welcome-menu #mancala-icon {
-    width: 60px;
-    height: 60px;
+    width:  70px;
+    height: 70px;
     transform: rotate(46.01deg);
     opacity: 80%;
 }
@@ -51,7 +51,7 @@
     width: 85vh;
     height: 40vh;
     border-radius: 0 0 30px 30px;
-    padding: 0 20px;
+    padding: 0 30px;
 
     display: flex;
     align-items: center;
@@ -62,16 +62,17 @@
     display: grid;
     grid-template: 0.35fr 0.2fr 0.3fr / repeat(6, 1fr);
     column-gap: 0.3rem;
-    height: 40vh;
-    width: 65vw;
+    height: 100%;
+    width:  100%;
     align-content: center;
 }
 
 #play .welcome-menu form #mode {
     grid-area: 1 / 1 / 2 / -1;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+    margin: 0 12px;
 }
 
 #play .welcome-menu form #difficulty {
@@ -100,8 +101,9 @@
     border: 1px solid #FFFFFF;
     color: #FFFFFF;
     font-weight: 300;
-    font-size: 1.2rem;
-    min-width: 150px;
+    font-size: 1.5rem;
+    min-width: 210px;
+    width: 40%;
     text-align: center;
     padding: 10px 0px;
     transition: background-color 200ms ease;
@@ -127,11 +129,11 @@
     color: #FFFFFF;
     
     height: 6vh;
-    padding: 6px;
+    padding: 6px 8px;
     margin: 0 12px;
     align-self: center;
 
-    font-size: 0.8rem;
+    font-size: 1.2rem;
     font-family: 'Nunito';
 }
 
@@ -140,7 +142,7 @@
 }
 
 #play .settings #difficulty option {
-    font-size: 0.7rem;
+    font-size: 1rem;
     background-color: #827E7E;
 }
 
@@ -174,7 +176,7 @@
 
 #play #play-btn {
     background-color: #A82727;
-    font-size: 0.9rem;
+    font-size: 1.5rem;
     font-weight: lighter;
     font-family: 'Nunito';
     margin-left: 12px;
@@ -192,15 +194,15 @@
 }
 
 #play #play-btn img {
-    padding-left: 5px;
+    margin-left: 5px;
     width: 17px;
-    height: 13px;
+    height: 16px;
 }
 #play #instructions-btn img {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
 }
 #play #more-settings-btn img {
-    width: 18px;
-    height: 18px;
+    width: 25px;
+    height: 25px;
 }

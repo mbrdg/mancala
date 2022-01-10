@@ -152,14 +152,14 @@
 #play .gameboard #pause-btn img {
     padding: 0.2rem;
     transform: rotate(90deg);
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 30px;
+    height: 30px;
     transition: 0.3s ease;
 }
 
 #play .gameboard #pause-btn:hover {
     cursor: pointer;
-    padding-left: 0.2rem;
+    padding-left: 0.4rem;
 }
 #play .gameboard #pause-btn img:hover {
     transform: rotate(270deg);

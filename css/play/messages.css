@@ -31,7 +31,7 @@
 }
 
 .messages #title h3 {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     color: white;
 }
 
@@ -39,7 +39,7 @@
     background-color: #A82727;
     color: white;
 
-    font-size: 0.7rem;
+    font-size: 1rem;
     font-weight: 10;
 
     align-self: flex-end;
@@ -53,7 +53,7 @@
     background-color: #B4B2B2;
     color: white;
 
-    font-size: 0.7rem;
+    font-size: 1rem;
     font-weight: 10;
 
     align-self: flex-start;
