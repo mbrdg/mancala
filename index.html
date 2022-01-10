@@ -279,30 +279,58 @@
       </div>
       <div class="highscores container">
         <h1>High Scores</h1>
-        <table id="online-ranking">
-          <thead>
-            <tr>
-              <th>Position</th>
-              <th>Nick</th>
-              <th>Victories</th>
-              <th>Games</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-        <table id="offline-ranking">
-          <thead>
-            <tr>
-              <th>Position</th>
-              <th>Nick</th>
-              <th>Points</th>
-              <th>Opponent</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+        <div class="slider-container">
+          <div class="slider">
+            <div class="slides">
+              <div id="slide_1" class="slide">
+                <p class="vertical-text table-title">Online</p>
+                <table id="online-ranking">
+                  <thead>
+                    <tr>
+                      <th>Position</th>
+                      <th>Nick</th>
+                      <th>Victories</th>
+                      <th>Games</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+                <a class="slide_prev" href="#slide_2" title="Next">
+                  <img src="./assets/down-arrow.png" alt="Arrow icon">
+                </a>
+                <a class="slide_next" href="#slide_2" title="Next">
+                  <img src="./assets/down-arrow.png" alt="Arrow icon">
+                </a>
+              </div>
+              <div id="slide_2" class="slide">
+                <p class="vertical-text table-title">Offline</p>
+                <table id="offline-ranking">
+                  <thead>
+                    <tr>
+                      <th>Position</th>
+                      <th>Nick</th>
+                      <th>Points</th>
+                      <th>Opponent</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+                <a class="slide_prev" href="#slide_1" title="Next">
+                  <img src="./assets/down-arrow.png" alt="Arrow icon">
+                </a>
+                <a class="slide_next" href="#slide_1" title="Next">
+                  <img src="./assets/down-arrow.png" alt="Arrow icon">
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="slider_nav">
+            <a class="slider_navlink active" href="#slide_1"></a>
+            <a class="slider_navlink" href="#slide_2"></a>
+        </div>
+        </div>
       </div>
     </section>
     <!-- End of HighScores Section -->

@@ -8,6 +8,7 @@ export function setUpAnimations() {
     moreSettingsAnimations();
     waitMenuAnimations();
     endMenuAnimations();
+    sliderAnimations();
 }
 
 const hamburguerAnimation = () => {
@@ -211,6 +212,37 @@ const endMenuAnimations = () => {
         welcomeMenu.style.display = "flex";
         endMenu.classList.remove('active');
     });
+}
+
+const sliderAnimations = () => {
+    const prevButtons  = document.querySelectorAll('#highscores .slide_prev');
+    const nextButtons  = document.querySelectorAll('#highscores .slide_next');
+    const sliderLinks = document.querySelectorAll('#highscores .slider_navlink')
+
+    prevButtons.forEach(button => {
+        button.addEventListener('click', ()=>{
+            sliderLinks.forEach((link)=>{
+                link.classList.toggle('active');
+            });
+        });
+    })
+    nextButtons.forEach(button => {
+        button.addEventListener('click', ()=>{
+            sliderLinks.forEach((link)=>{
+                link.classList.toggle('active');
+            });
+        });
+    })
+
+    sliderLinks.forEach((link,index) => {
+        link.addEventListener('click', ()=>{
+            if (link.classList.contains('active')) return;
+
+            link.classList.toggle('active');
+            const otherIndex = index === 0 ? 1 : 0;
+            sliderLinks[otherIndex].classList.toggle('active');
+        })
+    })
 }
 
 export function signInAnimation(name) {
