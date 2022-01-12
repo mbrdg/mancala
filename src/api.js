@@ -1,4 +1,4 @@
-export default class ServerApi {
+export default class Api {
     constructor(url) {
         this.url = url;
     }
@@ -125,7 +125,6 @@ export default class ServerApi {
         let response;
         try {
             response = await this.makeRequest({}, 'ranking');
-            console.log(response);
         } catch (e) {
             console.error('Ranking unsuccessful', e);
             return;

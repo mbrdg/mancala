@@ -24,9 +24,9 @@ export { GameState };
  */
 export default class Game {
 
-    constructor(serverApi, highScores) {
+    constructor(api, highScores) {
         this.chat = new Chat();
-        this.api = serverApi;
+        this.api = api;
         this.highScores = highScores;
         console.debug('Game object created.');
 
