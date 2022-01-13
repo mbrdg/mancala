@@ -1,10 +1,12 @@
 const http = require('http');
 const Registration = require('./server/register.js');
+const Ranking = require('./server/ranking.js');
 
 const hostname = '127.0.0.1';
 const port = 8976;
 
 const users = new Registration('./server/database/users.json');
+const rankings = new Ranking('./server/database/rankings.json');
 
 const headers = {
     plain: {
@@ -39,24 +41,18 @@ let server = http.createServer((req, res) => {
                 case '/register':
                     try {
                         users.register(body);
-                        res.writeHead(answer.status, headers[answer.style]);
-                        res.end('{}');
+                        answer.body={};
                     } catch (err) {
                         answer.status = 400;
-                        console.log(err);
-                        res.writeHead(400, headers.plain);
-                        res.end(JSON.stringify(err));
+                        answer.body=err;
                     }
                     break;
                 case '/ranking':
-                    try {
-                    } catch (e) {
-                        res.writeHead(400, headers.plain);
-                    }
+                    answer.body = rankings.getRankings();
             }
 
             res.writeHead(answer.status, headers[answer.style]);
-            res.end();
+            res.end(JSON.stringify(answer.body));
         })
         .on('error', (err) => {
             console.log(err.message);
@@ -75,7 +71,7 @@ let server = http.createServer((req, res) => {
         }
     }
     else {
-        answer.status = 400;
+        answer.status = 500;
         answer.style = 'plain';
         res.writeHead(answer.status, headers[answer.style]);
         res.end();

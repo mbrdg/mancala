@@ -5,7 +5,6 @@ module.exports.readFromFile = function (path, callback) {
         if (!err && data.length != 0){
             
             data = JSON.parse(data.toString());
-            console.log(data);
             callback(data);
         }
     });
