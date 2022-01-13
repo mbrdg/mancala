@@ -181,6 +181,8 @@ export default class Game {
         }
 
         console.log('Game End');
+        if (this.board.settings.online) 
+            this.highScores.updateOnline();
         this.showEndMenu(this.state);
     }
 
@@ -389,7 +391,7 @@ export default class Game {
         for (let playerName in data.stores) {
             if (playerName !== this.api.credentials.nick) this.api.opponent = playerName;
         }
-        
+
         if (data.board.turn === this.api.opponent) { 
             this.state = GameState.PLAYER2;
             this.board.update(this.state);
@@ -404,9 +406,7 @@ export default class Game {
         console.log("\nmessage", data);
 
         if (data.winner !== undefined && !data.board) { // Someone gave up
-            if (data.winner === this.api.credentials.nick) {
-                this.state = GameState.PLAYER2;
-            }
+            this.state =  data.winner === this.api.credentials.nick ? GameState.PLAYER2 : GameState.PLAYER1;
             this.end(true).then();
             eventSource.close();
             return;

@@ -12,6 +12,11 @@ module.exports = class Registration {
         let {nick, password} = info;
         if(!nick || !password) throw {error: "Invalid body request."};
 
+        password = crypto
+               .createHash('md5')
+               .update(password)
+               .digest('hex');
+               
         for (const user of this.users) {
             if (user.nick === nick) {
                 if (user.password !== password){
@@ -21,11 +26,6 @@ module.exports = class Registration {
             }
         }
 
-        //ENcrypt pass
-        password = crypto
-               .createHash('md5')
-               .update(password)
-               .digest('hex');
         this.users.push({nick, password});
         file.writeToFile(this.path, this.users, ()=>{ this.users.pop();});
     }

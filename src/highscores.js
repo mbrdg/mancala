@@ -1,18 +1,7 @@
 export default class HighScores {
     constructor(api) {
-        api.ranking().then((onlineRankings) => {
-            const tbody = document.getElementById('online-ranking').getElementsByTagName('tbody')[0];
-
-            onlineRankings.forEach((rank, i) => {
-                const row = tbody.insertRow();
-
-                row.insertCell(0).textContent = `#${i + 1}`;
-                row.insertCell(1).textContent = rank.nick;
-                row.insertCell(2).textContent = rank.victories;
-                row.insertCell(3).textContent = rank.games;
-            });
-        });
-
+        this.api = api;
+        this.updateOnline();
         this.updateOffline();
     }
 
@@ -61,5 +50,21 @@ export default class HighScores {
         offlineRankings = offlineRankings.slice(0, 5);
         localStorage.setItem('offline-rankings', JSON.stringify(offlineRankings));
         this.updateOffline();
+    }
+
+    updateOnline(){
+        this.api.ranking().then((onlineRankings) => {
+            const tbody = document.getElementById('online-ranking').getElementsByTagName('tbody')[0];
+            tbody.textContent = "";
+
+            onlineRankings.forEach((rank, i) => {
+                const row = tbody.insertRow();
+
+                row.insertCell(0).textContent = `#${i + 1}`;
+                row.insertCell(1).textContent = rank.nick;
+                row.insertCell(2).textContent = rank.victories;
+                row.insertCell(3).textContent = rank.games;
+            });
+        });
     }
 }
