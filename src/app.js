@@ -1,9 +1,11 @@
 import { setUpAnimations, signInAnimation } from './animations.js';
+import { setUpCanvas } from './canvas.js';
 import Api from "./api.js";
 import HighScores from "./highscores.js";
 import Game from './game.js';
 
 setUpAnimations();
+setUpCanvas();
 
 // HTML Elements
 const play = document.querySelector('#play');
