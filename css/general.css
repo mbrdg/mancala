@@ -9,6 +9,10 @@ html {
     scroll-behavior: smooth;
 }
 
+canvas {
+	display: block;
+}
+
 a {
     text-decoration: none;
 }

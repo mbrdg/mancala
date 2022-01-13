@@ -2,7 +2,7 @@ const http = require('http');
 const Registration = require('./server/register.js');
 
 const hostname = '127.0.0.1';
-const port = 3000;
+const port = 8976;
 
 const users = new Registration('./server/database/users.json');
 
