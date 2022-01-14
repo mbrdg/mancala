@@ -10,7 +10,7 @@ module.exports = class Registration {
 
     register(info) {
         let {nick, password} = info;
-        if(!nick || !password) throw {error: "Invalid body request."};
+        if(!nick || !password) throw {message: {error: "Invalid body request."}, status: 400};
 
         password = crypto
                .createHash('md5')
@@ -20,7 +20,7 @@ module.exports = class Registration {
         for (const user of this.users) {
             if (user.nick === nick) {
                 if (user.password !== password){
-                    throw {error: "User registered with a different password."}
+                    throw {message: {error: "User registered with a different password."}, status: 401};
                 }
                 return;
             }

@@ -405,6 +405,7 @@ export default class Game {
         const data = JSON.parse(event.data);
         console.log("\nmessage", data);
 
+
         if (data.winner !== undefined && !data.board) { // Someone gave up
             this.state =  data.winner === this.api.credentials.nick ? GameState.PLAYER2 : GameState.PLAYER1;
             this.end(true).then();
@@ -413,7 +414,7 @@ export default class Game {
         }
 
         const move = this.isPlayer1Turn() ? data.pit : data.pit + this.board.settings.numberOfHoles + 1;
-        this.playMove(move);
+        this.playMove(move, eventSource);
     }
 
     playMove(move) {
@@ -425,6 +426,7 @@ export default class Game {
 
         if (this.isOver(this.board.mySeeds, this.board.enemySeeds, this.isPlayer1Turn())) {
             this.collectAllRemainingSeeds(this.board.mySeeds, this.board.enemySeeds);
+            eventSource.close();
             return this.end(false);
         }
     }

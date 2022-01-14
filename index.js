@@ -43,12 +43,16 @@ let server = http.createServer((req, res) => {
                         users.register(body);
                         answer.body={};
                     } catch (err) {
-                        answer.status = 400;
-                        answer.body=err;
+                        answer.status = err.status;
+                        answer.body=err.message;
                     }
                     break;
                 case '/ranking':
                     answer.body = rankings.getRankings();
+                    break;
+                default:
+                    answer.status = 404;
+                    answer.body={error: 'Unknown request'};
             }
 
             res.writeHead(answer.status, headers[answer.style]);
