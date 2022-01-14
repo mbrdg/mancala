@@ -10,7 +10,9 @@ module.exports = class Registration {
 
     register(info) {
         let {nick, password} = info;
-        if(!nick || !password) throw {message: {error: "Invalid body request."}, status: 400};
+        if (!nick || !password) {
+            throw {message: {error: "Invalid body request."}, status: 400};
+        }
 
         password = crypto
                .createHash('md5')
@@ -28,5 +30,28 @@ module.exports = class Registration {
 
         this.users.push({nick, password});
         file.writeToFile(this.path, this.users, ()=>{ this.users.pop();});
+    }
+
+    exists(info) {
+        let {nick, password} = info;
+        if (!nick || !password) {
+            throw {message: {error: "Invalid body request."}, status: 400};
+        }
+
+        password = crypto
+            .createHash('md5')
+            .update(password)
+            .digest('hex');
+        
+        for (const user of this.users) {
+            if (user.nick === nick) {
+                if (user.password !== password){
+                    throw {message: {error: "User registered with a different password."}, status: 401};
+                }
+                return;
+            }
+        }
+
+        throw {message: {error: "User not registered."}, status: 401};
     }
 }

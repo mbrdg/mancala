@@ -379,6 +379,7 @@ export default class Game {
     }
 
     joinHandler(event, eventSource) {
+        clearTimeout(this.waitTimeout);
         const data = JSON.parse(event.data);
         console.log("message", data);
 

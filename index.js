@@ -1,11 +1,13 @@
 const http = require('http');
 const Registration = require('./server/register.js');
+const GameController = require('./server/gameController.js');
 const Ranking = require('./server/ranking.js');
 
 const hostname = '127.0.0.1';
 const port = 8976;
 
 const users = new Registration('./server/database/users.json');
+const controller = new GameController();
 const rankings = new Ranking('./server/database/rankings.json');
 
 const headers = {
@@ -49,6 +51,15 @@ let server = http.createServer((req, res) => {
                     break;
                 case '/ranking':
                     answer.body = rankings.getRankings();
+                    break;
+                case '/join':
+                    try {
+                        users.exists(body);
+                        answer.body = controller.join(body);
+                    } catch (err) {
+                        answer.status = err.status;
+                        answer.body=err.message;
+                    }
                     break;
                 default:
                     answer.status = 404;
