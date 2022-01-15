@@ -26,7 +26,7 @@ const headers = {
 
 let server = http.createServer((req, res) => {
     const { method, url } = req;
-    let answer = {};
+    let answer = { style: 'plain', status: 200 };
 
     if (method === 'POST') {
         let body = '';
@@ -35,9 +35,9 @@ let server = http.createServer((req, res) => {
             body += chunk;
         })
         .on('end', ()=>{
-            body = JSON.parse(body);
-            answer.style='plain';
-            answer.status = 200;
+            if (body!=='') {
+                body = JSON.parse(body);
+            }
 
             switch (url) {
                 case '/register':
@@ -63,31 +63,52 @@ let server = http.createServer((req, res) => {
                     break;
                 default:
                     answer.status = 404;
-                    answer.body={error: 'Unknown request'};
+                    answer.body={error: 'Unknown request.'};
             }
-
+            
             res.writeHead(answer.status, headers[answer.style]);
             res.end(JSON.stringify(answer.body));
         })
         .on('error', (err) => {
             console.log(err.message);
-            res.writeHead(answer.status, headers[answer.style]);
+            res.writeHead(500, headers[answer.style]);
             res.end();
         })
     }
     else if (method === 'GET'){
-        switch(url) {
-            case '/update':
-                answer.style = 'sse';
-                break;
-            default:
-                answer.status = 400;
-                break;
+        if (url !== '/update') {
+            res.writeHead(404, headers[answer.style]);
+            res.end(JSON.stringify({error: 'Unknown request.'}));
+            return;
         }
+
+        let body = '';
+        answer.style = 'sse';
+
+        req
+        .on('data', (chunk)=>{
+            body += chunk;
+        })
+        .on('end', ()=>{
+            if (body!=='') {
+                body = JSON.parse(body);
+            }
+
+            try {
+                controller.update(body);   
+            } catch (err) {
+                res.writeHead(err.status, headers['plain']);
+                res.end(JSON.stringify(err.message));
+            }
+        })
+        .on('error', (err) => {
+            console.log(err.message);
+            res.writeHead(500, headers[answer.style]);
+            res.end();
+        })
     }
     else {
         answer.status = 500;
-        answer.style = 'plain';
         res.writeHead(answer.status, headers[answer.style]);
         res.end();
     }

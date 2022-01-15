@@ -43,7 +43,7 @@ export default class Api {
 
     async join(settings) {
         const data = {
-            group:      11,
+            group:      76,
             nick:       this.credentials.nick,
             password:   this.credentials.password,
             size:       settings.numberOfHoles,
