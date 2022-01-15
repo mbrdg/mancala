@@ -12,7 +12,8 @@ const play = document.querySelector('#play');
 const welcomeMenu = document.querySelector('#play .welcome-menu');
 const gameMenu = document.querySelector('#play .game');
 
-let api = new Api('http://twserver.alunos.dcc.fc.up.pt:8008/');
+//let api = new Api('http://twserver.alunos.dcc.fc.up.pt:8008/');
+let api = new Api('http://localhost:8976/');
 let highScores = new HighScores(api);
 let game = new Game(api, highScores);
 

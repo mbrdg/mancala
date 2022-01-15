@@ -7,9 +7,9 @@ module.exports = class GameController {
     }
 
     join(info) {
-        let {group, nick, password, size, initial} = info;
+        let {group, nick, size, initial} = info;
 
-        if (!group || !nick || !password || !size || !initial) {
+        if (!group || !size || !initial) {
             throw {message: {error: "Invalid body request."}, status: 400};
         }
 
@@ -39,6 +39,7 @@ module.exports = class GameController {
         const timeout = setTimeout(() => {
             const index = this.waitList.findIndex((obj)=> obj.hash === gameHash);
             if (index !== -1) {
+                this.waitList[index].response.end();
                 this.waitList.splice(index, 1);
             }
         }, 120e3);
@@ -48,7 +49,7 @@ module.exports = class GameController {
     }
 
     createGame(index, player2) {
-        const {nick, size, initial, hash} = this.waitList.splice(index, 1)[0];
+        const {nick, size, initial, hash, response} = this.waitList.splice(index, 1)[0];
 
         const playerHoles = { pits: Array(size).fill(parseInt(initial)), store: 0};
         const game = {
@@ -62,16 +63,68 @@ module.exports = class GameController {
             stores: {[nick]:0, [player2]:0}
         }
 
-        this.games.push({hash, game, [nick]: null, [player2]:null});
+        this.games.push({hash, game, [nick]: response, [player2]:null});
     }
 
-    update(info) {
+    update(info, response, callback) {
         let {nick, game} = info;
 
         if (!nick || !game) {
             throw {message: {error: "Invalid body request."}, status: 400};
         }
 
+        const getResponse = (obj, props)=>{
+            const objProps = Object.getOwnPropertyNames(obj);
 
+            for (const property of objProps) {
+                if (props.includes(property)) {
+                    continue;
+                }
+                else {
+                    return obj[p];
+                }
+            }
+        }
+
+        for (const val of this.waitList) {
+            if (nick === val.nick && game === val.hash){
+                val.response = response;
+                console.log(this.waitList);
+                return;
+            }
+        }
+
+        for (const val of this.games) {
+            if (val[nick] === null){
+                val[nick] = response;
+                
+                const res1 = getResponse(val, ['game', 'hash', nick]);
+                callback([res1, val[nick]], val.game);
+                //TODO: set timeout for gameTurn
+                return;
+            }
+        }
+
+        throw {message: {error: "Invalid game reference."}, status: 400};
+    }
+
+    notify(info) {
+        let {nick, game, move} = info;
+
+        if (!game || !move) {
+            throw {message: {error: "Invalid body request."}, status: 400};
+        }
+
+        for (const game of this.games) {
+            if (game.hash === game) {
+                if(game.board.turn === nick) {
+                    console.log("hello");
+                } else {
+                    console.log("hello");
+                }
+            }
+        }
+
+        throw {message: {error: "Invalid game reference."}, status: 400};
     }
 }

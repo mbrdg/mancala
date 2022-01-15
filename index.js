@@ -2,6 +2,7 @@ const http = require('http');
 const Registration = require('./server/register.js');
 const GameController = require('./server/gameController.js');
 const Ranking = require('./server/ranking.js');
+const fs = require("fs");
 
 const hostname = '127.0.0.1';
 const port = 8976;
@@ -27,7 +28,7 @@ const headers = {
 let server = http.createServer((req, res) => {
     const { method, url } = req;
     let answer = { style: 'plain', status: 200 };
-
+    
     if (method === 'POST') {
         let body = '';
         req
@@ -61,11 +62,20 @@ let server = http.createServer((req, res) => {
                         answer.body=err.message;
                     }
                     break;
+                case '/notify':
+                    try {
+                        users.exists(body);
+                        answer.body = controller.notify(body);
+                    } catch (err) {
+                        answer.status = err.status;
+                        answer.body=err.message;
+                    }
+                    break;
                 default:
                     answer.status = 404;
                     answer.body={error: 'Unknown request.'};
             }
-            
+
             res.writeHead(answer.status, headers[answer.style]);
             res.end(JSON.stringify(answer.body));
         })
@@ -76,6 +86,14 @@ let server = http.createServer((req, res) => {
         })
     }
     else if (method === 'GET'){
+        if (url === '/') {
+            fs.readFile("./index.html", "UTF-8", (err, html)=>{
+
+                res.writeHead(200, {'Content-Type': "text/html"});
+                res.end(html);
+            })
+            return;
+        }
         if (url !== '/update') {
             res.writeHead(404, headers[answer.style]);
             res.end(JSON.stringify({error: 'Unknown request.'}));
@@ -95,7 +113,12 @@ let server = http.createServer((req, res) => {
             }
 
             try {
-                controller.update(body);   
+                controller.update(body, res, (responses, body) => {
+                    responses.forEach(response => {
+                        response.writeHead(answer.status, headers[answer.style]);
+                        response.write(JSON.stringify(body));
+                    });
+                });
             } catch (err) {
                 res.writeHead(err.status, headers['plain']);
                 res.end(JSON.stringify(err.message));
