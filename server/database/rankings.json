@@ -1,13 +1,1 @@
-[
-    {"nick":"jpleal","victories":2,"games":1},
-    {"nick":"zp","victories":0,"games":2},
-    {"nick":"zp","victories":0,"games":3},
-    {"nick":"zp","victories":0,"games":4},
-    {"nick":"zp","victories":0,"games":5},
-    {"nick":"zp","victories":0,"games":6},
-    {"nick":"zp","victories":0,"games":7},
-    {"nick":"zp","victories":0,"games":8},
-    {"nick":"zp","victories":0,"games":9},
-    {"nick":"zp","victories":0,"games":10},
-    {"nick":"zp","victories":0,"games":10}
-]
+[{"nick":"jpleal","victories":3,"games":17},{"nick":"jones","victories":3,"games":11},{"nick":"zp","victories":1,"games":2},{"nick":"bro","victories":0,"games":3},{"nick":"granda","victories":0,"games":4},{"nick":"maluco","victories":0,"games":5},{"nick":"oi","victories":0,"games":8},{"nick":"po","victories":0,"games":9},{"nick":"pe","victories":0,"games":10},{"nick":"bibi","victories":0,"games":1}]

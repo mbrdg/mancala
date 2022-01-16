@@ -11,7 +11,7 @@ module.exports.readFromFile = function (path, callback) {
 }
 
 module.exports.writeToFile = function (path, data, callback) {
-    fs.writeFile(path, JSON.stringify(data), function(err){
+    fs.writeFile(path, JSON.stringify(data),'utf8', function(err){
         if(err){
             callback();
         }

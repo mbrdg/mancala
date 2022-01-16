@@ -1,7 +1,8 @@
 const crypto = require('crypto');
 
 module.exports = class GameController {
-    constructor() {
+    constructor(rankings) {
+        this.rankings = rankings;
         this.games = [];
         this.waitList = [];
     }
@@ -63,19 +64,6 @@ module.exports = class GameController {
             throw {message: {error: "Invalid body request."}, status: 400};
         }
 
-        const getResponse = (obj, props)=>{
-            const objProps = Object.getOwnPropertyNames(obj);
-
-            for (const property of objProps) {
-                if (props.includes(property)) {
-                    continue;
-                }
-                else {
-                    return obj[property];
-                }
-            }
-        }
-
         for (const val of this.waitList) {
             if (nick === val.nick && game === val.hash){
                 val.response = response;
@@ -97,15 +85,53 @@ module.exports = class GameController {
                 val[nick] = response;
                 val.p2 = nick;
 
-                const res1 = val[val.p1];
-                const res2 = val[val.p2];
-                callback([res1, res2], {first: true , message: val.game});
+                callback([val[val.p1], response], {first: true , message: val.game});
 
                 val.timeout = setTimeout(() => {
-                    const result = this.findWinner(val.p1, val.p2, val.game.board.turn);
-                    callback([res1, res2], {message: result});
-                    //Update rankings
+                    const index = this.games.findIndex((obj)=> obj.hash === game);
+                    if (index !== -1) {
+                        const value = this.games[index];
+                        const res1 = value[value.p1];
+                        const res2 = value[value.p2];
+
+                        const result = this.findWinner(value.p1, value.p2, value.game.board.turn);
+                        callback([res1, res2], {message: result});
+                        this.endGame(index, result.winner);
+                    }
                 }, 120e3);
+                return;
+            }
+        }
+
+        throw {message: {error: "Invalid game reference."}, status: 400};
+    }
+
+    leave(info, callback) {
+        const {nick, game} = info;
+
+        if (nick===undefined || game===undefined) {
+            throw {message: {error: "Invalid body request."}, status: 400};
+        }
+
+        for (const [i, val] of this.waitList.entries()) {
+            if (nick === val.nick && game === val.hash){
+                clearTimeout(val.timeout);
+                callback([val.response], {first: true , message: {winner: null}});
+                this.waitList.splice(i, 1);
+                return;
+            }
+        }
+
+        for (let [i, val] of this.games.entries()) {
+            if (val.hash === game) {
+                if (!(nick === val.p1 || nick === val.p2)) {
+                    throw {message: {error: "Unrecognized nick for game reference."}, status: 400};
+                }
+
+                clearTimeout(val.timeout);
+                const winner = this.findWinner(val.p1, val.p2, nick);
+                callback([val[val.p1], val[val.p2]], {message: winner});
+                this.endGame(i, winner.winner);
                 return;
             }
         }
@@ -120,8 +146,8 @@ module.exports = class GameController {
             throw {message: {error: "Invalid body request."}, status: 400};
         }
         
-        for (let val of this.games) {
-            if (val.hash === game) {
+        for (let [i, val] of this.games.entries()) {
+            if (val.hash === game && (nick === val.p1 || nick === val.p2)) {
                 if (!this.validMove(val.game, move, nick)){
                     throw {message: {error: "Invalid move."}, status: 400};
                 }
@@ -141,14 +167,22 @@ module.exports = class GameController {
                     const res2 = val[val.p2];
                     callback([res1, res2], val.game);
 
-                    if (result.winner !== undefined){
+                    if (val.game.winner !== undefined){
+                        this.endGame(i, val.game.winner);
                         return;
                     }
 
                     val.timeout = setTimeout(() => {
-                        const result = this.findWinner(val.p1, val.p2, val.game.board.turn);
-                        callback([res1, res2], result);
-                        //Update rankings
+                        const index = this.games.findIndex((obj)=> obj.hash === game);
+                        if (index !== -1) {
+                            const value = this.games[index];
+                            const response1 = value[value.p1];
+                            const response2 = value[value.p2];
+
+                            const result = this.findWinner(value.p1, value.p2, value.game.board.turn);
+                            callback([response1, response2], result);
+                            this.endGame(index, result.winner);
+                        }
                     }, 120e3);
                     return;
                 } else {
@@ -223,7 +257,10 @@ module.exports = class GameController {
         let store2 = board[board.length - 1];
 
         if (this.isOver(seeds1, seeds2, player1Turn)) {
-            this.collectAllRemainingSeeds(seeds1, seeds2, store1, store2);
+            const result = this.collectAllRemainingSeeds(seeds1, seeds2, store1, store2);
+            store1 = result.store1;
+            store2 = result.store2;
+
             if (store1 > store2) game.winner = p1;
             else if (store1 < store2) game.winner = p2;
             else game.winner = "draw";
@@ -255,9 +292,10 @@ module.exports = class GameController {
     collectAllRemainingSeeds(p1Seeds, p2Seeds, store1, store2) {
         store1 += p1Seeds.reduce((h , a) => h + a, 0);
         store2 += p2Seeds.reduce((h, a) => h + a, 0);
-
         p1Seeds.fill(0);
         p2Seeds.fill(0);
+
+        return {store1, store2};
     }
 
     updateGame(game, newValues, p1, p2){
@@ -274,5 +312,11 @@ module.exports = class GameController {
     findWinner(p1, p2, loser){
         const winner = loser === p1 ? p2 : p1;
         return {winner};
+    }
+
+    endGame(index, result){
+        console.log("Game ended");
+        const val = this.games.splice(index, 1)[0];
+        this.rankings.updateRankings(val.p1, val.p2, result);
     }
 }

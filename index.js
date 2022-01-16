@@ -8,8 +8,8 @@ const hostname = '127.0.0.1';
 const port = 8976;
 
 const users = new Registration('./server/database/users.json');
-const controller = new GameController();
 const rankings = new Ranking('./server/database/rankings.json');
+const controller = new GameController(rankings);
 
 const headers = {
     plain: {
@@ -77,6 +77,23 @@ let server = http.createServer((req, res) => {
                         controller.notify(body, (responses, body) =>{
                             responses.forEach(res => {
                                 res.write(`data: ${JSON.stringify(body)}\n\n`);
+                            });
+                        });
+                        answer.body = {};
+                    } catch (err) {
+                        answer.status = err.status;
+                        answer.body=err.message;
+                    }
+                    break;
+                case '/leave':
+                    try {
+                        users.exists(body);
+                        controller.leave(body, (responses, body) =>{
+                            responses.forEach(res => {
+                                if (body.first){
+                                    res.writeHead(answer.status, headers['sse']);
+                                }
+                                res.write(`data: ${JSON.stringify(body.message)}\n\n`);
                             });
                         });
                         answer.body = {};
