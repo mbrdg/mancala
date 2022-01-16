@@ -379,12 +379,12 @@ export default class Game {
     }
 
     joinHandler(event, eventSource) {
-        clearTimeout(this.waitTimeout);
         const data = JSON.parse(event.data);
         console.log("message", data);
 
         if (data.winner !== undefined) {
             console.debug("Left wait menu");
+            document.getElementById('wait-btn').click();
             eventSource.close();
             return;
         }
@@ -418,7 +418,7 @@ export default class Game {
         this.playMove(move, eventSource);
     }
 
-    playMove(move) {
+    playMove(move, eventSource) {
         this.resetTimer();
 
         const repeatTurn = this.executeMove(this.board.mySeeds, this.board.enemySeeds, move, this.isPlayer1Turn(), true);

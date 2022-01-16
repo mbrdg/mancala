@@ -2,7 +2,7 @@ const http = require('http');
 const Registration = require('./server/register.js');
 const GameController = require('./server/gameController.js');
 const Ranking = require('./server/ranking.js');
-const fs = require("fs");
+const url = require('url');
 
 const hostname = '127.0.0.1';
 const port = 8976;
@@ -15,7 +15,7 @@ const headers = {
     plain: {
         'Content-Type': 'application/javascript',
         'Cache-Control': 'no-cache',
-        'Access-Control-Allow-Origin': '*'        
+        'Access-Control-Allow-Origin': '*'
     },
     sse: {
         'Content-Type': 'text/event-stream',
@@ -23,10 +23,19 @@ const headers = {
         'Access-Control-Allow-Origin': '*',
         'Connection': 'keep-alive'
     },
+    cors: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Credentials': 'false',
+        'Access-Control-Allow-Headers': 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept',
+        'Access-Control-Max-Age': '86400'
+    }
 };
 
 let server = http.createServer((req, res) => {
-    const { method, url } = req;
+    const { method } = req;
+    const { pathname, query, path } = url.parse(req.url, true);
+
     let answer = { style: 'plain', status: 200 };
     
     if (method === 'POST') {
@@ -40,7 +49,7 @@ let server = http.createServer((req, res) => {
                 body = JSON.parse(body);
             }
 
-            switch (url) {
+            switch (path) {
                 case '/register':
                     try {
                         users.register(body);
@@ -65,7 +74,12 @@ let server = http.createServer((req, res) => {
                 case '/notify':
                     try {
                         users.exists(body);
-                        answer.body = controller.notify(body);
+                        controller.notify(body, (responses, body) =>{
+                            responses.forEach(res => {
+                                res.write(`data: ${JSON.stringify(body)}\n\n`);
+                            });
+                        });
+                        answer.body = {};
                     } catch (err) {
                         answer.status = err.status;
                         answer.body=err.message;
@@ -86,49 +100,31 @@ let server = http.createServer((req, res) => {
         })
     }
     else if (method === 'GET'){
-        if (url === '/') {
-            fs.readFile("./index.html", "UTF-8", (err, html)=>{
-
-                res.writeHead(200, {'Content-Type': "text/html"});
-                res.end(html);
-            })
-            return;
-        }
-        if (url !== '/update') {
+        if (pathname !== '/update') {
             res.writeHead(404, headers[answer.style]);
             res.end(JSON.stringify({error: 'Unknown request.'}));
             return;
         }
-
-        let body = '';
         answer.style = 'sse';
 
-        req
-        .on('data', (chunk)=>{
-            body += chunk;
-        })
-        .on('end', ()=>{
-            if (body!=='') {
-                body = JSON.parse(body);
-            }
-
-            try {
-                controller.update(body, res, (responses, body) => {
-                    responses.forEach(response => {
-                        response.writeHead(answer.status, headers[answer.style]);
-                        response.write(JSON.stringify(body));
-                    });
+        try {
+            controller.update(query, res, (responses, body) => {
+                responses.forEach(res => {
+                    if (body.first){
+                        res.writeHead(answer.status, headers[answer.style]);
+                    }
+                    res.write(`data: ${JSON.stringify(body.message)}\n\n`);
                 });
-            } catch (err) {
-                res.writeHead(err.status, headers['plain']);
-                res.end(JSON.stringify(err.message));
-            }
-        })
-        .on('error', (err) => {
-            console.log(err.message);
-            res.writeHead(500, headers[answer.style]);
-            res.end();
-        })
+            });
+        } catch (err) {
+            res.writeHead(err.status, headers['plain']);
+            res.end(JSON.stringify(err.message));
+        }
+    }
+    else if (method === 'OPTIONS'){
+        answer.style = 'cors';
+        res.writeHead(answer.status, headers[answer.style]);
+        res.end();
     }
     else {
         answer.status = 500;

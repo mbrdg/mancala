@@ -37,11 +37,6 @@ playButton.addEventListener('click', async () => {
 
         document.querySelector('#play .wait-menu').classList.add('active');
         api.update(game.joinHandler.bind(game));
-        
-        game.waitTimeout = setTimeout(() => {
-            waitButton.click();
-            api.eventSource.close();
-        }, 120e3);
     }
     welcomeMenu.style.display = "none";
     gameMenu.classList.add('active');
@@ -56,7 +51,6 @@ waitButton.addEventListener('click', async (e)=>{
     if (e.isTrusted){
         await api.leave();
     }
-    clearTimeout(game.waitTimeout);
     game.reset();
     play.scrollIntoView();
 });
@@ -79,7 +73,6 @@ signInForm.addEventListener('submit', async (event) => {
     }
 
     const response = await api.register(nick, pass);
-    api.ranking().then();
 
     if (response !== nick) {
         alert(response);

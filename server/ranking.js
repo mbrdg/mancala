@@ -8,6 +8,6 @@ module.exports = class Ranking {
     }
 
     getRankings() {
-        return this.scores.slice(0, 10);
+        return {ranking: this.scores.slice(0, 10)};
     }
 }

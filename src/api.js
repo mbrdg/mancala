@@ -68,19 +68,19 @@ export default class Api {
             game: this.gameReference
         }
 
-        this.eventSource = new EventSource(`${this.url}update?`+ new URLSearchParams(data));
+        const eventSource = new EventSource(`${this.url}update?`+ new URLSearchParams(data));
         
-        this.eventSource.onopen = (_) => {
+        eventSource.onopen = (_) => {
             document.querySelector('#play .wait-menu').classList.remove('active');
         };
 
-        this.eventSource.onmessage = (e) => {
-            handler(e, this.eventSource);
+        eventSource.onmessage = (e) => {
+            handler(e, eventSource);
         };
 
-        this.eventSource.onerror = (e) => {
+        eventSource.onerror = (e) => {
             console.error(e);
-            this.eventSource.close();
+            eventSource.close();
         };
     }
 
