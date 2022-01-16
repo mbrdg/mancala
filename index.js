@@ -5,6 +5,7 @@ const Ranking = require('./server/ranking.js');
 const url = require('url');
 
 const hostname = '127.0.0.1';
+//const hostname = 'twserver.alunos.dcc.fc.up.pt';
 const port = 8976;
 
 const users = new Registration('./server/database/users.json');

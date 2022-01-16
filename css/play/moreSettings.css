@@ -175,13 +175,15 @@
 }
 
 #play .settings .box {
-    text-align: center;
     user-select: none;
     color: rgb(255, 255, 255);
     font-weight: 600;
     font-size: 1.3rem;
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Save */
