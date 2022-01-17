@@ -217,8 +217,10 @@ export default class Game {
         board[enemyHole] = 0;
         board[lastHole] = 0;
 
-        if (verbose)
-            this.chat.message("WOW! " + stolenSeeds.toString() + " seed(s) stolen!", isPlayer1Turn);
+        if (verbose){
+            const text = stolenSeeds === 1 ? "WOW! " + stolenSeeds.toString() + " seed stolen!" : "WOW! " + stolenSeeds.toString() + " seeds stolen!";
+            this.chat.message(text, isPlayer1Turn);
+        }
     }
 
     /**
@@ -233,10 +235,15 @@ export default class Game {
 
         let myDifference = board[this.board.settings.numberOfHoles] - mySeeds.deposit;
         let enemyDifference = board[board.length - 1] - enemySeeds.deposit;
-        if (myDifference > 0)
-            this.chat.message(myDifference.toString() + " point(s) in the bag.", true);
-        if (enemyDifference > 0)
-            this.chat.message(enemyDifference.toString() + " point(s) in the bag.", false);
+        const text = myDifference === 1 ? myDifference.toString() + " point in the bag." : myDifference.toString() + " points in the bag.";
+        if (myDifference > 0){
+            const text = myDifference === 1 ? myDifference.toString() + " point in the bag." : myDifference.toString() + " points in the bag.";
+            this.chat.message(text, true);
+        }
+        if (enemyDifference > 0){
+            const text = enemyDifference === 1 ? enemyDifference.toString() + " point in the bag." : enemyDifference.toString() + " points in the bag.";
+            this.chat.message(text, false);
+        }
 
         if (repeatTurn)
             this.chat.message("I'm playing again!", sender);
