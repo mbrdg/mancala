@@ -14,6 +14,7 @@ module.exports = class staticServer {
         'png':      'image/png',
         'jpeg':     'image/jpeg',
         'jpg':      'image/jpeg',
+        'gif':      'image/gif',
     };
 
     constructor() {}
@@ -65,7 +66,7 @@ module.exports = class staticServer {
             res.writeHead(403);
             res.end();
         } else {
-            fs.stat(pathname), (err, stats) => {
+            fs.stat(pathname, (err, stats) => {
                 if (err) {
                     res.writeHead(500);
                     res.end();
@@ -79,7 +80,7 @@ module.exports = class staticServer {
                 } else {
                     this.doGetPathname(pathname, res);
                 }
-            }
+            });
         }
     }
 }
