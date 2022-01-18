@@ -102,12 +102,12 @@ let server = http.createServer((req, res) => {
                         answer.body = {};
                     } catch (err) {
                         answer.status = err.status;
-                        answer.body=err.message;
+                        answer.body = err.message;
                     }
                     break;
                 default:
                     answer.status = 404;
-                    answer.body= { error: 'Unknown request.' };
+                    answer.body = { error: 'Unknown request.' };
             }
 
             res.writeHead(answer.status, headers[answer.style]);
