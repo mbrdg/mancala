@@ -1,12 +1,16 @@
 const http = require('http');
+const fs = require("fs");
+const url = require('url');
+
+const Static = require('./server/staticServer.js');
 const Registration = require('./server/register.js');
 const GameController = require('./server/gameController.js');
 const Ranking = require('./server/ranking.js');
-const url = require('url');
 
 const hostname = 'twserver.alunos.dcc.fc.up.pt';
 const port = 8976;
 
+const staticServer = new Static();
 const users = new Registration('./server/database/users.json');
 const rankings = new Ranking('./server/database/rankings.json');
 const controller = new GameController(rankings);
@@ -40,11 +44,9 @@ let server = http.createServer((req, res) => {
     
     if (method === 'POST') {
         let body = '';
-        req
-        .on('data', (chunk)=>{
+        req.on('data', (chunk) => {
             body += chunk;
-        })
-        .on('end', ()=>{
+        }).on('end', () => {
             if (body!=='') {
                 body = JSON.parse(body);
             }
@@ -53,10 +55,10 @@ let server = http.createServer((req, res) => {
                 case '/register':
                     try {
                         users.register(body);
-                        answer.body={};
+                        answer.body = {};
                     } catch (err) {
                         answer.status = err.status;
-                        answer.body=err.message;
+                        answer.body = err.message;
                     }
                     break;
                 case '/ranking':
@@ -68,7 +70,7 @@ let server = http.createServer((req, res) => {
                         answer.body = controller.join(body);
                     } catch (err) {
                         answer.status = err.status;
-                        answer.body=err.message;
+                        answer.body = err.message;
                     }
                     break;
                 case '/notify':
@@ -82,7 +84,7 @@ let server = http.createServer((req, res) => {
                         answer.body = {};
                     } catch (err) {
                         answer.status = err.status;
-                        answer.body=err.message;
+                        answer.body = err.message;
                     }
                     break;
                 case '/leave':
@@ -104,7 +106,7 @@ let server = http.createServer((req, res) => {
                     break;
                 default:
                     answer.status = 404;
-                    answer.body={error: 'Unknown request.'};
+                    answer.body= { error: 'Unknown request.' };
             }
 
             res.writeHead(answer.status, headers[answer.style]);
@@ -115,13 +117,16 @@ let server = http.createServer((req, res) => {
             res.writeHead(500, headers[answer.style]);
             res.end();
         })
-    }
-    else if (method === 'GET'){
+    } else if (method === 'GET') {
+        staticServer.processRequest(req, res);
+        // FIXME: what is below this line? only god knows...
+
         if (pathname !== '/update') {
             res.writeHead(404, headers[answer.style]);
             res.end(JSON.stringify({error: 'Unknown request.'}));
             return;
         }
+
         answer.style = 'sse';
 
         try {
@@ -137,13 +142,11 @@ let server = http.createServer((req, res) => {
             res.writeHead(err.status, headers['plain']);
             res.end(JSON.stringify(err.message));
         }
-    }
-    else if (method === 'OPTIONS'){
+    } else if (method === 'OPTIONS') {
         answer.style = 'cors';
         res.writeHead(answer.status, headers[answer.style]);
         res.end();
-    }
-    else {
+    } else {
         answer.status = 500;
         res.writeHead(answer.status, headers[answer.style]);
         res.end();
@@ -152,7 +155,7 @@ let server = http.createServer((req, res) => {
 
 server.listen(port, hostname, (err) => {
     if (err) {
-        console.log('Something went wrong', error);
+        console.log('Something went wrong', err);
     } else {
         console.log(`Server running at http://${hostname}:${port}`);
     }
