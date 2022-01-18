@@ -35,8 +35,7 @@ module.exports = class staticServer {
     }
 
     getPathname(req) {
-        const url = new URL(req.url);
-        let pathname = path.normalize(this.documentRoot + url.pathname)
+        let pathname = path.normalize(this.documentRoot + req.url)
 
         if (!pathname.startsWith(this.documentRoot))
             pathname = null;

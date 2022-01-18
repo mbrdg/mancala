@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require("fs");
 const url = require('url');
 
-const Static = require('./server/staticServer.js');
+const StaticServer = require('./server/staticServer.js');
 const Registration = require('./server/register.js');
 const GameController = require('./server/gameController.js');
 const Ranking = require('./server/ranking.js');
@@ -10,8 +10,7 @@ const Ranking = require('./server/ranking.js');
 const hostname = 'twserver.alunos.dcc.fc.up.pt';
 const port = 8976;
 
-// FIXME: Lookup to documentRoot
-const staticServer = new Static('/net/areas/homes/up2019XXXXX/public_html');
+const staticServer = new StaticServer('/net/areas/homes/up201906042/public_html');
 const users = new Registration('./server/database/users.json');
 const rankings = new Ranking('./server/database/rankings.json');
 const controller = new GameController(rankings);
