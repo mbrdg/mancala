@@ -10,7 +10,8 @@ const Ranking = require('./server/ranking.js');
 const hostname = 'twserver.alunos.dcc.fc.up.pt';
 const port = 8976;
 
-const staticServer = new Static();
+// FIXME: Lookup to documentRoot
+const staticServer = new Static('/net/areas/homes/up2019XXXXX/public_html');
 const users = new Registration('./server/database/users.json');
 const rankings = new Ranking('./server/database/rankings.json');
 const controller = new GameController(rankings);

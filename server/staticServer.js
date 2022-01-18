@@ -3,21 +3,20 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = class staticServer {
-
-    documentRoot = '/net/areas/homes/up201906042/public_html';
-    defaultIndex = 'index.html';
-    mediaTypes = {
-        'txt':      'text/plain',
-        'html':     'text/html',
-        'css':      'text/css',
-        'js':       'application/javascript',
-        'png':      'image/png',
-        'jpeg':     'image/jpeg',
-        'jpg':      'image/jpeg',
-        'gif':      'image/gif',
-    };
-
-    constructor() {}
+    constructor(documentRoot) {
+        this.documentRoot = documentRoot;
+        this.defaultIndex = 'index.html';
+        this.mediaTypes = {
+            'txt':      'text/plain',
+            'html':     'text/html',
+            'css':      'text/css',
+            'js':       'application/javascript',
+            'png':      'image/png',
+            'jpeg':     'image/jpeg',
+            'jpg':      'image/jpeg',
+            'gif':      'image/gif',
+        };
+    }
 
     getMediaType(pathname) {
         const lastDot = pathname.lastIndexOf('.');
