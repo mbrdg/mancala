@@ -52,7 +52,7 @@ export default class Game {
         this.setupRequiredClickEvents();
 
         if (!this.board.settings.pvp) {
-            let depth = this.board.settings.difficulty === 'easy' ? 1 : 4;
+            let depth = this.board.settings.difficulty === 'easy' ? 2 : 6;
             this.ai = new AI(this, depth);
 
             if (this.isPlayer2Turn())
