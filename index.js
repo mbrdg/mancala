@@ -1,5 +1,4 @@
 const http = require('http');
-const fs = require("fs");
 const url = require('url');
 
 const StaticServer = require('./server/staticServer.js');
@@ -10,7 +9,7 @@ const Ranking = require('./server/ranking.js');
 const hostname = 'twserver.alunos.dcc.fc.up.pt';
 const port = 8976;
 
-const staticServer = new StaticServer('/net/areas/homes/up201906042/public_html');
+const staticServer = new StaticServer('/net/areas/homes/up201905952/public_html');
 const users = new Registration('./server/database/users.json');
 const rankings = new Ranking('./server/database/rankings.json');
 const controller = new GameController(rankings);
@@ -118,30 +117,29 @@ let server = http.createServer((req, res) => {
             res.end();
         })
     } else if (method === 'GET') {
-        staticServer.processRequest(req, res);
-        // FIXME: what is below this line? only god knows...
-
-        if (pathname !== '/update') {
-            res.writeHead(404, headers[answer.style]);
-            res.end(JSON.stringify({error: 'Unknown request.'}));
-            return;
-        }
 
         answer.style = 'sse';
 
-        try {
-            controller.update(query, res, (responses, body) => {
-                responses.forEach(res => {
-                    if (body.first){
-                        res.writeHead(answer.status, headers[answer.style]);
-                    }
-                    res.write(`data: ${JSON.stringify(body.message)}\n\n`);
+        if (pathname === '/update') {
+            try {
+                controller.update(query, res, (responses, body) => {
+                    responses.forEach(res => {
+                        if (body.first){
+                            res.writeHead(answer.status, headers[answer.style]);
+                        }
+                        res.write(`data: ${JSON.stringify(body.message)}\n\n`);
+                    });
                 });
-            });
-        } catch (err) {
-            res.writeHead(err.status, headers['plain']);
-            res.end(JSON.stringify(err.message));
+                return;
+            } catch (err) {
+                res.writeHead(err.status, headers['plain']);
+                res.end(JSON.stringify(err.message));
+                return;
+            }
         }
+
+        staticServer.processRequest(req, res);
+
     } else if (method === 'OPTIONS') {
         answer.style = 'cors';
         res.writeHead(answer.status, headers[answer.style]);
