@@ -1,4 +1,8 @@
 export default class Api {
+    /**
+     * Constructor
+     * @param url - server url 
+     */
     constructor(url) {
         this.url = url;
     }
@@ -23,6 +27,12 @@ export default class Api {
         return json;
     }
 
+    /**
+     * Api register request
+     * @param nick - player nick
+     * @param password - player password
+     * @returns error or nick on success
+     */
     async register(nick, password) {
         const data = {
             nick,
@@ -41,6 +51,11 @@ export default class Api {
         return nick;
     }
 
+    /**
+     * Api join request
+     * @param settings - game settings 
+     * @returns true on success, false otherwise
+     */
     async join(settings) {
         const data = {
             group:      76,
@@ -62,6 +77,10 @@ export default class Api {
         return true;
     }
 
+    /**
+     * Api update request
+     * @param handler - eventSource handler in case of message received
+     */
     update(handler) {
         const data = {
             nick: this.credentials.nick,
@@ -84,6 +103,10 @@ export default class Api {
         };
     }
 
+    /**
+     * Api leave request
+     * @returns true on success, false otherwise
+     */
     async leave() {
         const data = {
             nick: this.credentials.nick,
@@ -102,6 +125,11 @@ export default class Api {
         return true;
     }
 
+    /**
+     * Api notify request
+     * @param move - pit index to be notified
+     * @returns true on success, false otherwise
+     */
     async notify(move) {
         const data = {
             nick: this.credentials.nick,
@@ -121,6 +149,10 @@ export default class Api {
         return true;
     }
 
+    /**
+     * Api ranking request
+     * @returns rankings on success, nothing on error
+     */
     async ranking() {
         let response;
         try {

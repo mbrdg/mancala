@@ -1,10 +1,17 @@
 export default class HighScores {
+    /**
+     * Contructor
+     * @param api - server api reference 
+     */
     constructor(api) {
         this.api = api;
         this.updateOnline();
         this.updateOffline();
     }
 
+    /**
+     * Updates offline scores according to local storage information
+     */
     updateOffline(){
         let offlineRankings = localStorage.getItem('offline-rankings');
         if (!offlineRankings) 
@@ -24,6 +31,10 @@ export default class HighScores {
         });        
     }
 
+    /**
+     * Inserts offline score according to score value
+     * @param score - score to be inserted
+     */
     insertScore(score){
         let offlineRankings = localStorage.getItem('offline-rankings');
         if (!offlineRankings) {
@@ -52,6 +63,9 @@ export default class HighScores {
         this.updateOffline();
     }
 
+    /**
+     * Updates online scores according to server response
+     */
     updateOnline(){
         this.api.ranking().then((onlineRankings) => {
             const tbody = document.getElementById('online-ranking').getElementsByTagName('tbody')[0];

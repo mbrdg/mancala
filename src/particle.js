@@ -1,4 +1,10 @@
 export default class Particle {
+    /**
+     * Constructor
+     * @param x - Initial x position
+     * @param y - Initial y position
+     * @param hue - Base hue value
+     */
     constructor(x, y, hue) {
         this.x = x;
         this.y = y;
@@ -29,6 +35,10 @@ export default class Particle {
         this.decay = random(0.015, 0.03);
     }
 
+    /**
+     * Updates particle position and opacity
+     * @returns true if current opacity is bellow the decay value, false otherwise
+     */
     update() {
         this.coordinates.pop();
         this.coordinates.unshift( [ this.x, this.y ] );
@@ -43,6 +53,10 @@ export default class Particle {
         return this.alpha <= this.decay;
     }
 
+    /**
+     * Draws particle
+     * @param {CanvasRenderingContext2D} ctx - canvas context
+     */
     draw(ctx) {
         ctx.beginPath();
         

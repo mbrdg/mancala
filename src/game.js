@@ -23,7 +23,11 @@ export { GameState };
  * all the models aka board and chat.
  */
 export default class Game {
-
+    /**
+     * Constructor
+     * @param api - server api reference
+     * @param highScores - game highscores reference
+     */
     constructor(api, highScores) {
         this.chat = new Chat();
         this.api = api;
@@ -107,6 +111,9 @@ export default class Game {
         }
     }
 
+    /**
+     * Executes bot move
+     */
     async bot() {
         let aiRepeatTurn;
         do {
@@ -319,8 +326,10 @@ export default class Game {
         console.log('Game Reset');
     }
 
-    // FIXME - I believe this is not responsibility of the game class because
-    //         here we just control all the other components.
+    /**
+     * Displays the final menu according to game result
+     * @param newState - final game state before reset 
+     */
     showEndMenu(newState) {
         const endMenu = document.querySelector('#play .end-menu');
 
@@ -382,6 +391,11 @@ export default class Game {
         endMenu.classList.add('active');
     }
 
+    /**
+     * Handler for join between 2 players in multiplayer mode
+     * @param event - occured event
+     * @param eventSource - eventSource which receives the events
+     */
     joinHandler(event, eventSource) {
         const data = JSON.parse(event.data);
 
@@ -405,6 +419,11 @@ export default class Game {
         eventSource.onmessage = (event) => { this.updateHandler(event, eventSource); };
     }
 
+    /**
+     * Handler for game events sent from the server api
+     * @param event - occured event
+     * @param eventSource - eventSource which receives the events
+     */
     updateHandler(event, eventSource) {
         const data = JSON.parse(event.data);
 
@@ -419,6 +438,11 @@ export default class Game {
         this.playMove(move, eventSource);
     }
 
+    /**
+     * Executes move from multiplayer mode
+     * @param move - hole index to play
+     * @param eventSource - eventSource which receives the events
+     */
     playMove(move, eventSource) {
         this.resetTimer();
 
@@ -433,6 +457,9 @@ export default class Game {
         }
     }
 
+    /**
+     * Starts countdown timer for multiplayer game mode
+     */
     startTimer(){
         document.getElementById('time').textContent='1:59';
         document.getElementById('timer').classList.add('active');
@@ -453,10 +480,17 @@ export default class Game {
         }, 1000);
     }
 
+    /**
+     * Resets timer value
+     */
     resetTimer() {
         document.getElementById('time').textContent = '1:59';
     }
 
+    /**
+     * Function which returns a promise so that the game stops for the number of miliseconds specified
+     * @param ms - number of miliseconds
+     */
     sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }

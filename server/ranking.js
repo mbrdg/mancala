@@ -1,16 +1,30 @@
 const file = require('./file.js');
 
 module.exports = class Ranking {
+    /**
+     * Constructor
+     * @param filePath - rankngs path 
+     */
     constructor(filePath) {
         this.path = filePath;
         this.scores = [];
         file.readFromFile(this.path, (data)=>{this.scores=data;});
     }
 
+    /**
+     * Returns the best rankings
+     * @returns rankings with a max size of 10 entries
+     */
     getRankings() {
         return {ranking: this.scores.slice(0, 10)};
     }
 
+    /**
+     * Updates the existing rankings with the game result
+     * @param p1 - player 1 name
+     * @param p2 - player 2 name
+     * @param result - game result
+     */
     updateRankings(p1, p2, result){
         let score1 = {};
         let score2 = {};
@@ -46,6 +60,10 @@ module.exports = class Ranking {
         console.log("Ranks updated");
     }
 
+    /**
+     * Inserts new score to ranking array in descending victory order
+     * @param score - score to be inserted
+     */
     insertScore(score) {
         for (const [i, value] of this.scores.entries()) {
             if (value.victories < score.victories) {

@@ -1,12 +1,21 @@
 const crypto = require('crypto');
 
 module.exports = class GameController {
+    /**
+     * Constructor
+     * @param rankings - game rankings
+     */
     constructor(rankings) {
         this.rankings = rankings;
         this.games = [];
         this.waitList = [];
     }
 
+    /**
+     * Game join request
+     * @param info - data
+     * @returns object with game hash
+     */
     join(info) {
         let {group, nick, size, initial} = info;
 
@@ -40,6 +49,11 @@ module.exports = class GameController {
         return {game: gameHash};
     }
 
+    /**
+     * Pushes game to games array
+     * @param index - waitlist game index
+     * @param player2 - new player2
+     */
     createGame(index, player2) {
         const {nick, size, initial, hash, response} = this.waitList.splice(index, 1)[0];
 
@@ -57,6 +71,12 @@ module.exports = class GameController {
         this.games.push({hash, game, [nick]: response, [player2]:null, p1: nick, p2: null});
     }
 
+    /**
+     * Game update request
+     * @param info - data
+     * @param response - new sse response
+     * @param callback - successful update callback
+     */
     update(info, response, callback) {
         const {nick, game} = info;
 
@@ -106,6 +126,11 @@ module.exports = class GameController {
         throw {message: {error: "Invalid game reference."}, status: 400};
     }
 
+    /**
+     * Leave from a game request
+     * @param info - data
+     * @param callback - callback for successful update
+     */
     leave(info, callback) {
         const {nick, game} = info;
 
@@ -139,6 +164,11 @@ module.exports = class GameController {
         throw {message: {error: "Invalid game reference."}, status: 400};
     }
 
+    /**
+     * Notify game of a new move
+     * @param info - data
+     * @param callback - callback for successful update
+     */
     notify(info, callback) {
         let {nick, game, move} = info;
         
@@ -194,11 +224,27 @@ module.exports = class GameController {
         throw {message: {error: "Invalid game reference."}, status: 400};
     }
 
+    /**
+     * Checks if a move is valid or not
+     * @param game - game object
+     * @param move - move value
+     * @param nick - player name
+     * @returns true if move is valid false, otherwise
+     */
     validMove(game, move, nick){
         const size = game.board.sides[nick].pits.length;
         return !(move < 0 || move >= size);
     }
 
+    /**
+     * Executes a move in game
+     * @param game - game object
+     * @param move - move index
+     * @param currentPlayer - current player name  
+     * @param p1 - player 1
+     * @param p2 - player 2
+     * @returns error or new board values
+     */
     playMove(game, move, currentPlayer, p1, p2) {
         const size = game.board.sides[p1].pits.length;
         const initialMove = move;
@@ -269,6 +315,13 @@ module.exports = class GameController {
         return {seeds1, seeds2, store1, store2, turn, move: initialMove};
     }
 
+    /**
+     * Executes a steal
+     * @param board - current board
+     * @param lastHole - last hole to be added a seed
+     * @param isPlayer1Turn - boolean indicating it is player 1 turn
+     * @param size - board size
+     */
     executeSteal(board, lastHole, isPlayer1Turn, size) {
         let enemyHole = 2 * size - lastHole;
         if (board[enemyHole] === 0)
@@ -282,6 +335,13 @@ module.exports = class GameController {
         board[lastHole] = 0;
     }
 
+    /**
+     * Checks if game is over or not
+     * @param p1Seeds - player 1 seeds
+     * @param p2Seeds - player 2 seeds
+     * @param player1Turn - boolean indicating if it is player 1 turn
+     * @returns true if game is over, false otherwise
+     */
     isOver(p1Seeds, p2Seeds, player1Turn){
         const p1GotNoSeeds = p1Seeds.every(item => item === 0);
         const p2GotNoSeeds = p2Seeds.every(item => item === 0);
@@ -289,6 +349,14 @@ module.exports = class GameController {
         return ( p1GotNoSeeds && player1Turn )  || ( p2GotNoSeeds && !player1Turn );
     }
 
+    /**
+     * Collects remainning seeds from player holes to the respective deposits
+     * @param p1Seeds - player 1 seeds
+     * @param p2Seeds - player 2 seeds
+     * @param store1 - player 1 seeds
+     * @param store2 - player 2 deposits
+     * @returns new store1 and store2 values
+     */
     collectAllRemainingSeeds(p1Seeds, p2Seeds, store1, store2) {
         store1 += p1Seeds.reduce((h , a) => h + a, 0);
         store2 += p2Seeds.reduce((h, a) => h + a, 0);
@@ -298,6 +366,13 @@ module.exports = class GameController {
         return {store1, store2};
     }
 
+    /**
+     * Update game values
+     * @param {*} game - game to update
+     * @param {*} newValues - new values
+     * @param {*} p1 - player 1 name
+     * @param {*} p2 - player 2 name
+     */
     updateGame(game, newValues, p1, p2){
         game.board.sides[p1].pits = newValues.seeds1;
         game.board.sides[p1].store = newValues.store1;
@@ -309,11 +384,23 @@ module.exports = class GameController {
         game.board.turn = newValues.turn;
     }
 
+    /**
+     * Returns the winner name
+     * @param p1 - player 1 name
+     * @param p2 - player 2 name
+     * @param loser - loser player
+     * @returns winner object 
+     */
     findWinner(p1, p2, loser){
         const winner = loser === p1 ? p2 : p1;
         return {winner};
     }
 
+    /**
+     * Ends game by removing from games and updating scores
+     * @param index - game index 
+     * @param result - game result
+     */
     endGame(index, result){
         console.log("Game ended");
         const val = this.games.splice(index, 1)[0];
