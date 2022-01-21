@@ -4,7 +4,6 @@
 export default class Chat {
     constructor() {
         this.chat = document.getElementById('chat');
-        console.debug('Chat object created');
     }
 
     clear() {

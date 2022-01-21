@@ -30,7 +30,6 @@ export default class Gameboard {
         this.gameLoopCallBack = gameLoop;
 
         this.buildBoard();
-        console.debug('Board object created.');
     }
 
     resetInformation() {
@@ -58,7 +57,6 @@ export default class Gameboard {
             difficulty:     document.getElementById('difficulty').value,
             online:         document.getElementById('difficulty').value === 'multi',
         }
-        console.log(this.settings);
     }
 
     /**
@@ -194,7 +192,6 @@ export default class Gameboard {
             pit.querySelector('.score').textContent = this.enemySeeds.seeds[i].toString();
         document.querySelector('.enemy-deposit .score').textContent = this.enemySeeds.deposit.toString();
 
-        console.debug('Scores Updated');
     }
 
 
@@ -226,7 +223,6 @@ export default class Gameboard {
 
         const enemyDepositHole = document.querySelector('.enemy-deposit .hole');
         this.updateSeedsOnHole(enemyDepositHole, this.enemySeeds.deposit);
-        console.debug('Seeds Updated');
     }
 
     updateElements() {
@@ -249,7 +245,6 @@ export default class Gameboard {
         else if (clickedHole.classList.contains('enemy-hole'))
             this.move = (this.settings.numberOfHoles + 1) + ((this.settings.numberOfHoles + 1) - holePosition)
 
-        console.debug('Move Generated');
     }
 
     reset() {

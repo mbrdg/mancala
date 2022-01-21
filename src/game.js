@@ -28,7 +28,6 @@ export default class Game {
         this.chat = new Chat();
         this.api = api;
         this.highScores = highScores;
-        console.debug('Game object created.');
 
         const leaveButton = document.getElementById('leave-btn');
         leaveButton.addEventListener('click', ()=>{
@@ -56,7 +55,7 @@ export default class Game {
             this.ai = new AI(this, depth);
 
             if (this.isPlayer2Turn())
-                this.bot().then(() => console.log("Bot executed it's move"));
+                this.bot().then(() => {});
         }
     }
 
@@ -88,7 +87,6 @@ export default class Game {
      * @returns {void}
      */
     async loop(event) {
-        console.log('Game Loop', 'State: ' + this.state);
         this.board.generateMove(event);
 
         if (this.board.settings.online) {
@@ -303,7 +301,6 @@ export default class Game {
         enemySeeds.seeds = board.slice(this.board.settings.numberOfHoles + 1, board.length - 1);
         enemySeeds.deposit = board[board.length - 1];
 
-        console.log('Move Executed from Hole no. ' + move.toString(), 'Ended in own holes: ' + endedInItsOwnHoles);
         return repeatTurn;
     }
 
@@ -387,7 +384,6 @@ export default class Game {
 
     joinHandler(event, eventSource) {
         const data = JSON.parse(event.data);
-        console.log("message", data);
 
         if (data.winner !== undefined) {
             console.debug("Left wait menu");
@@ -411,8 +407,6 @@ export default class Game {
 
     updateHandler(event, eventSource) {
         const data = JSON.parse(event.data);
-        console.log("\nmessage", data);
-
 
         if (data.winner !== undefined && !data.board) { // Someone gave up
             this.state =  data.winner === this.api.credentials.nick ? GameState.PLAYER2 : GameState.PLAYER1;
