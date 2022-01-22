@@ -1,5 +1,9 @@
 import Firework from "./firework.js";
 
+/**
+ * Function that sets up the canvas for the end game,
+ * associates the loop event according to the animation frame
+ */
 export function setUpCanvas() {
     window.requestAnimFrame = ( function() {
         return window.requestAnimationFrame ||

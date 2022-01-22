@@ -1,3 +1,6 @@
+/**
+ * Animation setter for app flow
+ */
 export function setUpAnimations() {
     hamburguerAnimation();
     navBarScrollAnimation();

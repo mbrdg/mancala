@@ -2,6 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = class staticServer {
+    /**
+     * Constructor
+     * @param documentRoot - documents root path 
+     */
     constructor(documentRoot) {
         this.documentRoot = documentRoot;
         this.defaultIndex = 'index.html';
@@ -56,6 +60,11 @@ module.exports = class staticServer {
         });
     }
 
+    /**
+     * Processes the given request
+     * @param req - request 
+     * @param res - response 
+     */
     processRequest(req, res) {
         const pathname = this.getPathname(req);
 

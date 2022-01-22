@@ -2,12 +2,20 @@ const file = require('./file.js');
 const crypto = require('crypto');
 
 module.exports = class Registration {
+    /**
+     * Constructor
+     * @param filePath - players info file path 
+     */
     constructor(filePath) {
         this.path = filePath;
         this.users = [];
         file.readFromFile(this.path, (data)=>{this.users=data;});
     }
 
+    /**
+     * Registers a user
+     * @param info - user info
+     */
     register(info) {
         let {nick, password} = info;
         if (!nick || !password) {
@@ -32,6 +40,10 @@ module.exports = class Registration {
         file.writeToFile(this.path, this.users, ()=>{ this.users.pop();});
     }
 
+    /**
+     * Verifies if a user with the given info already exists
+     * @param info - user info
+     */
     exists(info) {
         let {nick, password} = info;
         if (!nick || !password) {

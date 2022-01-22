@@ -30,9 +30,11 @@ export default class Gameboard {
         this.gameLoopCallBack = gameLoop;
 
         this.buildBoard();
-        console.debug('Board object created.');
     }
 
+    /**
+     * Resets seeds from player 1 and 2 as well as the move
+     */
     resetInformation() {
         this.mySeeds = {
             'seeds': Array(this.settings.numberOfHoles).fill(this.settings.seedsPerHole),
@@ -58,7 +60,6 @@ export default class Gameboard {
             difficulty:     document.getElementById('difficulty').value,
             online:         document.getElementById('difficulty').value === 'multi',
         }
-        console.log(this.settings);
     }
 
     /**
@@ -159,6 +160,10 @@ export default class Gameboard {
         }
     }
 
+    /**
+     * Function that changes holes classes according to the current game state.
+     * @param gameState Current State of the game given by a value of GameState object.
+     */
     updateClassNames(gameState) {
         const myHoles = document.querySelectorAll('.my-hole .hole');
         const enemyHoles = document.querySelectorAll('.enemy-hole .hole');
@@ -194,10 +199,13 @@ export default class Gameboard {
             pit.querySelector('.score').textContent = this.enemySeeds.seeds[i].toString();
         document.querySelector('.enemy-deposit .score').textContent = this.enemySeeds.deposit.toString();
 
-        console.debug('Scores Updated');
     }
 
-
+    /**
+     * Updates the number of seeds in one hole according to newNumberOfSeeds
+     * @param parentHole - parent node for hole
+     * @param newNumberOfSeeds - new number of seeds
+     */
     updateSeedsOnHole(parentHole, newNumberOfSeeds) {
         const seed = document.createElement('div');
         seed.classList.add('seed');
@@ -211,6 +219,9 @@ export default class Gameboard {
             parentHole.removeChild(parentHole.lastChild);
     }
 
+    /**
+     * Updates all seeds from both player deposits and board holes
+     */
     updateSeeds() {
         const myHoles = document.querySelectorAll('.my-hole');
         const enemyHoles = document.querySelectorAll('.enemy-hole');
@@ -226,19 +237,30 @@ export default class Gameboard {
 
         const enemyDepositHole = document.querySelector('.enemy-deposit .hole');
         this.updateSeedsOnHole(enemyDepositHole, this.enemySeeds.deposit);
-        console.debug('Seeds Updated');
     }
 
+    /**
+     * Updates both the scores and the seeds
+     */
     updateElements() {
         this.updateScores();
         this.updateSeeds();
     }
+
+    /**
+     * Updates event listenners, class names as well as all elements according to gamestate
+     * @param gameState Current State of the game given by a value of GameState object.
+     */
     update(gameState) {
         this.updateEventListeners(gameState);
         this.updateClassNames(gameState);
         this.updateElements();
     }
 
+    /**
+     * Updates the move atribute according to the click event
+     * @param event - event trigger
+     */
     generateMove(event) {
         let clickedHole = event.target.classList.contains('seed') ? event.target.parentElement.parentElement :
                                                                     event.target.parentElement;
@@ -249,9 +271,11 @@ export default class Gameboard {
         else if (clickedHole.classList.contains('enemy-hole'))
             this.move = (this.settings.numberOfHoles + 1) + ((this.settings.numberOfHoles + 1) - holePosition)
 
-        console.debug('Move Generated');
     }
 
+    /**
+     * Resets the whole board
+     */
     reset() {
         this.resetInformation();
 

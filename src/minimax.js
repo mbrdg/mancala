@@ -1,14 +1,19 @@
 export default class AI {
+    /**
+     * Constructor
+     * @param game - game object 
+     * @param maxDepth - maximum evaluation depth
+     */
     constructor(game, maxDepth) {
         this.game = game;
         this.maxDepth = maxDepth;
     }
 
     /**
-     *
+     * Find best move for computer player according to the current game state and depth
      * @param maxPlayer Object containing the information about the maximizing player seeds
      * @param minPlayer Object containing the information about the minimizing 2 seeds
-     * @returns {number|*}
+     * @returns {number} Best move according to the specified game depth
      */
     findMove(maxPlayer, minPlayer) {
 
@@ -100,6 +105,12 @@ export default class AI {
         return niceSeeds - notNiceSeeds;
     }
 
+    /**
+     * Retrieves the difference from the maximizing player deposit and minimizing
+     * @param maxPlayer - Object containing the information about the maximizing player seeds
+     * @param minPlayer - Object containing the information about the minimizing 2 seeds
+     * @returns 
+     */
     score(maxPlayer, minPlayer) {
         return maxPlayer.deposit - minPlayer.deposit;
     }
